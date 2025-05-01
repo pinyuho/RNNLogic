@@ -1,0 +1,272 @@
+W0427 17:28:58.501784 2847340 torch/distributed/run.py:793] 
+W0427 17:28:58.501784 2847340 torch/distributed/run.py:793] *****************************************
+W0427 17:28:58.501784 2847340 torch/distributed/run.py:793] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0427 17:28:58.501784 2847340 torch/distributed/run.py:793] *****************************************
+Data loading | DONE!
+Data loading | DONE!
+2025-04-27 17:29:14,970 INFO     -------------------------
+2025-04-27 17:29:14,970 INFO     | Pre-train Generator
+2025-04-27 17:29:14,970 INFO     -------------------------
+mode:  fixed
+mode:  fixed
+2025-04-27 17:29:15,111 INFO     >>>>> Generator: Training
+2025-04-27 17:29:21,012 INFO     [E1000] Total: 2.309692 | Main: 2.619517 | Aux: 1.070392
+2025-04-27 17:29:26,157 INFO     [E2000] Total: 2.241207 | Main: 2.537519 | Aux: 1.055961
+2025-04-27 17:29:31,498 INFO     [E3000] Total: 2.231779 | Main: 2.526241 | Aux: 1.053930
+2025-04-27 17:29:36,545 INFO     [E4000] Total: 2.226018 | Main: 2.519633 | Aux: 1.051561
+2025-04-27 17:29:41,901 INFO     [E5000] Total: 2.216577 | Main: 2.507932 | Aux: 1.051161
+2025-04-27 17:29:46,947 INFO     [E6000] Total: 2.214696 | Main: 2.505806 | Aux: 1.050257
+2025-04-27 17:29:51,995 INFO     [E7000] Total: 2.210643 | Main: 2.500910 | Aux: 1.049573
+2025-04-27 17:29:57,392 INFO     [E8000] Total: 2.206369 | Main: 2.495771 | Aux: 1.048758
+2025-04-27 17:30:02,421 INFO     [E9000] Total: 2.201544 | Main: 2.489811 | Aux: 1.048474
+2025-04-27 17:30:07,764 INFO     [E10000] Total: 2.202758 | Main: 2.491439 | Aux: 1.048032
+2025-04-27 17:30:07,768 INFO     -------------------------
+2025-04-27 17:30:07,768 INFO     | EM Iteration: 1/1
+2025-04-27 17:30:07,768 INFO     -------------------------
+2025-04-27 17:30:07,768 INFO     >>>>> Generator: Rule generation with sampling
+2025-04-27 17:30:07,967 INFO     Predictor: read 497 rules from list.
+2025-04-27 17:30:07,973 INFO     Predictor: read 497 rules from list.
+2025-04-27 17:30:07,974 INFO     Initializing distributed process group
+2025-04-27 17:30:07,976 INFO     Preprocess training set
+2025-04-27 17:30:08,059 INFO     >>>>> Predictor: Training
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/logging/__init__.py", line 1083, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.9/logging/__init__.py", line 927, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.9/logging/__init__.py", line 663, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.9/logging/__init__.py", line 367, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 106, in main
+    solver_p.train(**cfg.predictor.train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 86, in train
+    logits, mask = model(all_h, all_r, edges_to_remove)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1643, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1459, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 63, in forward
+    x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 156, in grounding
+    x = self.propagate(x, r_body)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 185, in propagate
+    logging.info("message size: ", message.size())
+Message: 'message size: '
+Arguments: (torch.Size([6102, 1]),)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/logging/__init__.py", line 1083, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.9/logging/__init__.py", line 927, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.9/logging/__init__.py", line 663, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.9/logging/__init__.py", line 367, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 106, in main
+    solver_p.train(**cfg.predictor.train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 86, in train
+    logits, mask = model(all_h, all_r, edges_to_remove)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1643, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1459, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 63, in forward
+    x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 156, in grounding
+    x = self.propagate(x, r_body)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 185, in propagate
+    logging.info("message size: ", message.size())
+Message: 'message size: '
+Arguments: (torch.Size([6102, 1]),)
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+[rank1]:     main(parse_args())
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 106, in main
+[rank1]:     solver_p.train(**cfg.predictor.train)
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 86, in train
+[rank1]:     logits, mask = model(all_h, all_r, edges_to_remove)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank1]:     return forward_call(*args, **kwargs)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1643, in forward
+[rank1]:     else self._run_ddp_forward(*inputs, **kwargs)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1459, in _run_ddp_forward
+[rank1]:     return self.module(*inputs, **kwargs)  # type: ignore[index]
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank1]:     return forward_call(*args, **kwargs)
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 63, in forward
+[rank1]:     x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 156, in grounding
+[rank1]:     x = self.propagate(x, r_body)
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 195, in propagate
+[rank1]:     E, B, D = message.size()
+[rank1]: ValueError: not enough values to unpack (expected 3, got 2)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/logging/__init__.py", line 1083, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.9/logging/__init__.py", line 927, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.9/logging/__init__.py", line 663, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.9/logging/__init__.py", line 367, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 106, in main
+    solver_p.train(**cfg.predictor.train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 86, in train
+    logits, mask = model(all_h, all_r, edges_to_remove)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1643, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1459, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 63, in forward
+    x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 156, in grounding
+    x = self.propagate(x, r_body)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 185, in propagate
+    logging.info("message size: ", message.size())
+Message: 'message size: '
+Arguments: (torch.Size([58554, 1]),)
+--- Logging error ---
+Traceback (most recent call last):
+  File "/usr/lib/python3.9/logging/__init__.py", line 1083, in emit
+    msg = self.format(record)
+  File "/usr/lib/python3.9/logging/__init__.py", line 927, in format
+    return fmt.format(record)
+  File "/usr/lib/python3.9/logging/__init__.py", line 663, in format
+    record.message = record.getMessage()
+  File "/usr/lib/python3.9/logging/__init__.py", line 367, in getMessage
+    msg = msg % self.args
+TypeError: not all arguments converted during string formatting
+Call stack:
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 106, in main
+    solver_p.train(**cfg.predictor.train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 86, in train
+    logits, mask = model(all_h, all_r, edges_to_remove)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1643, in forward
+    else self._run_ddp_forward(*inputs, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1459, in _run_ddp_forward
+    return self.module(*inputs, **kwargs)  # type: ignore[index]
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 63, in forward
+    x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 156, in grounding
+    x = self.propagate(x, r_body)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 185, in propagate
+    logging.info("message size: ", message.size())
+Message: 'message size: '
+Arguments: (torch.Size([58554, 1]),)
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+[rank0]:     main(parse_args())
+[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 106, in main
+[rank0]:     solver_p.train(**cfg.predictor.train)
+[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 86, in train
+[rank0]:     logits, mask = model(all_h, all_r, edges_to_remove)
+[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1643, in forward
+[rank0]:     else self._run_ddp_forward(*inputs, **kwargs)
+[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/parallel/distributed.py", line 1459, in _run_ddp_forward
+[rank0]:     return self.module(*inputs, **kwargs)  # type: ignore[index]
+[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 63, in forward
+[rank0]:     x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 156, in grounding
+[rank0]:     x = self.propagate(x, r_body)
+[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 195, in propagate
+[rank0]:     E, B, D = message.size()
+[rank0]: ValueError: not enough values to unpack (expected 3, got 2)
+[rank0]:[W427 17:30:09.234222613 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+E0427 17:30:10.473109 2847340 torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 2847363) of binary: /home/emma/polly_env_py39/bin/python3.9
+Traceback (most recent call last):
+  File "/home/emma/polly_env_py39/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/run.py", line 919, in main
+    run(args)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/run.py", line 910, in run
+    elastic_launch(
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 269, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+run_rnnlogic.py FAILED
+------------------------------------------------------------
+Failures:
+[1]:
+  time      : 2025-04-27_17:30:10
+  host      : emma-System-Product-Name
+  rank      : 1 (local_rank: 1)
+  exitcode  : 1 (pid: 2847364)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2025-04-27_17:30:10
+  host      : emma-System-Product-Name
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 2847363)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

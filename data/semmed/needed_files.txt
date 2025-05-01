@@ -1,0 +1,9 @@
+### ALL NEEDED FILES ###
+
+1. entities.dict (<ent_id>\t<ent>)
+2. relations.dict (<rel_id>\t<rel>)
+3. train.txt (<head>\t<rel>\t<tail>)
+4. valid.txt
+5. test.txt
+6. relation_cluster.dict (<rel_id>\t<cluster_id>)
+7. mined_rules.txt

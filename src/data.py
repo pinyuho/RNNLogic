@@ -1,10 +1,14 @@
 import torch
 from torch.utils.data import Dataset
 from torch_scatter import scatter
+import torch.nn.functional as F
+
 import numpy as np
 import os
 import random
 from easydict import EasyDict
+import logging
+from typing import List, Optional, Tuple
 
 class KnowledgeGraph(object):
     def __init__(self, data_path):
@@ -14,6 +18,7 @@ class KnowledgeGraph(object):
         self.relation2id = dict()
         self.id2entity = dict()
         self.id2relation = dict()
+        self.rel2cluster = dict() # auxiliary task
 
         with open(os.path.join(data_path, 'entities.dict')) as fi:
             for line in fi:
@@ -37,6 +42,8 @@ class KnowledgeGraph(object):
         self.hr2oo = dict()
         self.hr2ooo = dict()
         self.relation2adjacency = [[[], []] for k in range(self.relation_size)]
+        self.sparse_adj = {} # To prevent grounding OOM
+
         self.relation2ht2index = [dict() for k in range(self.relation_size)]
         self.relation2outdegree = [[0 for i in range(self.entity_size)] for k in range(self.relation_size)]
 
@@ -70,6 +77,18 @@ class KnowledgeGraph(object):
 
                 self.relation2outdegree[r][t] += 1
 
+        for r, (tails, heads) in enumerate(self.relation2adjacency):
+            row = torch.LongTensor(tails)
+            col = torch.LongTensor(heads)
+            idx = torch.stack([row, col], dim=0)               # shape [2, num_edges]
+            vals = torch.ones(row.size(0), dtype=torch.float32)
+            A = torch.sparse_coo_tensor(
+                idx, vals,
+                (self.entity_size, self.entity_size),
+                device='cpu'        # 先建在 CPU，之後再 to(device)
+            ).coalesce()
+            self.sparse_adj[r] = A
+
         with open(os.path.join(data_path, "valid.txt")) as fi:
             for line in fi:
                 h, r, t = line.strip().split('\t')
@@ -97,6 +116,11 @@ class KnowledgeGraph(object):
                 if hr_index not in self.hr2ooo:
                     self.hr2ooo[hr_index] = list()
                 self.hr2ooo[hr_index].append(t)
+
+        with open(os.path.join(data_path, "relation_cluster.dict")) as fi: # relation_class.dict
+            for line in fi:
+                rel_id, cluster_id = line.strip().split("\t")
+                self.rel2cluster[int(rel_id)] = int(cluster_id)
 
         for r in range(self.relation_size):
             index = torch.LongTensor(self.relation2adjacency[r])
@@ -133,44 +157,110 @@ class KnowledgeGraph(object):
         value = value[mask]
         return [index, value]
 
-    def grounding(self, h, r, rule, edges_to_remove):
-        device = h.device
-        with torch.no_grad():
-            x = torch.nn.functional.one_hot(h, self.entity_size).transpose(0, 1).unsqueeze(-1)
-            if device.type == "cuda":
-                x = x.cuda(device)
-            for r_body in rule:
-                if r_body == r:
-                    x = self.propagate(x, r_body, edges_to_remove)
-                else:
-                    x = self.propagate(x, r_body, None)
-        return x.squeeze(-1).transpose(0, 1)
-
-    def propagate(self, x, relation, edges_to_remove=None):
+    @torch.no_grad()
+    def propagate_chunked(self,
+                          x: torch.Tensor,         # [E, bs]
+                          relation: int,
+                          edges_to_remove: Optional[torch.Tensor] = None,
+                          chunk_size: int = 32
+                         ) -> torch.Tensor:
+        """
+        把 x ([E,bs]) 切 chunk，分段做 sparse.mm，避免一次 allocate 全 [E,bs] OOM。
+        """
         device = x.device
-        node_in = self.relation2adjacency[relation][0][1]
-        node_out = self.relation2adjacency[relation][0][0]
-        if device.type == "cuda":
-            node_in = node_in.cuda(device)
-            node_out = node_out.cuda(device)
+        A = self.sparse_adj[relation].to(device)  # [E, E] sparse
+        E, bs = x.shape
 
-        message = x[node_in]
-        E, B, D = message.size()
+        # 預先 allocate 一次 [E, bs]
+        out = torch.zeros_like(x)
 
-        if edges_to_remove == None:
-            x = scatter(message, node_out, dim=0, dim_size=x.size(0))
-        else:
-            # message: edge * batch * dim
-            message = message.view(-1, D)
-            bias = torch.arange(B)
-            if device.type == "cuda":
-                bias = bias.cuda(device)
-            edges_to_remove = edges_to_remove * B + bias
-            message[edges_to_remove] = 0
-            message = message.view(E, B, D)
-            x = scatter(message, node_out, dim=0, dim_size=x.size(0))
+        # 分段 sparse.mm
+        for start in range(0, bs, chunk_size):
+            end = min(start + chunk_size, bs)
+            out[:, start:end] = torch.sparse.mm(
+                A, x[:, start:end]
+            )
 
-        return x
+        # 如果需要剔除邊，就在這裡做 mask
+        if edges_to_remove is not None:
+            rm = edges_to_remove.view(-1)  # [bs]
+            out[rm, torch.arange(bs, device=device)] = 0
+
+        return out
+    
+    @torch.no_grad()
+    def propagate(self,
+                  x: torch.Tensor,                    # [E, bs]
+                  relation: int,
+                  edges_to_remove: Optional[torch.Tensor] = None,
+                  chunk_size: int = 32
+                 ) -> torch.Tensor:
+        """
+        Chunked sparse.mm to avoid OOM.
+        x:           [E, bs]
+        self.sparse_adj[relation]: sparse [E, E]
+        """
+        device = x.device
+        A = self.sparse_adj[relation].to(device)  # sparse adjacency [E, E]
+        E, bs = x.shape
+
+        # allocate output once
+        out = torch.zeros_like(x)                 # [E, bs]
+
+        # chunked multiplication
+        for start in range(0, bs, chunk_size):
+            end = min(start + chunk_size, bs)
+            out[:, start:end] = torch.sparse.mm(A, x[:, start:end])
+
+        # optional edge removal mask
+        if edges_to_remove is not None:
+            rm = edges_to_remove.view(-1)         # [bs]
+            out[rm, torch.arange(bs, device=device)] = 0
+
+        return out
+
+    @torch.no_grad()
+    def grounding(self,
+                  h: torch.LongTensor,               # [B]
+                  r: int,
+                  rule: List[int],
+                  edges_to_remove: Optional[torch.Tensor] = None,
+                  micro_bs: int = 16,
+                  chunk_size: int = 32
+                 ) -> torch.Tensor:
+        """
+        Full grounding with micro-batch + chunked propagation.
+        Returns a tensor of shape [B, E].
+        """
+        device = h.device
+        B = h.size(0)
+        results = []
+
+        for start in range(0, B, micro_bs):
+            end = min(start + micro_bs, B)
+            h_mb = h[start:end]                  # [bs]
+            bs = end - start
+
+            # one-hot initial distribution [E, bs]
+            x = torch.zeros(self.entity_size, bs, device=device)
+            x[h_mb, torch.arange(bs, device=device)] = 1.0
+
+            for r_body in rule:
+                # slice edges_to_remove for this micro-batch & rule
+                if edges_to_remove is not None and r_body == r:
+                    e2r_mb = edges_to_remove[start:end].view(-1)
+                else:
+                    e2r_mb = None
+
+                # chunked sparse propagation
+                x = self.propagate(x, r_body, e2r_mb, chunk_size)
+
+            # collect and transpose → [bs, E]
+            results.append(x.transpose(0, 1))
+            del x
+
+        # concatenate all micro-batches → [B, E]
+        return torch.cat(results, dim=0)
 
 class TrainDataset(Dataset):
     def __init__(self, graph, batch_size):
@@ -293,7 +383,7 @@ class TestDataset(Dataset):
         return all_h, all_r, all_t, mask
 
 class RuleDataset(Dataset):
-    def __init__(self, num_relations, input):
+    def __init__(self, num_relations, input, rel2cluster=None, cluster_size=None):
         self.rules = list()
         self.num_relations = num_relations
         self.ending_idx = num_relations
@@ -324,22 +414,38 @@ class RuleDataset(Dataset):
     @staticmethod
     def collate_fn(data):
         inputs = [item[0][0:len(item[0])-1] for item in data]
-        target = [item[0][1:len(item[0])] for item in data]
+        main_target = [item[0][1:len(item[0])] for item in data]
         weight = [float(item[-1]) for item in data]
         max_len = max([len(_) for _ in inputs])
         padding_index = [int(item[-2]) for item in data]
 
+        # aux_target
+        rel2cluster = load_relation_clusters()
+
+        aux_target = [[rel2cluster.get(rel, -1) for rel in seq] for seq in main_target]
+
         for k in range(len(data)):
             for i in range(max_len - len(inputs[k])):
                 inputs[k].append(padding_index[k])
-                target[k].append(padding_index[k])
+                main_target[k].append(padding_index[k])
+                aux_target[k].append(-1)  # -1 代表 padding，避開有效 cluster id 範圍
 
         inputs = torch.tensor(inputs, dtype=torch.long)
-        target = torch.tensor(target, dtype=torch.long)
+        main_target = torch.tensor(main_target, dtype=torch.long)
+        aux_target = torch.tensor(aux_target, dtype=torch.long)
         weight = torch.tensor(weight)
-        mask = (target != torch.tensor(padding_index, dtype=torch.long).unsqueeze(1))
+        mask = (main_target != torch.tensor(padding_index, dtype=torch.long).unsqueeze(1))
 
-        return inputs, target, mask, weight
+        # return inputs, target, mask, weight
+        return inputs, main_target, aux_target, mask, weight
+
+def load_relation_clusters(data_path="../data/semmed", file_name="relation_cluster.dict"): # relation_class.dict
+    rel2cluster = {}
+    with open(os.path.join(data_path, file_name)) as fi:
+        for line in fi:
+            rel_id, cluster_id = line.strip().split("\t")
+            rel2cluster[int(rel_id)] = int(cluster_id)
+    return rel2cluster
 
 def Iterator(dataloader):
     while True:

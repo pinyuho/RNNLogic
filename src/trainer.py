@@ -290,8 +290,9 @@ class TrainerPredictor(object):
 
 class TrainerGenerator(object):
 
-    def __init__(self, model, gpu):
+    def __init__(self, model, mode, gpu):
         self.model = model
+        self.mode = mode
 
         if gpu is None:
             self.device = torch.device("cpu")
@@ -311,18 +312,24 @@ class TrainerGenerator(object):
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
         total_loss = 0.0
+        total_main_loss = 0.0
+        total_aux_loss = 0.0
         for epoch in range(num_epoch):
             batch = next(iterator)
-            inputs, target, mask, weight = batch
+            inputs, main_target, aux_target, mask, weight = batch
             hidden = self.zero_state(inputs.size(0))
             
             if self.device.type == "cuda":
                 inputs = inputs.cuda(self.device)
-                target = target.cuda(self.device)
+                main_target = main_target.cuda(self.device)
+                aux_target = aux_target.cuda(self.device)
                 mask = mask.cuda(self.device)
                 weight = weight.cuda(self.device)
 
-            loss = model.loss(inputs, target, mask, weight, hidden)
+            if self.mode != 'ori':
+                loss, main_loss, aux_loss = model.loss(inputs, main_target, aux_target, epoch, mask, weight, hidden)
+            else:
+                loss = model.loss(inputs, main_target, mask, weight, hidden)
             loss.backward()
 
             optimizer.step()
@@ -330,10 +337,28 @@ class TrainerGenerator(object):
 
             total_loss += loss.item()
 
+            if self.mode != 'ori':
+                total_main_loss += main_loss.item()
+                total_aux_loss += aux_loss.item()
+
             if (epoch + 1) % print_every == 0:
+                avg_total_loss = total_loss / print_every
+
+                if self.mode != 'ori':
+                    avg_main_loss = total_main_loss / print_every
+                    avg_aux_loss = total_aux_loss / print_every
                 if comm.get_rank() == 0:
-                    logging.info('{} {} {:.6f}'.format(epoch + 1, num_epoch, total_loss / print_every))
+                    if self.mode != 'ori':
+                        logging.info(f"[E{epoch + 1:03d}] Total: {avg_total_loss:.6f} | Main: {avg_main_loss:.6f} | Aux: {avg_aux_loss:.6f}")
+                    else:
+                        logging.info('{} {} {:.6f}'.format(epoch + 1, num_epoch, total_loss / print_every))
+                # if comm.get_rank() == 0:
+                #     logging.info('{} {} {:.6f}'.format(epoch + 1, num_epoch, total_loss / print_every))
                 total_loss = 0.0
+
+                if self.mode != 'ori':
+                    total_main_loss = 0.0
+                    total_aux_loss = 0.0
     
     def zero_state(self, batch_size): 
         state_shape = (self.model.num_layers, batch_size, self.model.hidden_dim)
@@ -376,7 +401,11 @@ class TrainerGenerator(object):
         inputs = torch.tensor([seq], dtype=torch.long, device=self.device)
         relation = torch.tensor([seq[0]], dtype=torch.long, device=self.device)
         hidden = self.zero_state(1)
-        logits, hidden = model(inputs, relation, hidden)
+        if self.mode == 'ori':
+            logits, hidden = model(inputs, relation, hidden)
+        else:
+            _, logits, hidden = model(inputs, relation, hidden)
+        # logits, hidden = model(inputs, relation, hidden)
         log_prob = torch.log_softmax(logits[0, -1, :] / temperature, dim=-1).data.cpu().numpy().tolist()
         return log_prob
     
@@ -427,7 +456,11 @@ class TrainerGenerator(object):
 
             for pst in range(max_len):
                 inputs = rules[:, pst].unsqueeze(-1)
-                logits, hidden = model(inputs, head, hidden)
+
+                if self.mode == 'ori':
+                    logits, hidden = model(inputs, head, hidden)
+                else:
+                    _, logits, hidden = model(inputs, head, hidden)
                 logits /= temperature
                 log_probability = torch.log_softmax(logits.squeeze(1), dim=-1)
                 probability = torch.softmax(logits.squeeze(1), dim=-1)

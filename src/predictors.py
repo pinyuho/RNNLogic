@@ -13,6 +13,7 @@ from layers import MLP, FuncToNode, FuncToNodeSum
 from embedding import RotatE
 from torch.utils.data import Dataset, DataLoader
 from torch_scatter import scatter, scatter_add, scatter_min, scatter_max, scatter_mean
+from typing import Tuple, Optional
 
 class Predictor(torch.nn.Module):
     def __init__(self, graph, entity_feature='bias'):
@@ -51,72 +52,73 @@ class Predictor(torch.nn.Module):
         self.rule_weights = torch.nn.parameter.Parameter(torch.zeros(self.num_rules))
 
     def forward(self, all_h, all_r, edges_to_remove):
-        query_r = all_r[0].item()
-        assert (all_r != query_r).sum() == 0
-        device = all_r.device
+            query_r = all_r[0].item()
+            assert (all_r != query_r).sum() == 0
+            device = all_r.device
 
-        score = torch.zeros(all_r.size(0), self.num_entities, device=device)
-        mask = torch.zeros(all_r.size(0), self.num_entities, device=device)
-        for index, (r_head, r_body) in self.relation2rules[query_r]:
-            assert r_head == query_r
+            score = torch.zeros(all_r.size(0), self.num_entities, device=device)
+            mask = torch.zeros(all_r.size(0), self.num_entities, device=device)
+            for index, (r_head, r_body) in self.relation2rules[query_r]:
+                assert r_head == query_r
 
-            x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
-            score += x * self.rule_weights[index]
-            mask += x
-        
-        if mask.sum().item() == 0:
+                x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+                score += x * self.rule_weights[index]
+                mask += x
+            
+            if mask.sum().item() == 0:
+                if self.entity_feature == 'bias':
+                    return mask + self.bias.unsqueeze(0), (1 - mask).bool()
+                else:
+                    return mask - float('-inf'), mask.bool()
+            
             if self.entity_feature == 'bias':
-                return mask + self.bias.unsqueeze(0), (1 - mask).bool()
+                score = score + self.bias.unsqueeze(0)
+                mask = torch.ones_like(mask).bool()
             else:
-                return mask - float('-inf'), mask.bool()
-        
-        if self.entity_feature == 'bias':
-            score = score + self.bias.unsqueeze(0)
-            mask = torch.ones_like(mask).bool()
-        else:
-            mask = (mask != 0)
-            score = score.masked_fill(~mask, float('-inf'))
-        
-        return score, mask
+                mask = (mask != 0)
+                score = score.masked_fill(~mask, float('-inf'))
+            
+            return score, mask
 
     def compute_H(self, all_h, all_r, all_t, edges_to_remove):
-        query_r = all_r[0].item()
-        assert (all_r != query_r).sum() == 0
-        device = all_r.device
+            query_r = all_r[0].item()
+            assert (all_r != query_r).sum() == 0
+            device = all_r.device
 
-        rule_score = list()
-        rule_index = list()
-        mask = torch.zeros(all_r.size(0), self.num_entities, device=device)
-        for index, (r_head, r_body) in self.relation2rules[query_r]:
-            assert r_head == query_r
+            rule_score = list()
+            rule_index = list()
+            mask = torch.zeros(all_r.size(0), self.num_entities, device=device)
+            for index, (r_head, r_body) in self.relation2rules[query_r]:
+                assert r_head == query_r
 
-            x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
-            score = x * self.rule_weights[index]
-            mask += x
+                x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+                score = x * self.rule_weights[index]
+                mask += x
 
-            rule_score.append(score)
-            rule_index.append(index)
+                rule_score.append(score)
+                rule_index.append(index)
 
-        rule_index = torch.tensor(rule_index, dtype=torch.long, device=device)
-        pos_index = F.one_hot(all_t, self.num_entities).bool()
-        if device.type == "cuda":
-            pos_index = pos_index.cuda(device)
-        neg_index = (mask != 0)
+            rule_index = torch.tensor(rule_index, dtype=torch.long, device=device)
+            pos_index = F.one_hot(all_t, self.num_entities).bool()
+            if device.type == "cuda":
+                pos_index = pos_index.cuda(device)
+            neg_index = (mask != 0)
 
-        if len(rule_score) == 0:
-            return None, None
+            if len(rule_score) == 0:
+                return None, None
 
-        rule_H_score = list()
-        for score in rule_score:
-            pos_score = (score * pos_index).sum(1) / torch.clamp(pos_index.sum(1), min=1)
-            neg_score = (score * neg_index).sum(1) / torch.clamp(neg_index.sum(1), min=1)
-            H_score = pos_score - neg_score
-            rule_H_score.append(H_score.unsqueeze(-1))
+            rule_H_score = list()
+            for score in rule_score:
+                pos_score = (score * pos_index).sum(1) / torch.clamp(pos_index.sum(1), min=1)
+                neg_score = (score * neg_index).sum(1) / torch.clamp(neg_index.sum(1), min=1)
+                H_score = pos_score - neg_score
+                rule_H_score.append(H_score.unsqueeze(-1))
 
-        rule_H_score = torch.cat(rule_H_score, dim=-1)
-        rule_H_score = torch.softmax(rule_H_score, dim=-1).sum(0)
+            rule_H_score = torch.cat(rule_H_score, dim=-1)
+            rule_H_score = torch.softmax(rule_H_score, dim=-1).sum(0)
 
-        return rule_H_score, rule_index
+            return rule_H_score, rule_index
+
 
 class PredictorPlus(torch.nn.Module):
     def __init__(self, graph, type='emb', num_layers=3, hidden_dim=16, entity_feature='bias', aggregator='sum', embedding_path=None):
@@ -206,7 +208,7 @@ class PredictorPlus(torch.nn.Module):
         idx = idx.unsqueeze(-1).unsqueeze(-1).expand(-1, -1, self.hidden_dim)
         rule_emb = torch.gather(output, 1, idx).squeeze(1)
         return rule_emb
-    
+
     def forward(self, all_h, all_r, edges_to_remove):
         query_r = all_r[0].item()
         assert (all_r != query_r).sum() == 0
@@ -269,3 +271,4 @@ class PredictorPlus(torch.nn.Module):
             score = score.masked_fill(~mask, float('-inf'))
 
         return score, mask
+
