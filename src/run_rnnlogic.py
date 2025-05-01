@@ -10,13 +10,34 @@ import numpy as np
 from datetime import datetime
 import torch
 from torch.utils.data import DataLoader
+from torch import distributed as dist
 
 from data import KnowledgeGraph, TrainDataset, ValidDataset, TestDataset, RuleDataset
 from predictors import Predictor, PredictorPlus
 from generators import Generator
+from generator_multitask import GeneratorMultitask
 from utils import load_config, save_config, set_logger, set_seed
 from trainer import TrainerPredictor, TrainerGenerator
 import comm
+
+def save_rules(cfg, rules, label):
+    relation_map = {}
+    with open(cfg.data.data_path + '/relations.dict', 'r') as file:
+        for line in file:
+            rel_id, rel_name = line.strip().split("\t")
+            relation_map[int(rel_id)] = rel_name
+            
+    all_readable_rules = []
+    for rule in rules:
+        readable_rule = []
+        for rel in rule:
+            readable_rule.append(relation_map.get(rel, f'UNKNOWN_REL_{rel}'))
+
+        all_readable_rules.append(readable_rule)
+
+    filepath = os.path.join(cfg.save_path, f'rules_{label}.txt')
+    with open(filepath, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(str(rule) for rule in all_readable_rules))
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser(
@@ -25,6 +46,7 @@ def parse_args(args=None):
     )
     parser.add_argument('--config', default='../rnnlogic.yaml', type=str)
     parser.add_argument("--local_rank", type=int, default=0)
+    parser.add_argument('--mode', default='ori', type=str)
     return parser.parse_args(args)
 
 def main(args):
@@ -53,8 +75,13 @@ def main(args):
         logging.info('-------------------------')
         logging.info('| Pre-train Generator')
         logging.info('-------------------------')
-    generator = Generator(graph, **cfg.generator.model)
-    solver_g = TrainerGenerator(generator, gpu=cfg.generator.gpu)
+    
+    print("mode: ", args.mode)
+    if args.mode == 'ori':
+        generator = Generator(graph, **cfg.generator.model)
+    else:
+        generator = GeneratorMultitask(graph, 4, args.mode, **cfg.generator.model) # cluster_size = 4
+    solver_g = TrainerGenerator(generator, args.mode, gpu=cfg.generator.gpu)
     solver_g.train(dataset, **cfg.generator.pre_train)
 
     replay_buffer = list()
@@ -68,6 +95,7 @@ def main(args):
         sampled_rules = solver_g.sample(cfg.EM.num_rules, cfg.EM.max_length)
         prior = [rule[-1] for rule in sampled_rules]
         rules = [rule[0:-1] for rule in sampled_rules]
+        save_rules(cfg, rules, k)
 
         # Train a reasoning predictor with sampled logic rules.
         predictor = Predictor(graph, **cfg.predictor.model)
@@ -88,6 +116,7 @@ def main(args):
         
         # M-step: Update the rule generator.
         dataset = RuleDataset(graph.relation_size, rules)
+
         solver_g.train(dataset, **cfg.generator.train)
         
     if replay_buffer != []:
@@ -118,6 +147,8 @@ def main(args):
 
     predictor = PredictorPlus(graph, **cfg.predictorplus.model)
     predictor.set_rules(rules)
+    save_rules(cfg, rules, "final")
+
     optim = torch.optim.Adam(predictor.parameters(), **cfg.predictorplus.optimizer)
 
     solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, gpus=cfg.predictorplus.gpus)
@@ -142,6 +173,9 @@ def main(args):
         logging.info('-------------------------')
         logging.info('| Final Test MRR: {:.6f}'.format(test_mrr))
         logging.info('-------------------------')
+
+    if dist.is_initialized():
+        dist.destroy_process_group()
 
 if __name__ == '__main__':
     main(parse_args())

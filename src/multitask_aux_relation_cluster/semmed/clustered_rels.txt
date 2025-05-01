@@ -1,0 +1,57 @@
+Cluster 0:
+  - affects
+  - augments
+  - compared_with
+  - converts_to
+  - disrupts
+  - higher_than
+  - inhibits
+  - interacts_with
+  - location_of
+  - lower_than
+  - neg_affects
+  - neg_augments
+  - neg_disrupts
+  - neg_inhibits
+  - neg_interacts_with
+  - neg_location_of
+  - neg_part_of
+  - neg_produces
+  - neg_stimulates
+  - part_of
+  - produces
+  - same_as
+  - stimulates
+
+Cluster 1:
+  - administered_to
+  - neg_administered_to
+  - neg_process_of
+  - occurs_in
+  - process_of
+
+Cluster 2:
+  - method_of
+  - neg_precedes
+  - neg_treats
+  - neg_uses
+  - precedes
+  - treats
+  - uses
+
+Cluster 3:
+  - associated_with
+  - causes
+  - coexists_with
+  - complicates
+  - diagnoses
+  - isa
+  - manifestation_of
+  - neg_associated_with
+  - neg_causes
+  - neg_coexists_with
+  - neg_predisposes
+  - neg_prevents
+  - predisposes
+  - prevents
+

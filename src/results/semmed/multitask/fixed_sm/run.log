@@ -1,0 +1,22 @@
+2025-04-27 17:30:07 INFO     Predictor: read 497 rules from list.
+17:29:14 INFO     | Pre-train Generator
+2025-04-27 17:29:14 INFO     -------------------------
+2025-04-27 17:29:15 INFO     >>>>> Generator: Training
+2025-04-27 17:29:21 INFO     [E1000] Total: 2.309692 | Main: 2.619517 | Aux: 1.070392
+2025-04-27 17:29:26 INFO     [E2000] Total: 2.241207 | Main: 2.537519 | Aux: 1.055961
+2025-04-27 17:29:31 INFO     [E3000] Total: 2.231779 | Main: 2.526241 | Aux: 1.053930
+2025-04-27 17:29:36 INFO     [E4000] Total: 2.226018 | Main: 2.519633 | Aux: 1.051561
+2025-04-27 17:29:41 INFO     [E5000] Total: 2.216577 | Main: 2.507932 | Aux: 1.051161
+2025-04-27 17:29:46 INFO     [E6000] Total: 2.214696 | Main: 2.505806 | Aux: 1.050257
+2025-04-27 17:29:51 INFO     [E7000] Total: 2.210643 | Main: 2.500910 | Aux: 1.049573
+2025-04-27 17:29:57 INFO     [E8000] Total: 2.206369 | Main: 2.495771 | Aux: 1.048758
+2025-04-27 17:30:02 INFO     [E9000] Total: 2.201544 | Main: 2.489811 | Aux: 1.048474
+2025-04-27 17:30:07 INFO     [E10000] Total: 2.202758 | Main: 2.491439 | Aux: 1.048032
+2025-04-27 17:30:07 INFO     -------------------------
+2025-04-27 17:30:07 INFO     | EM Iteration: 1/1
+2025-04-27 17:30:07 INFO     -------------------------
+2025-04-27 17:30:07 INFO     >>>>> Generator: Rule generation with sampling
+2025-04-27 17:30:07 INFO     Predictor: read 497 rules from list.
+2025-04-27 17:30:07 INFO     Initializing distributed process group
+2025-04-27 17:30:07 INFO     Preprocess training set
+2025-04-27 17:30:08 INFO     >>>>> Predictor: Training
