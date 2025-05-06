@@ -69,7 +69,11 @@ class FuncToNodeSum(nn.Module):
         message = x_f.unsqueeze(0)
 
         weight_zero = weight == 0
-        features = (message * weight).sum(1)
+
+        A_fn_sparse = A_fn.to_sparse()
+        features = torch.sparse.mm(A_fn_sparse, x_f)  # → (N_node, vector_dim)
+
+        # features = (message * weight).sum(1)
         output = self.add_model(features)
         output = self.layer_norm(output)
         output = torch.relu(output)

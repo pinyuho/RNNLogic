@@ -4,7 +4,6 @@ from torch_scatter import scatter
 
 import os
 import random
-
 # from utils import load_config
 
 class KnowledgeGraph(object):
@@ -114,10 +113,10 @@ class KnowledgeGraph(object):
                     self.hr2ooo[hr_index] = list()
                 self.hr2ooo[hr_index].append(t)
 
-        # with open(os.path.join(data_path, "relation_cluster.dict")) as fi: # relation_class.dict
-        #     for line in fi:
-        #         rel_id, cluster_id = line.strip().split("\t")
-        #         self.rel2cluster[int(rel_id)] = int(cluster_id)
+        with open(os.path.join(data_path, "relation_cluster.dict")) as fi: # relation_class.dict
+            for line in fi:
+                rel_id, cluster_id = line.strip().split("\t")
+                self.rel2cluster[int(rel_id)] = int(cluster_id)
 
         for r in range(self.relation_size):
             index = torch.LongTensor(self.relation2adjacency[r])

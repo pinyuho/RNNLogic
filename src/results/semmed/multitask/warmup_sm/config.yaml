@@ -12,12 +12,12 @@ EM: !!python/object/new:easydict.EasyDict
 data: !!python/object/new:easydict.EasyDict
   dictitems:
     batch_size: 8
-    data_path: ../data/semmed2
-    rule_file: ../data/semmed2/mined_rules.txt
+    data_path: ../data/semmed
+    rule_file: ../data/semmed/mined_rules.txt
   state:
     batch_size: 8
-    data_path: ../data/semmed2
-    rule_file: ../data/semmed2/mined_rules.txt
+    data_path: ../data/semmed
+    rule_file: ../data/semmed/mined_rules.txt
 final_prediction: !!python/object/new:easydict.EasyDict
   dictitems:
     max_length: &id001
@@ -171,5 +171,5 @@ predictorplus: !!python/object/new:easydict.EasyDict
     model: *id015
     optimizer: *id016
     train: *id017
-save_path: test
+save_path: results/semmed/multitask/warmup_sm
 seed: 1
