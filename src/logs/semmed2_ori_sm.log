@@ -1,0 +1,76 @@
+W0505 20:32:46.842414 3174985 torch/distributed/run.py:793] 
+W0505 20:32:46.842414 3174985 torch/distributed/run.py:793] *****************************************
+W0505 20:32:46.842414 3174985 torch/distributed/run.py:793] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0505 20:32:46.842414 3174985 torch/distributed/run.py:793] *****************************************
+Data loading | DONE!
+Data loading | DONE!
+mode:  ori
+2025-05-05 20:32:50,840 INFO     -------------------------
+2025-05-05 20:32:50,840 INFO     | Pre-train Generator
+2025-05-05 20:32:50,840 INFO     -------------------------
+mode:  ori
+2025-05-05 20:32:50,998 INFO     >>>>> Generator: Training
+2025-05-05 20:32:56,089 INFO     1000 10000 2.150474
+W0505 20:32:59.923142 3174985 torch/distributed/elastic/agent/server/api.py:704] Received Signals.SIGINT death signal, shutting down workers
+W0505 20:32:59.923740 3174985 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3175012 closing signal SIGINT
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+W0505 20:32:59.923915 3174985 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3175013 closing signal SIGINT
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 85, in main
+    solver_g.train(dataset, **cfg.generator.pre_train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 332, in train
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+    loss = model.loss(inputs, main_target, mask, weight, hidden)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/generators.py", line 32, in loss
+    logits, hidden = self.forward(inputs, inputs[:, 0], hidden)    
+main(parse_args())  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/generators.py", line 28, in forward
+
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 85, in main
+    logits = self.linear(outputs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    solver_g.train(dataset, **cfg.generator.pre_train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 318, in train
+    batch = next(iterator)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 387, in Iterator
+    for data in dataloader:
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
+    data = self._next_data()
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 757, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 55, in fetch
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return self.collate_fn(data)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 351, in collate_fn
+    inputs = [item[0][0:len(item[0])-1] for item in data]
+      File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 351, in <listcomp>
+return forward_call(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/linear.py", line 125, in forward
+    inputs = [item[0][0:len(item[0])-1] for item in data]
+KeyboardInterrupt
+    return F.linear(input, self.weight, self.bias)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/emma/polly_env_py39/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 355, in wrapper
+    return f(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/run.py", line 919, in main
+    run(args)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/run.py", line 910, in run
+    elastic_launch(
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 138, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/launcher/api.py", line 260, in launch_agent
+    result = agent.run()
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/elastic/metrics/api.py", line 137, in wrapper
+    result = f(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 696, in run
+    result = self._invoke_run(role)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/elastic/agent/server/api.py", line 855, in _invoke_run
+    time.sleep(monitor_interval)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/distributed/elastic/multiprocessing/api.py", line 84, in _terminate_process_handler
+    raise SignalException(f"Process {os.getpid()} got signal: {sigval}", sigval=sigval)
+torch.distributed.elastic.multiprocessing.api.SignalException: Process 3174985 got signal: 2

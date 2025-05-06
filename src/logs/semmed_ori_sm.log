@@ -1,71 +1,47 @@
-W0501 17:52:42.368353 3004976 torch/distributed/run.py:793] 
-W0501 17:52:42.368353 3004976 torch/distributed/run.py:793] *****************************************
-W0501 17:52:42.368353 3004976 torch/distributed/run.py:793] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
-W0501 17:52:42.368353 3004976 torch/distributed/run.py:793] *****************************************
+W0502 19:11:31.432727 3057306 torch/distributed/run.py:793] 
+W0502 19:11:31.432727 3057306 torch/distributed/run.py:793] *****************************************
+W0502 19:11:31.432727 3057306 torch/distributed/run.py:793] Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+W0502 19:11:31.432727 3057306 torch/distributed/run.py:793] *****************************************
 Data loading | DONE!
 Data loading | DONE!
-2025-05-01 17:52:59,066 INFO     -------------------------
-2025-05-01 17:52:59,066 INFO     | Pre-train Generator
-2025-05-01 17:52:59,066 INFO     -------------------------
+2025-05-02 19:11:48,225 INFO     -------------------------
+2025-05-02 19:11:48,225 INFO     | Pre-train Generator
+2025-05-02 19:11:48,225 INFO     -------------------------
 mode:  ori
 mode:  ori
-2025-05-01 17:52:59,202 INFO     >>>>> Generator: Training
-2025-05-01 17:53:03,751 INFO     1000 10000 2.617082
-2025-05-01 17:53:07,462 INFO     2000 10000 2.524798
-2025-05-01 17:53:11,473 INFO     3000 10000 2.511061
-2025-05-01 17:53:15,264 INFO     4000 10000 2.499214
-2025-05-01 17:53:19,774 INFO     5000 10000 2.498550
-2025-05-01 17:53:23,569 INFO     6000 10000 2.493884
-2025-05-01 17:53:27,297 INFO     7000 10000 2.491780
-2025-05-01 17:53:31,389 INFO     8000 10000 2.484261
-2025-05-01 17:53:35,121 INFO     9000 10000 2.486301
-2025-05-01 17:53:39,145 INFO     10000 10000 2.474596
-2025-05-01 17:53:39,149 INFO     -------------------------
-2025-05-01 17:53:39,149 INFO     | EM Iteration: 1/1
-2025-05-01 17:53:39,149 INFO     -------------------------
-2025-05-01 17:53:39,149 INFO     >>>>> Generator: Rule generation with sampling
-2025-05-01 17:53:39,350 INFO     Predictor: read 496 rules from list.
-2025-05-01 17:53:39,350 INFO     Initializing distributed process group
-2025-05-01 17:53:39,360 INFO     Predictor: read 496 rules from list.
-2025-05-01 17:53:39,363 INFO     Preprocess training set
-2025-05-01 17:53:39,441 INFO     >>>>> Predictor: Training
-[rank1]:[W501 17:53:40.851239079 reducer.cpp:1400] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
-[rank0]:[W501 17:53:40.868948344 reducer.cpp:1400] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
-2025-05-01 17:54:22,882 INFO     100 29348 14.231636 16130632.0
-2025-05-01 17:55:07,678 INFO     200 29348 14.119928 16070142.1
-2025-05-01 17:55:50,974 INFO     300 29348 14.118111 16130632.0
-2025-05-01 17:56:34,220 INFO     400 29348 13.933010 16130632.0
-2025-05-01 17:57:16,488 INFO     500 29348 13.672813 16130632.0
-2025-05-01 17:57:58,501 INFO     600 29348 13.725976 16009652.3
-2025-05-01 17:58:42,802 INFO     700 29348 13.483242 16130632.0
-2025-05-01 17:59:28,313 INFO     800 29348 13.520261 16130632.0
-2025-05-01 18:00:11,449 INFO     900 29348 13.493156 16130632.0
-2025-05-01 18:00:55,379 INFO     1000 29348 13.352287 16130632.0
-2025-05-01 18:00:55,383 INFO     >>>>> Predictor: Evaluating on valid
-[rank1]: Traceback (most recent call last):
-[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
-[rank1]:     main(parse_args())
-[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 107, in main
-[rank1]:     valid_mrr_iter = solver_p.evaluate('valid', expectation=cfg.predictor.eval.expectation)
-[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-[rank1]:     return func(*args, **kwargs)
-[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 173, in evaluate
-[rank1]:     logits, mask = model(all_h, all_r, None)
-[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
-[rank1]:     return self._call_impl(*args, **kwargs)
-[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
-[rank1]:     return forward_call(*args, **kwargs)
-[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 64, in forward
-[rank1]:     x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
-[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-[rank1]:     return func(*args, **kwargs)
-[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 256, in grounding
-[rank1]:     x = self.propagate(x, r_body, e2r_mb, chunk_size)
-[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-[rank1]:     return func(*args, **kwargs)
-[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 213, in propagate
-[rank1]:     out[:, start:end] = torch.sparse.mm(A, x[:, start:end])
-[rank1]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.00 MiB. GPU 1 has a total capacity of 11.72 GiB of which 9.81 MiB is free. Process 3005017 has 378.00 MiB memory in use. Including non-PyTorch memory, this process has 11.33 GiB memory in use. Of the allocated memory 10.85 GiB is allocated by PyTorch, and 124.59 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+2025-05-02 19:11:48,388 INFO     >>>>> Generator: Training
+2025-05-02 19:11:53,025 INFO     1000 10000 2.617082
+2025-05-02 19:11:56,784 INFO     2000 10000 2.524798
+2025-05-02 19:12:00,875 INFO     3000 10000 2.511061
+2025-05-02 19:12:04,612 INFO     4000 10000 2.499214
+2025-05-02 19:12:08,654 INFO     5000 10000 2.498550
+2025-05-02 19:12:12,375 INFO     6000 10000 2.493884
+2025-05-02 19:12:16,098 INFO     7000 10000 2.491780
+2025-05-02 19:12:20,186 INFO     8000 10000 2.484261
+2025-05-02 19:12:23,914 INFO     9000 10000 2.486301
+2025-05-02 19:12:27,943 INFO     10000 10000 2.474596
+2025-05-02 19:12:27,947 INFO     -------------------------
+2025-05-02 19:12:27,947 INFO     | EM Iteration: 1/1
+2025-05-02 19:12:27,947 INFO     -------------------------
+2025-05-02 19:12:27,947 INFO     >>>>> Generator: Rule generation with sampling
+2025-05-02 19:12:28,144 INFO     Predictor: read 496 rules from list.
+2025-05-02 19:12:28,149 INFO     Predictor: read 496 rules from list.
+2025-05-02 19:12:28,150 INFO     Initializing distributed process group
+2025-05-02 19:12:28,152 INFO     Preprocess training set
+2025-05-02 19:12:28,228 INFO     >>>>> Predictor: Training
+[rank1]:[W502 19:12:28.575876322 reducer.cpp:1400] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+[rank0]:[W502 19:12:28.603853821 reducer.cpp:1400] Warning: find_unused_parameters=True was specified in DDP constructor, but did not find any unused parameters in the forward pass. This flag results in an extra traversal of the autograd graph every iteration,  which can adversely affect performance. If your model indeed never has any unused parameters in the forward pass, consider turning this flag off. Note that this warning may be a false positive if your model has flow control causing later iterations to have unused parameters. (function operator())
+2025-05-02 19:12:56,653 INFO     100 29348 14.281121 16130632.0
+2025-05-02 19:13:24,355 INFO     200 29348 14.168927 16070142.1
+2025-05-02 19:13:52,031 INFO     300 29348 14.143982 16130632.0
+2025-05-02 19:14:19,933 INFO     400 29348 13.983266 16130632.0
+2025-05-02 19:14:47,818 INFO     500 29348 13.743751 16130632.0
+2025-05-02 19:15:15,815 INFO     600 29348 13.784642 16009652.3
+2025-05-02 19:15:43,769 INFO     700 29348 13.552358 16130632.0
+2025-05-02 19:16:11,716 INFO     800 29348 13.585082 16130632.0
+2025-05-02 19:16:39,647 INFO     900 29348 13.535047 16130632.0
+2025-05-02 19:17:07,551 INFO     1000 29348 13.398506 16130632.0
+2025-05-02 19:17:07,555 INFO     >>>>> Predictor: Evaluating on valid
 [rank0]: Traceback (most recent call last):
 [rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
 [rank0]:     main(parse_args())
@@ -81,17 +57,42 @@ mode:  ori
 [rank0]:     return forward_call(*args, **kwargs)
 [rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 64, in forward
 [rank0]:     x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
-[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-[rank0]:     return func(*args, **kwargs)
-[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 256, in grounding
-[rank0]:     x = self.propagate(x, r_body, e2r_mb, chunk_size)
-[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
-[rank0]:     return func(*args, **kwargs)
-[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 213, in propagate
-[rank0]:     out[:, start:end] = torch.sparse.mm(A, x[:, start:end])
-[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 62.00 MiB. GPU 0 has a total capacity of 11.72 GiB of which 51.88 MiB is free. Including non-PyTorch memory, this process has 11.34 GiB memory in use. Process 3005018 has 180.00 MiB memory in use. Of the allocated memory 10.86 GiB is allocated by PyTorch, and 142.77 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
-W0501 18:01:24.966360 3004976 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3005017 closing signal SIGTERM
-E0501 18:01:25.231350 3004976 torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 1 (pid: 3005018) of binary: /home/emma/polly_env_py39/bin/python3.9
+[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 170, in grounding
+[rank0]:     x = self.propagate(x, r_body, None)
+[rank0]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 203, in propagate
+[rank0]:     out[:, start:end] = scatter(
+[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch_scatter-2.1.2-py3.9-linux-x86_64.egg/torch_scatter/scatter.py", line 167, in scatter
+[rank0]:     return scatter_sum(src, index, dim, out, dim_size)
+[rank0]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch_scatter-2.1.2-py3.9-linux-x86_64.egg/torch_scatter/scatter.py", line 22, in scatter_sum
+[rank0]:     out = torch.zeros(size, dtype=src.dtype, device=src.device)
+[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 124.00 MiB. GPU 0 has a total capacity of 11.72 GiB of which 113.88 MiB is free. Including non-PyTorch memory, this process has 11.28 GiB memory in use. Process 3057330 has 180.00 MiB memory in use. Of the allocated memory 10.60 GiB is allocated by PyTorch, and 352.29 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[rank1]: Traceback (most recent call last):
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+[rank1]:     main(parse_args())
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 107, in main
+[rank1]:     valid_mrr_iter = solver_p.evaluate('valid', expectation=cfg.predictor.eval.expectation)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+[rank1]:     return func(*args, **kwargs)
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 173, in evaluate
+[rank1]:     logits, mask = model(all_h, all_r, None)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+[rank1]:     return self._call_impl(*args, **kwargs)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+[rank1]:     return forward_call(*args, **kwargs)
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 64, in forward
+[rank1]:     x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 170, in grounding
+[rank1]:     x = self.propagate(x, r_body, None)
+[rank1]:   File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 203, in propagate
+[rank1]:     out[:, start:end] = scatter(
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch_scatter-2.1.2-py3.9-linux-x86_64.egg/torch_scatter/scatter.py", line 167, in scatter
+[rank1]:     return scatter_sum(src, index, dim, out, dim_size)
+[rank1]:   File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch_scatter-2.1.2-py3.9-linux-x86_64.egg/torch_scatter/scatter.py", line 22, in scatter_sum
+[rank1]:     out = torch.zeros(size, dtype=src.dtype, device=src.device)
+[rank1]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 124.00 MiB. GPU 1 has a total capacity of 11.72 GiB of which 79.81 MiB is free. Process 3057329 has 378.00 MiB memory in use. Including non-PyTorch memory, this process has 11.26 GiB memory in use. Of the allocated memory 10.63 GiB is allocated by PyTorch, and 278.90 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[rank0]:[W502 19:17:21.273526282 ProcessGroupNCCL.cpp:1250] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+W0502 19:17:22.617563 3057306 torch/distributed/elastic/multiprocessing/api.py:897] Sending process 3057330 closing signal SIGTERM
+E0502 19:17:22.681724 3057306 torch/distributed/elastic/multiprocessing/api.py:869] failed (exitcode: 1) local_rank: 0 (pid: 3057329) of binary: /home/emma/polly_env_py39/bin/python3.9
 Traceback (most recent call last):
   File "/home/emma/polly_env_py39/bin/torchrun", line 8, in <module>
     sys.exit(main())
@@ -114,10 +115,10 @@ Failures:
 ------------------------------------------------------------
 Root Cause (first observed failure):
 [0]:
-  time      : 2025-05-01_18:01:24
+  time      : 2025-05-02_19:17:22
   host      : emma-System-Product-Name
-  rank      : 1 (local_rank: 1)
-  exitcode  : 1 (pid: 3005018)
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 3057329)
   error_file: <N/A>
   traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
 ============================================================

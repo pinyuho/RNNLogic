@@ -12,12 +12,12 @@ EM: !!python/object/new:easydict.EasyDict
 data: !!python/object/new:easydict.EasyDict
   dictitems:
     batch_size: 8
-    data_path: ../data/xxx
-    rule_file: ../data/xxx/mined_rules.txt
+    data_path: ../data/semmed2
+    rule_file: ../data/semmed2/mined_rules.txt
   state:
     batch_size: 8
-    data_path: ../data/xxx
-    rule_file: ../data/xxx/mined_rules.txt
+    data_path: ../data/semmed2
+    rule_file: ../data/semmed2/mined_rules.txt
 final_prediction: !!python/object/new:easydict.EasyDict
   dictitems:
     max_length: &id001
@@ -102,6 +102,7 @@ predictor: !!python/object/new:easydict.EasyDict
       state:
         expectation: true
     gpus: &id009
+    - 0
     - 1
     model: &id010 !!python/object/new:easydict.EasyDict
       dictitems:
@@ -139,6 +140,7 @@ predictorplus: !!python/object/new:easydict.EasyDict
       state:
         expectation: true
     gpus: &id014
+    - 0
     - 1
     model: &id015 !!python/object/new:easydict.EasyDict
       dictitems:

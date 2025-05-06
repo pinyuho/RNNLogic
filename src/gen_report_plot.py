@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 # 模擬之前的資料
-models = ["RNNLogic", "multitask_fixed", "multitask_warmup", "multitask_schedule", "multitask_adaptive", "multitask_adaptive_topk"]
+models = ["RNNLogic", "multitask_fixed", "multitask_warmup", "multitask_schedule", "multitask_adaptive"]
 sizes = ["small", "mid", "full"]
 data = {
     "RNNLogic": [0.468, 0.456, 0.481],
@@ -9,7 +9,7 @@ data = {
     "multitask_warmup": [0.465, 0.446, None],
     "multitask_schedule": [0.462, 0.452, None],
     "multitask_adaptive": [0.473, 0.443, 0.478],
-    "multitask_adaptive_topk": [0.470, 0.448, 0.476],
+    # "multitask_adaptive_topk": [0.470, 0.448, 0.476],
 }
 
 # 繪製折線圖
