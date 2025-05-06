@@ -1,11 +1,10 @@
-save_path: test
+save_path: results/semmed/multitask/ori_sm
 load_path: null
 seed: 1
 
 data:
   data_path: ../data/semmed
   rule_file: ../data/semmed/mined_rules.txt
-  # batch_size: 2
   batch_size: 8
 
 EM:
