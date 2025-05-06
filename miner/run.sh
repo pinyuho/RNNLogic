@@ -14,8 +14,8 @@ mkdir -p logs
   -top-n 0 \
   -top-k 0 \
   -top-n-out 0 \
-  -output-file mined_rules.txt \
-  > logs/rule_mining.out.log \
-  2> logs/rule_mining.err.log
+  -output-file mined_rules.txt \d
+  # > logs/rule_mining.out.log \
+  # 2> logs/rule_mining.err.log
 
-echo "✅ Done! stdout → rule_mining.out.log / stderr → rule_mining.err.log"
+# echo "✅ Done! stdout → rule_mining.out.log / stderr → rule_mining.err.log"

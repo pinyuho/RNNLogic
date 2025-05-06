@@ -1,4 +1,4 @@
-save_path: results/semmed/multitask/ori_sm
+save_path: test
 load_path: null
 seed: 1
 

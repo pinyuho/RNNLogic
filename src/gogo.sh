@@ -33,7 +33,7 @@ for CONFIG_ORIGINAL in "${CONFIG_LIST[@]}"; do
 
     # ⏩ 複製並替換 save_path 為帶 mode + size 的版本
     cp "$CONFIG_ORIGINAL" "$CONFIG_PATH"
-    sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask/${MODE}_${SIZE}|" "$CONFIG_PATH"
+    # sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask/${MODE}_${SIZE}|" "$CONFIG_PATH"
     sed -i "s|data_path: .*|data_path: ../data/${DATASET}|" "$CONFIG_PATH"
     sed -i "s|rule_file: .*|rule_file: ../data/${DATASET}/mined_rules.txt|" "$CONFIG_PATH"
 

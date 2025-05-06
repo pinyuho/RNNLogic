@@ -1,0 +1,29 @@
+Cluster 0:
+  - !_member_meronym
+  - _member_meronym
+
+Cluster 1:
+  - _member_of_domain_region
+  - !_instance_hypernym
+  - _has_part
+  - !_has_part
+  - !_member_of_domain_region
+  - _instance_hypernym
+
+Cluster 2:
+  - _member_of_domain_usage
+  - !_synset_domain_topic_of
+  - _verb_group
+  - !_verb_group
+  - !_hypernym
+  - !_derivationally_related_form
+  - !_member_of_domain_usage
+  - _derivationally_related_form
+  - _synset_domain_topic_of
+  - _hypernym
+
+Cluster 3:
+  - _similar_to
+  - _also_see
+  - !_also_see
+  - !_similar_to
