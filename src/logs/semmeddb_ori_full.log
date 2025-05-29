@@ -1,0 +1,28 @@
+2025-05-24 01:10:11,633 INFO     -------------------------
+2025-05-24 01:10:11,633 INFO     | Pre-train Generator
+2025-05-24 01:10:11,633 INFO     -------------------------
+2025-05-24 01:10:11,754 INFO     >>>>> Generator: Training
+2025-05-24 01:10:16,264 INFO     1000 10000 1.640829
+2025-05-24 01:10:19,717 INFO     2000 10000 1.555844
+entity size:  8673
+relation size:  20
+Data loading | DONE!
+mode:  ori
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 182, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 86, in main
+    solver_g.train(dataset, **cfg.generator.pre_train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 319, in train
+    batch = next(iterator)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 379, in Iterator
+    for data in dataloader:
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
+    data = self._next_data()
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 756, in _next_data
+    index = self._next_index()  # may raise StopIteration
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 691, in _next_index
+    return next(self._sampler_iter)  # may raise StopIteration
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/sampler.py", line 349, in __iter__
+    idx_in_batch += 1
+KeyboardInterrupt

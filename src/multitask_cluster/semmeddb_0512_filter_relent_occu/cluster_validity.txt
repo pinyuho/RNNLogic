@@ -1,0 +1,5 @@
+
+[Cluster Validity (k = 5)]
+- Silhouette Score        : 0.3467 (Higher is better, max=1.0)
+- Davies-Bouldin Index     : 0.7624 (Lower is better, min=0.0)
+- Calinski-Harabasz Index  : 15.7316 (Higher is better)
