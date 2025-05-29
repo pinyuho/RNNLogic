@@ -20,8 +20,13 @@ class GeneratorMultitask(torch.nn.Module):
         self.label_size = self.num_relations + 1
         self.cluster_size = cluster_size
 
-        # prepare relations' embs
-        self.embedding = torch.nn.Embedding(self.vocab_size, self.embedding_dim, padding_idx=self.padding_idx)
+        # 隨機初始化
+        # self.embedding = torch.nn.Embedding(self.vocab_size, self.embedding_dim, padding_idx=self.padding_idx)
+
+        # 代入 RotatE 的 embedding (shape: [num_relations, dim])
+        rotate_relation_emb = torch.load("../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_512/relation_embedding.npy")  # shape: [num_relations, dim]
+        self.embedding = torch.nn.Embedding.from_pretrained(rotate_relation_emb, freeze=True)
+
 
         # ori
         self.encoder = torch.nn.LSTM(self.embedding_dim * 2, self.hidden_dim, self.num_layers, batch_first=True)
@@ -44,7 +49,7 @@ class GeneratorMultitask(torch.nn.Module):
         outputs, hidden = self.encoder(embedding, hidden)
         shared = self.mlp1(outputs)
 
-        aux_logits = self.mlp2(shared)
+        aux_logits = self.mlp2(shared) # TODO: 2. 不拿 shared 當做 input, 使用對應的 RotatE relation embedding 當做 input
         main_logits = self.mlp3(shared)
 
         return aux_logits, main_logits, hidden

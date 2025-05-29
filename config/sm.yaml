@@ -36,7 +36,7 @@ generator:
     batch_size: 512
 
 predictor:
-  gpus: [0, 1]
+  gpus: [1]
   model:
     entity_feature: bias
   optimizer:
@@ -57,7 +57,7 @@ final_prediction:
   max_length: [1, 2, 3, 4, 5]
 
 predictorplus:
-  gpus: [0, 1]
+  gpus: [1]
   model:
     hidden_dim: 16
     aggregator: sum

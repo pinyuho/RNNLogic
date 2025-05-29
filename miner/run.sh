@@ -3,7 +3,7 @@
 mkdir -p logs
 
 ./rnnlogic \
-  -data-path ../data/semmed \
+  -data-path ../data/semmeddb \
   -max-length 3 \
   -threads 40 \
   -lr 0.01 \

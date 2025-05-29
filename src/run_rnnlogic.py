@@ -80,7 +80,8 @@ def main(args):
     if args.mode == 'ori':
         generator = Generator(graph, **cfg.generator.model)
     else:
-        generator = GeneratorMultitask(graph, 4, args.mode, **cfg.generator.model) # cluster_size = 4
+        print("cluster size:", 3)
+        generator = GeneratorMultitask(graph, 3, args.mode, **cfg.generator.model)
     solver_g = TrainerGenerator(generator, args.mode, gpu=cfg.generator.gpu)
     solver_g.train(dataset, **cfg.generator.pre_train)
 

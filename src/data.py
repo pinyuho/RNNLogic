@@ -1,10 +1,10 @@
 import torch
 from torch.utils.data import Dataset
 from torch_scatter import scatter
-
+import numpy as np
 import os
 import random
-# from utils import load_config
+from easydict import EasyDict
 
 class KnowledgeGraph(object):
     def __init__(self, data_path):
@@ -16,11 +16,15 @@ class KnowledgeGraph(object):
         self.id2relation = dict()
         self.rel2cluster = dict() # auxiliary task
 
+        seen = set()
         with open(os.path.join(data_path, 'entities.dict')) as fi:
             for line in fi:
                 id, entity = line.strip().split('\t')
                 self.entity2id[entity] = int(id)
                 self.id2entity[int(id)] = entity
+                if entity in seen:
+                    print(f"Duplicate entity name detected: {entity}")
+                seen.add(entity)
 
         with open(os.path.join(data_path, 'relations.dict')) as fi:
             for line in fi:
@@ -30,6 +34,9 @@ class KnowledgeGraph(object):
 
         self.entity_size = len(self.entity2id)
         self.relation_size = len(self.relation2id)
+
+        print("entity size: ", self.entity_size)
+        print("relation size: ", self.relation_size)
         
         self.train_facts = list()
         self.valid_facts = list()
@@ -38,8 +45,6 @@ class KnowledgeGraph(object):
         self.hr2oo = dict()
         self.hr2ooo = dict()
         self.relation2adjacency = [[[], []] for k in range(self.relation_size)]
-        self.sparse_adj = {} # To prevent grounding OOM
-
         self.relation2ht2index = [dict() for k in range(self.relation_size)]
         self.relation2outdegree = [[0 for i in range(self.entity_size)] for k in range(self.relation_size)]
 
@@ -71,19 +76,11 @@ class KnowledgeGraph(object):
                 index = len(self.relation2ht2index[r])
                 self.relation2ht2index[r][ht_index] = index
 
-                self.relation2outdegree[r][t] += 1
-
-        for r, (tails, heads) in enumerate(self.relation2adjacency):
-            row = torch.LongTensor(tails)
-            col = torch.LongTensor(heads)
-            idx = torch.stack([row, col], dim=0)               # shape [2, num_edges]
-            vals = torch.ones(row.size(0), dtype=torch.float32)
-            A = torch.sparse_coo_tensor(
-                idx, vals,
-                (self.entity_size, self.entity_size),
-                device='cpu'        # 先建在 CPU，之後再 to(device)
-            ).coalesce()
-            self.sparse_adj[r] = A
+                try:
+                    self.relation2outdegree[r][t] += 1
+                except:
+                    print(f"Error: {r} {h} {t}")
+                    raise
 
         with open(os.path.join(data_path, "valid.txt")) as fi:
             for line in fi:
@@ -113,7 +110,7 @@ class KnowledgeGraph(object):
                     self.hr2ooo[hr_index] = list()
                 self.hr2ooo[hr_index].append(t)
 
-        with open(os.path.join(data_path, "relation_cluster.dict")) as fi: # relation_class.dict
+        with open(os.path.join(data_path, "relation_cluster_4.dict")) as fi: # relation_class.dict
             for line in fi:
                 rel_id, cluster_id = line.strip().split("\t")
                 self.rel2cluster[int(rel_id)] = int(cluster_id)
@@ -153,7 +150,6 @@ class KnowledgeGraph(object):
         value = value[mask]
         return [index, value]
 
-
     def grounding(self, h, r, rule, edges_to_remove):
         device = h.device
         with torch.no_grad():
@@ -166,7 +162,6 @@ class KnowledgeGraph(object):
                 else:
                     x = self.propagate(x, r_body, None)
         return x.squeeze(-1).transpose(0, 1)
-    
 
     def propagate(self, x, relation, edges_to_remove=None):
         device = x.device
@@ -193,8 +188,6 @@ class KnowledgeGraph(object):
             x = scatter(message, node_out, dim=0, dim_size=x.size(0))
 
         return x
-
-
 
 class TrainDataset(Dataset):
     def __init__(self, graph, batch_size):
@@ -373,7 +366,7 @@ class RuleDataset(Dataset):
         # return inputs, target, mask, weight
         return inputs, main_target, aux_target, mask, weight
 
-def load_relation_clusters(data_path="../data/semmed", file_name="relation_cluster.dict"): # FIXME: hard coded bad
+def load_relation_clusters(data_path="../data/semmeddb", file_name="relation_cluster_3.dict"): # FIXME: hard coded bad
     rel2cluster = {}
     with open(os.path.join(data_path, file_name)) as fi:
         for line in fi:

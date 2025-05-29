@@ -1,0 +1,110 @@
+2025-05-15 20:47:46,906 INFO     -------------------------
+2025-05-15 20:47:46,906 INFO     | Pre-train Generator
+2025-05-15 20:47:46,907 INFO     -------------------------
+2025-05-15 20:47:47,019 INFO     >>>>> Generator: Training
+2025-05-15 20:47:51,177 INFO     1000 10000 1.491443
+2025-05-15 20:47:54,483 INFO     2000 10000 1.364137
+2025-05-15 20:47:57,788 INFO     3000 10000 1.336327
+2025-05-15 20:48:01,099 INFO     4000 10000 1.332606
+2025-05-15 20:48:04,415 INFO     5000 10000 1.331419
+2025-05-15 20:48:07,733 INFO     6000 10000 1.322923
+2025-05-15 20:48:11,047 INFO     7000 10000 1.315852
+2025-05-15 20:48:14,380 INFO     8000 10000 1.315792
+2025-05-15 20:48:17,682 INFO     9000 10000 1.310170
+2025-05-15 20:48:20,956 INFO     10000 10000 1.305870
+2025-05-15 20:48:20,956 INFO     -------------------------
+2025-05-15 20:48:20,956 INFO     | EM Iteration: 1/1
+2025-05-15 20:48:20,956 INFO     -------------------------
+2025-05-15 20:48:20,956 INFO     >>>>> Generator: Rule generation with sampling
+2025-05-15 20:48:21,053 INFO     Predictor: read 175 rules from list.
+2025-05-15 20:48:21,053 INFO     Preprocess training set
+2025-05-15 20:48:21,054 INFO     >>>>> Predictor: Training
+2025-05-15 20:48:22,008 INFO     100 21720 10.461180 327544.0
+2025-05-15 20:48:22,744 INFO     200 21720 10.052602 327544.0
+2025-05-15 20:48:23,486 INFO     300 21720 9.842306 327544.0
+2025-05-15 20:48:24,248 INFO     400 21720 9.750655 327544.0
+2025-05-15 20:48:24,970 INFO     500 21720 9.615602 327544.0
+2025-05-15 20:48:25,708 INFO     600 21720 9.576995 327544.0
+2025-05-15 20:48:26,426 INFO     700 21720 9.176287 327544.0
+2025-05-15 20:48:27,156 INFO     800 21720 9.193475 327544.0
+2025-05-15 20:48:27,876 INFO     900 21720 9.084629 327544.0
+2025-05-15 20:48:28,622 INFO     1000 21720 9.174853 327544.0
+2025-05-15 20:48:28,623 INFO     >>>>> Predictor: Evaluating on valid
+2025-05-15 20:48:34,936 INFO     Data : 6068
+2025-05-15 20:48:34,936 INFO     Hit1 : 0.337810
+2025-05-15 20:48:34,936 INFO     Hit3 : 0.368771
+2025-05-15 20:48:34,936 INFO     Hit10: 0.385185
+2025-05-15 20:48:34,936 INFO     MR   : 11340.176664
+2025-05-15 20:48:34,936 INFO     MRR  : 0.356269
+2025-05-15 20:48:34,937 INFO     >>>>> Predictor: Evaluating on test
+2025-05-15 20:48:41,481 INFO     Data : 6268
+2025-05-15 20:48:41,481 INFO     Hit1 : 0.344076
+2025-05-15 20:48:41,481 INFO     Hit3 : 0.367565
+2025-05-15 20:48:41,482 INFO     Hit10: 0.385859
+2025-05-15 20:48:41,482 INFO     MR   : 11712.262524
+2025-05-15 20:48:41,482 INFO     MRR  : 0.358932
+2025-05-15 20:48:41,482 INFO     >>>>> Predictor: Computing H scores of rules
+2025-05-15 20:48:47,830 INFO     1000 21720
+2025-05-15 20:48:54,089 INFO     2000 21720
+2025-05-15 20:49:00,430 INFO     3000 21720
+2025-05-15 20:49:06,749 INFO     4000 21720
+2025-05-15 20:49:13,010 INFO     5000 21720
+2025-05-15 20:49:19,288 INFO     6000 21720
+2025-05-15 20:49:25,589 INFO     7000 21720
+2025-05-15 20:49:31,915 INFO     8000 21720
+2025-05-15 20:49:38,252 INFO     9000 21720
+2025-05-15 20:49:44,504 INFO     10000 21720
+2025-05-15 20:49:50,842 INFO     11000 21720
+2025-05-15 20:49:57,169 INFO     12000 21720
+2025-05-15 20:50:03,461 INFO     13000 21720
+2025-05-15 20:50:09,768 INFO     14000 21720
+2025-05-15 20:50:16,063 INFO     15000 21720
+2025-05-15 20:50:22,314 INFO     16000 21720
+2025-05-15 20:50:28,610 INFO     17000 21720
+2025-05-15 20:50:34,880 INFO     18000 21720
+2025-05-15 20:50:41,205 INFO     19000 21720
+2025-05-15 20:50:47,493 INFO     20000 21720
+2025-05-15 20:50:53,798 INFO     21000 21720
+2025-05-15 20:50:58,384 INFO     >>>>> Generator: Training
+2025-05-15 20:50:58,632 INFO     -------------------------
+2025-05-15 20:50:58,632 INFO     | Post-train Generator
+2025-05-15 20:50:58,632 INFO     -------------------------
+2025-05-15 20:50:58,632 INFO     >>>>> Generator: Training
+2025-05-15 20:51:01,087 INFO     1000 1000 -9.076116
+2025-05-15 20:51:01,087 INFO     -------------------------
+2025-05-15 20:51:01,087 INFO     | Beam Search Best Rules
+2025-05-15 20:51:01,087 INFO     -------------------------
+2025-05-15 20:51:01,087 INFO     >>>>> Generator: Rule generation with beam search
+2025-05-15 20:51:01,283 INFO     >>>>> Generator: Rule generation with beam search
+2025-05-15 20:51:02,304 INFO     >>>>> Generator: Rule generation with beam search
+2025-05-15 20:51:11,200 INFO     >>>>> Generator: Rule generation with beam search
+2025-05-15 20:51:16,695 INFO     >>>>> Generator: Rule generation with beam search
+2025-05-15 20:51:20,459 INFO     -------------------------
+2025-05-15 20:51:20,460 INFO     | Train Final Predictor+
+2025-05-15 20:51:20,460 INFO     -------------------------
+2025-05-15 20:51:20,466 INFO     Predictor+: read 20306 rules from list.
+2025-05-15 20:51:20,519 INFO     Preprocess training set
+2025-05-15 20:51:20,520 INFO     -------------------------
+2025-05-15 20:51:20,520 INFO     | Iteration: 1/1
+2025-05-15 20:51:20,520 INFO     -------------------------
+2025-05-15 20:51:20,520 INFO     >>>>> Predictor: Training
+2025-05-15 20:52:05,426 INFO     100 21720 6.002966 327544.0
+2025-05-15 20:52:49,838 INFO     200 21720 5.188575 327544.0
+2025-05-15 20:53:34,134 INFO     300 21720 5.066161 327544.0
+2025-05-15 20:54:18,505 INFO     400 21720 4.331963 327544.0
+Data loading | DONE!
+mode:  ori
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 181, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 163, in main
+    solver_p.train(**cfg.predictorplus.train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 86, in train
+    logits, mask = model(all_h, all_r, edges_to_remove)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 245, in forward
+    rule_count = torch.stack(rule_count, dim=0)
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.13 GiB. GPU 1 has a total capacity of 11.72 GiB of which 907.38 MiB is free. Process 422585 has 2.65 GiB memory in use. Process 568855 has 5.86 GiB memory in use. Including non-PyTorch memory, this process has 2.30 GiB memory in use. Of the allocated memory 1.24 GiB is allocated by PyTorch, and 855.47 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)

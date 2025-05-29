@@ -170,8 +170,9 @@ class TrainerPredictor(object):
                 all_t = all_t.cuda(device=self.device)
                 flag = flag.cuda(device=self.device)
 
+            # TODO: original
             logits, mask = model(all_h, all_r, None)
-
+        
             concat_logits.append(logits)
             concat_all_h.append(all_h)
             concat_all_r.append(all_r)
