@@ -4,7 +4,10 @@ from torch_scatter import scatter
 import numpy as np
 import os
 import random
-from easydict import EasyDict
+import logging
+from functools import partial
+import comm
+
 
 class KnowledgeGraph(object):
     def __init__(self, data_path):
@@ -14,7 +17,7 @@ class KnowledgeGraph(object):
         self.relation2id = dict()
         self.id2entity = dict()
         self.id2relation = dict()
-        self.rel2cluster = dict() # auxiliary task
+        # self.rel2cluster = dict() # auxiliary task
 
         seen = set()
         with open(os.path.join(data_path, 'entities.dict')) as fi:
@@ -39,6 +42,8 @@ class KnowledgeGraph(object):
         print("relation size: ", self.relation_size)
         
         self.train_facts = list()
+        self.train_counts = list()
+
         self.valid_facts = list()
         self.test_facts = list()
         self.hr2o = dict()
@@ -48,11 +53,17 @@ class KnowledgeGraph(object):
         self.relation2ht2index = [dict() for k in range(self.relation_size)]
         self.relation2outdegree = [[0 for i in range(self.entity_size)] for k in range(self.relation_size)]
 
-        with open(os.path.join(data_path, "train.txt")) as fi:
+        self.triple2count = dict() # train dataset
+        self.default_cnt = 1.0 # default count for unseen triples
+        
+
+        with open(os.path.join(data_path, "train_with_count.txt")) as fi:
             for line in fi:
-                h, r, t = line.strip().split('\t')
+                h, r, t, count = line.strip().split('\t')
                 h, r, t = self.entity2id[h], self.relation2id[r], self.entity2id[t]
                 self.train_facts.append((h, r, t))
+                
+                self.triple2count[(h, r, t)] = int(count)
 
                 hr_index = self.encode_hr(h, r)
                 
@@ -98,7 +109,8 @@ class KnowledgeGraph(object):
                     self.hr2ooo[hr_index] = list()
                 self.hr2ooo[hr_index].append(t)
 
-        with open(os.path.join(data_path, "test.txt")) as fi:
+        with open(os.path.join(data_path, "test_filtered.txt")) as fi:
+        # with open(os.path.join(data_path, "test.txt")) as fi:
             for line in fi:
                 h, r, t = line.strip().split('\t')
                 h, r, t = self.entity2id[h], self.relation2id[r], self.entity2id[t]
@@ -110,11 +122,6 @@ class KnowledgeGraph(object):
                     self.hr2ooo[hr_index] = list()
                 self.hr2ooo[hr_index].append(t)
 
-        with open(os.path.join(data_path, "relation_cluster_4.dict")) as fi: # relation_class.dict
-            for line in fi:
-                rel_id, cluster_id = line.strip().split("\t")
-                self.rel2cluster[int(rel_id)] = int(cluster_id)
-
         for r in range(self.relation_size):
             index = torch.LongTensor(self.relation2adjacency[r])
             value = torch.ones(index.size(1))
@@ -122,7 +129,8 @@ class KnowledgeGraph(object):
 
             self.relation2outdegree[r] = torch.LongTensor(self.relation2outdegree[r])
 
-        print("Data loading | DONE!")
+        if comm.get_rank() == 0:
+            logging.info("Data loading | DONE!")
 
     def encode_hr(self, h, r):
         return r * self.entity_size + h
@@ -193,6 +201,8 @@ class TrainDataset(Dataset):
     def __init__(self, graph, batch_size):
         self.graph = graph
         self.batch_size = batch_size
+        self.triple2count = graph.triple2count
+        self.default_cnt = graph.default_cnt
 
         self.r2instances = [[] for r in range(self.graph.relation_size)]
         for h, r, t in self.graph.train_facts:
@@ -233,7 +243,12 @@ class TrainDataset(Dataset):
             edges_to_remove.append(edge)
         edges_to_remove = torch.LongTensor(edges_to_remove)
 
-        return all_h, all_r, all_t, target, edges_to_remove
+        sample_w = torch.FloatTensor([
+            self.triple2count.get((h, r, t), self.default_cnt) for (h, r, t) in data
+        ])   # shape (B,)
+        sample_w = sample_w.unsqueeze(1)    
+
+        return all_h, all_r, all_t, target, edges_to_remove, sample_w
 
 class ValidDataset(Dataset):
     def __init__(self, graph, batch_size):
@@ -310,11 +325,16 @@ class TestDataset(Dataset):
         return all_h, all_r, all_t, mask
 
 class RuleDataset(Dataset):
-    def __init__(self, num_relations, input):
+    def __init__(self, num_relations, input, cluster_size, relation_cluster_file):
         self.rules = list()
         self.num_relations = num_relations
         self.ending_idx = num_relations
         self.padding_idx = num_relations + 1
+
+        self.cluster_size = cluster_size
+        self.rel2cluster = load_relation_clusters(relation_cluster_file)
+
+        self.collate_fn = partial(self._collate_static, self.rel2cluster)
         
         if type(input) == list:
             rules = input
@@ -337,38 +357,46 @@ class RuleDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.rules[idx]
-
+    
     @staticmethod
-    def collate_fn(data):
+    def _collate_static(rel2cluster, data):
         inputs = [item[0][0:len(item[0])-1] for item in data]
         main_target = [item[0][1:len(item[0])] for item in data]
         weight = [float(item[-1]) for item in data]
         max_len = max([len(_) for _ in inputs])
         padding_index = [int(item[-2]) for item in data]
 
-        # aux_target
-        rel2cluster = load_relation_clusters()
+        aux_target = [
+            [rel2cluster.get(r, -1) for r in seq]
+            for seq in main_target
+        ]
 
-        aux_target = [[rel2cluster.get(rel, -1) for rel in seq] for seq in main_target]
+        aux2_target = [
+            [rel2cluster.get(r, -1) for r in seq]
+            for seq in inputs
+        ]
 
         for k in range(len(data)):
             for i in range(max_len - len(inputs[k])):
                 inputs[k].append(padding_index[k])
                 main_target[k].append(padding_index[k])
                 aux_target[k].append(-1)  # -1 代表 padding，避開有效 cluster id 範圍
+                aux2_target[k].append(-1)  # -1 代表 padding，避開有效 cluster id 範圍
 
         inputs = torch.tensor(inputs, dtype=torch.long)
         main_target = torch.tensor(main_target, dtype=torch.long)
         aux_target = torch.tensor(aux_target, dtype=torch.long)
+        aux2_target = torch.tensor(aux2_target, dtype=torch.long)
         weight = torch.tensor(weight)
         mask = (main_target != torch.tensor(padding_index, dtype=torch.long).unsqueeze(1))
 
         # return inputs, target, mask, weight
-        return inputs, main_target, aux_target, mask, weight
+        return inputs, main_target, aux_target, aux2_target, mask, weight
 
-def load_relation_clusters(data_path="../data/semmeddb", file_name="relation_cluster_3.dict"): # FIXME: hard coded bad
+# def load_relation_clusters(data_path="../data/semmeddb", file_name="relation_cluster_3_matrix.dict"): # FIXME: hard coded bad
+def load_relation_clusters(relation_cluster_file):
     rel2cluster = {}
-    with open(os.path.join(data_path, file_name)) as fi:
+    with open(relation_cluster_file) as fi:
         for line in fi:
             rel_id, cluster_id = line.strip().split("\t")
             rel2cluster[int(rel_id)] = int(cluster_id)

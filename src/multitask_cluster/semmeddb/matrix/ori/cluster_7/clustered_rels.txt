@@ -1,0 +1,33 @@
+Cluster 0:
+  - coexists_with
+
+Cluster 1:
+  - augments
+  - complicates
+  - diagnoses
+  - disrupts
+  - isa
+  - location_of
+  - prevents
+  - produces
+  - same_as
+
+Cluster 2:
+  - associated_with
+
+Cluster 3:
+  - compared_with
+
+Cluster 4:
+  - part_of
+
+Cluster 5:
+  - affects
+  - causes
+  - treats
+
+Cluster 6:
+  - inhibits
+  - interacts_with
+  - stimulates
+

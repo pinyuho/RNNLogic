@@ -1,14 +1,15 @@
-save_path: results/semmeddb/multitask/full/ori
+save_path: results/semmeddb/multitask/matrix_encode_relation/cluster_3/random_init/sm_test/ori
 load_path: null
 seed: 1
 
 data:
   data_path: ../data/semmeddb
   rule_file: ../data/semmeddb/mined_rules.txt
+  cluster_size: 3
+  relation_cluster_file: ../data/semmeddb/relation_cluster_3_matrix.dict
   # batch_size: 32
   batch_size: 8
-  cluster_size: 5
-
+  
 EM:
   num_iters: 5
   prior_weight: 0.001

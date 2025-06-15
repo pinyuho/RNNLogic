@@ -16,6 +16,7 @@ class Generator(torch.nn.Module):
         self.padding_idx = self.num_relations + 1
 
         self.embedding = torch.nn.Embedding(self.vocab_size, self.embedding_dim, padding_idx=self.padding_idx)
+
         self.rnn = torch.nn.LSTM(self.embedding_dim * 2, self.hidden_dim, self.num_layers, batch_first=True)
         self.linear = torch.nn.Linear(self.hidden_dim, self.label_size)
         self.criterion = torch.nn.CrossEntropyLoss(reduction='none')

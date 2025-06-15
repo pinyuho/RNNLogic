@@ -1,10 +1,12 @@
-save_path: results/semmeddb/multitask/cluster_3/full/adaptive
+save_path: results/semmeddb/multitask/matrix_encode_relation/task1_next_clus/random_init/cluster_3/test_filtered/adaptive_no_loss_adjstment
 load_path: null
 seed: 1
 
 data:
   data_path: ../data/semmeddb
   rule_file: ../data/semmeddb/mined_rules.txt
+  cluster_size: 3
+  relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_3.dict
   # batch_size: 32
   batch_size: 8
   

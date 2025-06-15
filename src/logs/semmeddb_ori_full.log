@@ -1,28 +1,268 @@
-2025-05-24 01:10:11,633 INFO     -------------------------
-2025-05-24 01:10:11,633 INFO     | Pre-train Generator
-2025-05-24 01:10:11,633 INFO     -------------------------
-2025-05-24 01:10:11,754 INFO     >>>>> Generator: Training
-2025-05-24 01:10:16,264 INFO     1000 10000 1.640829
-2025-05-24 01:10:19,717 INFO     2000 10000 1.555844
+2025-06-09 19:36:45,729 INFO     Data loading | DONE!
+2025-06-09 19:36:45,873 INFO     Using subset datasets for training, validation, and testing.
+2025-06-09 19:36:45,873 INFO     Subset ratio: 0.1
+2025-06-09 19:36:45,873 INFO     [Subset] TrainDataset: 1231/12313 samples (10%)
+2025-06-09 19:36:45,874 INFO     [Subset] ValidDataset: 47/478 samples (10%)
+2025-06-09 19:36:45,874 INFO     [Subset] TestDataset: 55/551 samples (10%)
+2025-06-09 19:36:45,874 INFO     [Subset] RuleDataset: 1366/13661 samples (10%)
+2025-06-09 19:36:45,874 INFO     -------------------------
+2025-06-09 19:36:45,874 INFO     | Pre-train Generator
+2025-06-09 19:36:45,874 INFO     -------------------------
+2025-06-09 19:36:45,987 INFO     >>>>> Generator: Training
+2025-06-09 19:36:51,596 INFO     1000 10000 1.042826
+2025-06-09 19:36:56,425 INFO     2000 10000 0.911553
+2025-06-09 19:37:01,159 INFO     3000 10000 0.908359
+2025-06-09 19:37:05,960 INFO     4000 10000 0.903730
+2025-06-09 19:37:10,587 INFO     5000 10000 0.902669
+2025-06-09 19:37:15,277 INFO     6000 10000 0.901058
+2025-06-09 19:37:19,984 INFO     7000 10000 0.900167
+2025-06-09 19:37:24,693 INFO     8000 10000 0.899464
+2025-06-09 19:37:29,516 INFO     9000 10000 0.900438
+2025-06-09 19:37:34,231 INFO     10000 10000 0.900380
+2025-06-09 19:37:34,231 INFO     -------------------------
+2025-06-09 19:37:34,232 INFO     | EM Iteration: 1/5
+2025-06-09 19:37:34,232 INFO     -------------------------
+2025-06-09 19:37:34,232 INFO     >>>>> Generator: Rule generation with sampling
+2025-06-09 19:37:34,342 INFO     Predictor: read 837 rules from list.
+2025-06-09 19:37:34,343 INFO     Preprocess training set
+2025-06-09 19:37:34,343 INFO     >>>>> Predictor: Training
+2025-06-09 19:38:06,780 INFO     1000 1231 8.591094 69297.3
+2025-06-09 19:38:14,038 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:38:14,945 INFO     Data : 376
+2025-06-09 19:38:14,945 INFO     Hit1 : 0.023936
+2025-06-09 19:38:14,945 INFO     Hit3 : 0.053191
+2025-06-09 19:38:14,945 INFO     Hit10: 0.111702
+2025-06-09 19:38:14,945 INFO     MR   : 1267.775266
+2025-06-09 19:38:14,945 INFO     MRR  : 0.055697
+2025-06-09 19:38:14,945 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:38:16,005 INFO     Data : 440
+2025-06-09 19:38:16,005 INFO     Hit1 : 0.036364
+2025-06-09 19:38:16,005 INFO     Hit3 : 0.068182
+2025-06-09 19:38:16,005 INFO     Hit10: 0.125000
+2025-06-09 19:38:16,005 INFO     MR   : 1271.839773
+2025-06-09 19:38:16,005 INFO     MRR  : 0.069292
+2025-06-09 19:38:16,005 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-09 19:38:51,306 INFO     1000 1231
+2025-06-09 19:38:59,261 INFO     >>>>> Generator: Training
+2025-06-09 19:38:59,699 INFO     -------------------------
+2025-06-09 19:38:59,699 INFO     | EM Iteration: 2/5
+2025-06-09 19:38:59,699 INFO     -------------------------
+2025-06-09 19:38:59,699 INFO     >>>>> Generator: Rule generation with sampling
+2025-06-09 19:38:59,756 INFO     Predictor: read 869 rules from list.
+2025-06-09 19:38:59,756 INFO     Preprocess training set
+2025-06-09 19:38:59,757 INFO     >>>>> Predictor: Training
+2025-06-09 19:39:31,889 INFO     1000 1231 8.627633 69384.0
+2025-06-09 19:39:39,141 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:39:40,038 INFO     Data : 376
+2025-06-09 19:39:40,038 INFO     Hit1 : 0.023936
+2025-06-09 19:39:40,038 INFO     Hit3 : 0.053191
+2025-06-09 19:39:40,038 INFO     Hit10: 0.106383
+2025-06-09 19:39:40,038 INFO     MR   : 1217.186170
+2025-06-09 19:39:40,038 INFO     MRR  : 0.053884
+2025-06-09 19:39:40,038 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:39:41,087 INFO     Data : 440
+2025-06-09 19:39:41,088 INFO     Hit1 : 0.052273
+2025-06-09 19:39:41,088 INFO     Hit3 : 0.090909
+2025-06-09 19:39:41,088 INFO     Hit10: 0.138636
+2025-06-09 19:39:41,088 INFO     MR   : 1238.327273
+2025-06-09 19:39:41,088 INFO     MRR  : 0.084805
+2025-06-09 19:39:41,088 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-09 19:40:16,491 INFO     1000 1231
+2025-06-09 19:40:24,652 INFO     >>>>> Generator: Training
+2025-06-09 19:40:25,090 INFO     -------------------------
+2025-06-09 19:40:25,090 INFO     | EM Iteration: 3/5
+2025-06-09 19:40:25,090 INFO     -------------------------
+2025-06-09 19:40:25,090 INFO     >>>>> Generator: Rule generation with sampling
+2025-06-09 19:40:25,146 INFO     Predictor: read 906 rules from list.
+2025-06-09 19:40:25,146 INFO     Preprocess training set
+2025-06-09 19:40:25,147 INFO     >>>>> Predictor: Training
+2025-06-09 19:40:58,849 INFO     1000 1231 8.604963 69340.6
+2025-06-09 19:41:06,253 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:41:07,279 INFO     Data : 376
+2025-06-09 19:41:07,279 INFO     Hit1 : 0.026596
+2025-06-09 19:41:07,279 INFO     Hit3 : 0.053191
+2025-06-09 19:41:07,280 INFO     Hit10: 0.119681
+2025-06-09 19:41:07,280 INFO     MR   : 1126.037234
+2025-06-09 19:41:07,280 INFO     MRR  : 0.059919
+2025-06-09 19:41:07,280 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:41:08,489 INFO     Data : 440
+2025-06-09 19:41:08,489 INFO     Hit1 : 0.052273
+2025-06-09 19:41:08,489 INFO     Hit3 : 0.100000
+2025-06-09 19:41:08,489 INFO     Hit10: 0.161364
+2025-06-09 19:41:08,490 INFO     MR   : 1170.715909
+2025-06-09 19:41:08,490 INFO     MRR  : 0.091152
+2025-06-09 19:41:08,490 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-09 19:41:44,674 INFO     1000 1231
+2025-06-09 19:41:52,673 INFO     >>>>> Generator: Training
+2025-06-09 19:41:53,118 INFO     -------------------------
+2025-06-09 19:41:53,118 INFO     | EM Iteration: 4/5
+2025-06-09 19:41:53,118 INFO     -------------------------
+2025-06-09 19:41:53,118 INFO     >>>>> Generator: Rule generation with sampling
+2025-06-09 19:41:53,174 INFO     Predictor: read 939 rules from list.
+2025-06-09 19:41:53,175 INFO     Preprocess training set
+2025-06-09 19:41:53,175 INFO     >>>>> Predictor: Training
+2025-06-09 19:42:27,091 INFO     1000 1231 8.601382 69366.7
+2025-06-09 19:42:35,036 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:42:36,208 INFO     Data : 376
+2025-06-09 19:42:36,208 INFO     Hit1 : 0.026596
+2025-06-09 19:42:36,208 INFO     Hit3 : 0.047872
+2025-06-09 19:42:36,208 INFO     Hit10: 0.117021
+2025-06-09 19:42:36,208 INFO     MR   : 1287.724734
+2025-06-09 19:42:36,208 INFO     MRR  : 0.056080
+2025-06-09 19:42:36,208 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:42:37,576 INFO     Data : 440
+2025-06-09 19:42:37,576 INFO     Hit1 : 0.043182
+2025-06-09 19:42:37,576 INFO     Hit3 : 0.075000
+2025-06-09 19:42:37,576 INFO     Hit10: 0.131818
+2025-06-09 19:42:37,576 INFO     MR   : 1251.976136
+2025-06-09 19:42:37,576 INFO     MRR  : 0.075988
+2025-06-09 19:42:37,576 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-09 19:43:14,409 INFO     1000 1231
+2025-06-09 19:43:23,024 INFO     >>>>> Generator: Training
+2025-06-09 19:43:23,569 INFO     -------------------------
+2025-06-09 19:43:23,569 INFO     | EM Iteration: 5/5
+2025-06-09 19:43:23,569 INFO     -------------------------
+2025-06-09 19:43:23,569 INFO     >>>>> Generator: Rule generation with sampling
+2025-06-09 19:43:23,625 INFO     Predictor: read 953 rules from list.
+2025-06-09 19:43:23,626 INFO     Preprocess training set
+2025-06-09 19:43:23,626 INFO     >>>>> Predictor: Training
+2025-06-09 19:43:57,352 INFO     1000 1231 8.607857 69384.0
+2025-06-09 19:44:05,087 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:44:06,133 INFO     Data : 376
+2025-06-09 19:44:06,133 INFO     Hit1 : 0.026596
+2025-06-09 19:44:06,133 INFO     Hit3 : 0.066489
+2025-06-09 19:44:06,133 INFO     Hit10: 0.125000
+2025-06-09 19:44:06,133 INFO     MR   : 1276.469415
+2025-06-09 19:44:06,133 INFO     MRR  : 0.061927
+2025-06-09 19:44:06,133 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:44:07,356 INFO     Data : 440
+2025-06-09 19:44:07,356 INFO     Hit1 : 0.052273
+2025-06-09 19:44:07,356 INFO     Hit3 : 0.090909
+2025-06-09 19:44:07,356 INFO     Hit10: 0.150000
+2025-06-09 19:44:07,356 INFO     MR   : 1208.572727
+2025-06-09 19:44:07,356 INFO     MRR  : 0.087521
+2025-06-09 19:44:07,356 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-09 19:44:43,933 INFO     1000 1231
+2025-06-09 19:44:52,332 INFO     >>>>> Generator: Training
+2025-06-09 19:44:52,782 INFO     -------------------------
+2025-06-09 19:44:52,782 INFO     | Post-train Generator
+2025-06-09 19:44:52,782 INFO     -------------------------
+2025-06-09 19:44:52,784 INFO     >>>>> Generator: Training
+2025-06-09 19:44:57,647 INFO     1000 1000 1.282952
+2025-06-09 19:44:57,647 INFO     -------------------------
+2025-06-09 19:44:57,647 INFO     | Beam Search Best Rules
+2025-06-09 19:44:57,648 INFO     -------------------------
+2025-06-09 19:44:57,648 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-09 19:44:57,837 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-09 19:44:58,927 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-09 19:45:07,742 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-09 19:45:13,690 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-09 19:45:17,811 INFO     Using subset datasets for final predictor+ training, validation, and testing.
+2025-06-09 19:45:17,811 INFO     Subset ratio: 0.1
+2025-06-09 19:45:17,812 INFO     Subset sizes: train=1231, valid=47, test=55, rule dataset=1842
+2025-06-09 19:45:17,812 INFO     -------------------------
+2025-06-09 19:45:17,812 INFO     | Train Final Predictor+
+2025-06-09 19:45:17,813 INFO     -------------------------
+2025-06-09 19:45:17,814 INFO     Predictor+: read 1842 rules from list.
+2025-06-09 19:45:17,818 INFO     Preprocess training set
+2025-06-09 19:45:17,819 INFO     -------------------------
+2025-06-09 19:45:17,819 INFO     | Iteration: 1/5
+2025-06-09 19:45:17,819 INFO     -------------------------
+2025-06-09 19:45:17,819 INFO     >>>>> Predictor: Training
+2025-06-09 19:46:06,478 INFO     1000 1231 6.966117 69305.9
+2025-06-09 19:46:17,638 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:46:19,634 INFO     Data : 376
+2025-06-09 19:46:19,634 INFO     Hit1 : 0.029255
+2025-06-09 19:46:19,634 INFO     Hit3 : 0.058511
+2025-06-09 19:46:19,634 INFO     Hit10: 0.125000
+2025-06-09 19:46:19,634 INFO     MR   : 1433.704787
+2025-06-09 19:46:19,634 INFO     MRR  : 0.060409
+2025-06-09 19:46:19,634 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:46:21,953 INFO     Data : 440
+2025-06-09 19:46:21,953 INFO     Hit1 : 0.018182
+2025-06-09 19:46:21,953 INFO     Hit3 : 0.036364
+2025-06-09 19:46:21,953 INFO     Hit10: 0.088636
+2025-06-09 19:46:21,953 INFO     MR   : 1405.340909
+2025-06-09 19:46:21,953 INFO     MRR  : 0.043069
+2025-06-09 19:46:21,953 INFO     Save checkpoint to results/semmeddb/multitask/matrix_encode_relation/cluster_3/random_init/sm_test/ori/predictor.pt
+2025-06-09 19:46:21,956 INFO     -------------------------
+2025-06-09 19:46:21,956 INFO     | Iteration: 2/5
+2025-06-09 19:46:21,956 INFO     -------------------------
+2025-06-09 19:46:21,957 INFO     >>>>> Predictor: Training
+2025-06-09 19:47:11,110 INFO     1000 1231 6.693744 69366.7
+2025-06-09 19:47:22,493 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:47:24,479 INFO     Data : 376
+2025-06-09 19:47:24,479 INFO     Hit1 : 0.031915
+2025-06-09 19:47:24,479 INFO     Hit3 : 0.053191
+2025-06-09 19:47:24,479 INFO     Hit10: 0.109043
+2025-06-09 19:47:24,479 INFO     MR   : 1307.704787
+2025-06-09 19:47:24,479 INFO     MRR  : 0.058813
+2025-06-09 19:47:24,479 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:47:26,793 INFO     Data : 440
+2025-06-09 19:47:26,793 INFO     Hit1 : 0.020455
+2025-06-09 19:47:26,793 INFO     Hit3 : 0.047727
+2025-06-09 19:47:26,793 INFO     Hit10: 0.086364
+2025-06-09 19:47:26,793 INFO     MR   : 1270.236364
+2025-06-09 19:47:26,793 INFO     MRR  : 0.044986
+2025-06-09 19:47:26,793 INFO     -------------------------
+2025-06-09 19:47:26,793 INFO     | Iteration: 3/5
+2025-06-09 19:47:26,793 INFO     -------------------------
+2025-06-09 19:47:26,793 INFO     >>>>> Predictor: Training
+2025-06-09 19:48:17,172 INFO     1000 1231 6.631820 69384.0
+2025-06-09 19:48:28,728 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:48:30,732 INFO     Data : 376
+2025-06-09 19:48:30,732 INFO     Hit1 : 0.013298
+2025-06-09 19:48:30,732 INFO     Hit3 : 0.042553
+2025-06-09 19:48:30,732 INFO     Hit10: 0.109043
+2025-06-09 19:48:30,732 INFO     MR   : 1270.819149
+2025-06-09 19:48:30,732 INFO     MRR  : 0.046594
+2025-06-09 19:48:30,732 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:48:33,117 INFO     Data : 440
+2025-06-09 19:48:33,117 INFO     Hit1 : 0.015909
+2025-06-09 19:48:33,118 INFO     Hit3 : 0.031818
+2025-06-09 19:48:33,118 INFO     Hit10: 0.072727
+2025-06-09 19:48:33,118 INFO     MR   : 1239.272727
+2025-06-09 19:48:33,118 INFO     MRR  : 0.037568
+2025-06-09 19:48:33,118 INFO     -------------------------
+2025-06-09 19:48:33,118 INFO     | Iteration: 4/5
+2025-06-09 19:48:33,118 INFO     -------------------------
+2025-06-09 19:48:33,118 INFO     >>>>> Predictor: Training
+2025-06-09 19:49:23,310 INFO     1000 1231 6.585164 69340.6
+2025-06-09 19:49:34,753 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:49:36,778 INFO     Data : 376
+2025-06-09 19:49:36,778 INFO     Hit1 : 0.031915
+2025-06-09 19:49:36,778 INFO     Hit3 : 0.053191
+2025-06-09 19:49:36,779 INFO     Hit10: 0.109043
+2025-06-09 19:49:36,779 INFO     MR   : 1239.267287
+2025-06-09 19:49:36,779 INFO     MRR  : 0.058598
+2025-06-09 19:49:36,779 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:49:39,149 INFO     Data : 440
+2025-06-09 19:49:39,149 INFO     Hit1 : 0.018182
+2025-06-09 19:49:39,149 INFO     Hit3 : 0.034091
+2025-06-09 19:49:39,149 INFO     Hit10: 0.081818
+2025-06-09 19:49:39,149 INFO     MR   : 1196.387500
+2025-06-09 19:49:39,149 INFO     MRR  : 0.038488
+2025-06-09 19:49:39,149 INFO     -------------------------
+2025-06-09 19:49:39,149 INFO     | Iteration: 5/5
+2025-06-09 19:49:39,149 INFO     -------------------------
+2025-06-09 19:49:39,149 INFO     >>>>> Predictor: Training
+2025-06-09 19:50:28,780 INFO     1000 1231 6.626438 69340.6
+2025-06-09 19:50:40,108 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-09 19:50:42,117 INFO     Data : 376
+2025-06-09 19:50:42,117 INFO     Hit1 : 0.018617
+2025-06-09 19:50:42,117 INFO     Hit3 : 0.039894
+2025-06-09 19:50:42,117 INFO     Hit10: 0.109043
+2025-06-09 19:50:42,117 INFO     MR   : 1222.226064
+2025-06-09 19:50:42,117 INFO     MRR  : 0.047641
+2025-06-09 19:50:42,117 INFO     >>>>> Predictor: Evaluating on test
+2025-06-09 19:50:44,474 INFO     Data : 440
+2025-06-09 19:50:44,474 INFO     Hit1 : 0.020455
+2025-06-09 19:50:44,474 INFO     Hit3 : 0.036364
+2025-06-09 19:50:44,474 INFO     Hit10: 0.088636
+2025-06-09 19:50:44,474 INFO     MR   : 1179.476136
+2025-06-09 19:50:44,474 INFO     MRR  : 0.043704
+2025-06-09 19:50:44,474 INFO     -------------------------
+2025-06-09 19:50:44,474 INFO     | Final Test MRR: 0.043069
+2025-06-09 19:50:44,474 INFO     -------------------------
 entity size:  8673
 relation size:  20
-Data loading | DONE!
-mode:  ori
-Traceback (most recent call last):
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 182, in <module>
-    main(parse_args())
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 86, in main
-    solver_g.train(dataset, **cfg.generator.pre_train)
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 319, in train
-    batch = next(iterator)
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 379, in Iterator
-    for data in dataloader:
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 701, in __next__
-    data = self._next_data()
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 756, in _next_data
-    index = self._next_index()  # may raise StopIteration
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 691, in _next_index
-    return next(self._sampler_iter)  # may raise StopIteration
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/data/sampler.py", line 349, in __iter__
-    idx_in_batch += 1
-KeyboardInterrupt

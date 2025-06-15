@@ -5,6 +5,8 @@ seed: 1
 data:
   data_path: ../data/xxx
   rule_file: ../data/xxx/mined_rules.txt
+  cluster_size: -1
+  relation_cluster_file: ../data/xxx/relation_cluster.dict
   # batch_size: 32
   batch_size: 8
   
