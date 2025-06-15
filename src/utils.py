@@ -8,6 +8,9 @@ import yaml
 import easydict
 import numpy as np
 import torch
+import comm
+
+from torch.utils.data import Dataset, Subset
 
 def load_config(cfg_file):
     with open(cfg_file, "r") as fin:
@@ -68,3 +71,39 @@ def set_logger(save_path):
     formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
     console.setFormatter(formatter)
     logging.getLogger('').addHandler(console)
+
+class SubsetProxy(Dataset):
+    """
+    一个既有 Subset 功能，又能把原 dataset
+    的所有属性和方法透明代理过来的包装器。
+    """
+    def __init__(self, dataset: Dataset, indices):
+        self._dataset = dataset
+        self._indices = list(indices)
+
+    def __len__(self):
+        return len(self._indices)
+
+    def __getitem__(self, idx):
+        return self._dataset[self._indices[idx]]
+
+    def __getattr__(self, name):
+        # 只要这个 proxy 本身没有的属性，就去底层 dataset 拿
+        return getattr(self._dataset, name)
+    
+def get_subset_dataset(dataset, ratio: float = 1.0, seed: int = 42):
+    """
+    ratio < 1.0  → 回传 SubsetProxy(dataset, indices)
+    ratio >= 1.0 → 回传原 dataset
+    """
+    if ratio >= 1.0:
+        return dataset
+
+    n = len(dataset)
+    k = int(n * ratio)
+    rng = np.random.RandomState(seed)
+    idx = rng.choice(n, k, replace=False)
+
+    if comm.get_rank() == 0:
+        logging.info(f"[Subset] {dataset.__class__.__name__}: {k}/{n} samples ({ratio:.0%})")
+    return SubsetProxy(dataset, idx)

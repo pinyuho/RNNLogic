@@ -40,6 +40,7 @@ class TrainerPredictor(object):
 
         self.model = model
         self.train_set = train_set
+        
         self.valid_set = valid_set
         self.test_set = test_set
         self.optimizer = optimizer
@@ -49,6 +50,7 @@ class TrainerPredictor(object):
         if comm.get_rank() == 0:
             logging.info('>>>>> Predictor: Training')
         self.train_set.make_batches()
+
         sampler = torch_data.DistributedSampler(self.train_set, self.world_size, self.rank)
         dataloader = torch_data.DataLoader(self.train_set, 1, sampler=sampler, num_workers=self.num_worker)
         batch_per_epoch = batch_per_epoch or len(dataloader)
@@ -66,13 +68,15 @@ class TrainerPredictor(object):
         sampler.set_epoch(0)
 
         for batch_id, batch in enumerate(islice(dataloader, batch_per_epoch)):
-            all_h, all_r, all_t, target, edges_to_remove = batch
+            all_h, all_r, all_t, target, edges_to_remove, sample_w = batch
             all_h = all_h.squeeze(0)
             all_r = all_r.squeeze(0)
             all_t = all_t.squeeze(0)
             target = target.squeeze(0)
             edges_to_remove = edges_to_remove.squeeze(0)
             target_t = torch.nn.functional.one_hot(all_t, self.train_set.graph.entity_size)
+
+            sample_w = sample_w.squeeze(0)
             
             if self.device.type == "cuda":
                 all_h = all_h.cuda(device=self.device)
@@ -80,12 +84,22 @@ class TrainerPredictor(object):
                 target = target.cuda(device=self.device)
                 edges_to_remove = edges_to_remove.cuda(device=self.device)
                 target_t = target_t.cuda(device=self.device)
+                sample_w = sample_w.cuda(device=self.device)
+
             
             target = target * smoothing + target_t * (1 - smoothing)
 
             logits, mask = model(all_h, all_r, edges_to_remove)
             if mask.sum().item() != 0:
                 logits = (torch.softmax(logits, dim=1) + 1e-8).log()
+                # logging.info("self.train_counts: {}".format(self.train_counts))
+                # logging.info("logits: {}".format(logits.shape))
+                # logging.info("target: {}".format(target.shape))
+                # logging.info("mask: {}".format(mask.shape))
+                # logging.info("sample_w: {}".format(sample_w.shape))
+
+                # weighted_log = logits * sample_w 
+                # weighted_log = logits * sample_w.sqrt()
                 loss = -(logits[mask] * target[mask]).sum() / torch.clamp(target[mask].sum(), min=1)
                 loss.backward()
 
@@ -115,7 +129,7 @@ class TrainerPredictor(object):
         model.eval()
         all_H_score = torch.zeros(model.num_rules, device=self.device)
         for batch_id, batch in enumerate(dataloader):
-            all_h, all_r, all_t, target, edges_to_remove = batch
+            all_h, all_r, all_t, target, edges_to_remove, sample_w = batch
             all_h = all_h.squeeze(0)
             all_r = all_r.squeeze(0)
             all_t = all_t.squeeze(0)
@@ -307,8 +321,8 @@ class TrainerGenerator(object):
             logging.info('>>>>> Generator: Training')
         model = self.model
         model.train()
-        
-        dataloader = torch_data.DataLoader(rule_set, batch_size, shuffle=True, collate_fn=RuleDataset.collate_fn)
+
+        dataloader = torch_data.DataLoader(rule_set, batch_size, shuffle=True, collate_fn=rule_set.collate_fn)
         iterator = Iterator(dataloader)
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
@@ -317,18 +331,19 @@ class TrainerGenerator(object):
         total_aux_loss = 0.0
         for epoch in range(num_epoch):
             batch = next(iterator)
-            inputs, main_target, aux_target, mask, weight = batch
+            inputs, main_target, aux_target, aux2_target, mask, weight = batch
             hidden = self.zero_state(inputs.size(0))
             
             if self.device.type == "cuda":
                 inputs = inputs.cuda(self.device)
                 main_target = main_target.cuda(self.device)
                 aux_target = aux_target.cuda(self.device)
+                aux2_target = aux2_target.cuda(self.device)
                 mask = mask.cuda(self.device)
                 weight = weight.cuda(self.device)
 
             if self.mode != 'ori':
-                loss, main_loss, aux_loss = model.loss(inputs, main_target, aux_target, epoch, mask, weight, hidden)
+                loss, main_loss, aux2_loss = model.loss(inputs, main_target, aux_target, aux2_target, epoch, mask, weight, hidden)
             else:
                 loss = model.loss(inputs, main_target, mask, weight, hidden)
             loss.backward()
@@ -340,7 +355,7 @@ class TrainerGenerator(object):
 
             if self.mode != 'ori':
                 total_main_loss += main_loss.item()
-                total_aux_loss += aux_loss.item()
+                total_aux_loss += aux2_loss.item()
 
             if (epoch + 1) % print_every == 0:
                 avg_total_loss = total_loss / print_every

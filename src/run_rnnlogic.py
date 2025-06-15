@@ -9,14 +9,14 @@ from easydict import EasyDict
 import numpy as np
 from datetime import datetime
 import torch
-from torch.utils.data import DataLoader
+# from torch.utils.data import DataLoader
 from torch import distributed as dist
 
 from data import KnowledgeGraph, TrainDataset, ValidDataset, TestDataset, RuleDataset
 from predictors import Predictor, PredictorPlus
 from generators import Generator
 from generator_multitask import GeneratorMultitask
-from utils import load_config, save_config, set_logger, set_seed
+from utils import load_config, save_config, set_logger, set_seed, get_subset_dataset
 from trainer import TrainerPredictor, TrainerGenerator
 import comm
 
@@ -47,6 +47,7 @@ def parse_args(args=None):
     parser.add_argument('--config', default='../rnnlogic.yaml', type=str)
     parser.add_argument("--local_rank", type=int, default=0)
     parser.add_argument('--mode', default='ori', type=str)
+    parser.add_argument('--subset_ratio', type=float, default=1.0)
     return parser.parse_args(args)
 
 def main(args):
@@ -66,23 +67,38 @@ def main(args):
 
     graph = KnowledgeGraph(cfg.data.data_path)
     train_set = TrainDataset(graph, cfg.data.batch_size)
+    
     valid_set = ValidDataset(graph, cfg.data.batch_size)
     test_set = TestDataset(graph, cfg.data.batch_size)
 
-    dataset = RuleDataset(graph.relation_size, cfg.data.rule_file)
+    dataset = RuleDataset(graph.relation_size, cfg.data.rule_file, cfg.data.cluster_size, cfg.data.relation_cluster_file)
+
+
+    if args.subset_ratio < 1.0:
+        if comm.get_rank() == 0:
+            logging.info('Using subset datasets for training, validation, and testing.')
+            logging.info(f'Subset ratio: {args.subset_ratio}')
+        train_set = get_subset_dataset(train_set, args.subset_ratio, seed=42)
+        valid_set = get_subset_dataset(valid_set, args.subset_ratio, seed=99)   # 也可用不同 seed
+        test_set  = get_subset_dataset(test_set,  args.subset_ratio, seed=123)
+        dataset = get_subset_dataset(dataset, args.subset_ratio, seed=456)
+    else:
+        if comm.get_rank() == 0:
+            logging.info('Using full datasets for training, validation, and testing.')
+
+
 
     if comm.get_rank() == 0:
         logging.info('-------------------------')
         logging.info('| Pre-train Generator')
         logging.info('-------------------------')
     
-    print("mode: ", args.mode)
     if args.mode == 'ori':
         generator = Generator(graph, **cfg.generator.model)
     else:
-        print("cluster size:", 3)
-        generator = GeneratorMultitask(graph, 3, args.mode, **cfg.generator.model)
+        generator = GeneratorMultitask(graph, cfg.data.cluster_size, args.mode, **cfg.generator.model)
     solver_g = TrainerGenerator(generator, args.mode, gpu=cfg.generator.gpu)
+
     solver_g.train(dataset, **cfg.generator.pre_train)
 
     replay_buffer = list()
@@ -116,7 +132,7 @@ def main(args):
         replay_buffer += rules
         
         # M-step: Update the rule generator.
-        dataset = RuleDataset(graph.relation_size, rules)
+        dataset = RuleDataset(graph.relation_size, rules, cfg.data.cluster_size, cfg.data.relation_cluster_file)
 
         solver_g.train(dataset, **cfg.generator.train)
         
@@ -125,7 +141,7 @@ def main(args):
             logging.info('-------------------------')
             logging.info('| Post-train Generator')
             logging.info('-------------------------')
-        dataset = RuleDataset(graph.relation_size, replay_buffer)
+        dataset = RuleDataset(graph.relation_size, replay_buffer, cfg.data.cluster_size, cfg.data.relation_cluster_file)
         solver_g.train(dataset, **cfg.generator.post_train)
 
     if comm.get_rank() == 0:
@@ -140,6 +156,20 @@ def main(args):
         
     prior = [rule[-1] for rule in sampled_rules]
     rules = [rule[0:-1] for rule in sampled_rules]
+
+    if args.subset_ratio < 1.0:
+        if comm.get_rank() == 0:
+            logging.info('Using subset datasets for final predictor+ training, validation, and testing.')
+            logging.info(f'Subset ratio: {args.subset_ratio}')
+
+            subset_size = int(len(rules) * args.subset_ratio)
+            subset_indices = random.sample(range(len(rules)), subset_size)
+
+            rules = [rules[i] for i in subset_indices]
+            prior = [prior[i] for i in subset_indices]
+
+            logging.info(f'Subset sizes: train={len(train_set)}, valid={len(valid_set)}, test={len(test_set)}, rule dataset={len(rules)}')
+
 
     if comm.get_rank() == 0:
         logging.info('-------------------------')

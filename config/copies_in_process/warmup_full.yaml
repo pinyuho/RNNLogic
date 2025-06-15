@@ -1,10 +1,12 @@
-save_path: results/semmeddb/multitask/cluster_3/full/warmup
+save_path: results/semmeddb/sm_test/random_init/bidirectional_cluster_2/warmup
 load_path: null
 seed: 1
 
 data:
   data_path: ../data/semmeddb
   rule_file: ../data/semmeddb/mined_rules.txt
+  cluster_size: 2
+  relation_cluster_file: ../data/semmeddb/relation_cluster/bidirectional_2.dict
   # batch_size: 32
   batch_size: 8
   
