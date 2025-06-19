@@ -9,11 +9,13 @@ from data import RuleDataset, Iterator
 
 class TrainerPredictor(object):
 
-    def __init__(self, model, train_set, valid_set, test_set, optimizer, scheduler=None, gpus=None, num_worker=0):
+    def __init__(self, model, train_set, valid_set, test_set, optimizer, weighted_loss_mode, is_wrnnlogic=0, scheduler=None, gpus=None, num_worker=0):
         self.rank = comm.get_rank()
         self.world_size = comm.get_world_size()
         self.gpus = gpus
         self.num_worker = num_worker
+        self.weighted_loss_mode = weighted_loss_mode
+        self.is_wrnnlogic = is_wrnnlogic
 
         if gpus is None:
             self.device = torch.device("cpu")
@@ -46,6 +48,59 @@ class TrainerPredictor(object):
         self.optimizer = optimizer
         self.scheduler = scheduler
 
+    def rule_margin_loss(self, logits, target, rho=None, mask=None, *, neg_k=10):
+        """
+        三段式 margin loss（已加數值護欄）
+        loss = Σ score(neg)
+            - Σ min(ρ*score(pos), 1)
+            + Σ_{pos,neg} max(ρ*score(pos) - score(neg), 0)
+        logits : (B,E) raw score
+        target : (B,E) 1=正例
+        rho    : (B,E) 正例權重 (None→target.float())
+        mask   : (B,E) 有效格
+        neg_k  : 抽樣負例數；None 表示用全部負例
+        """
+        if mask is None:
+            mask = torch.ones_like(target, dtype=torch.bool)
+        if rho is None:
+            rho = target.float()
+
+        # -------- 取有效格並再 clip 一次 --------
+        logits = logits.masked_select(mask).view_as(target)
+        rho = rho.masked_select(mask).view_as(target)
+
+        # -------- 分正負 --------
+        pos_mask = target.bool()
+        neg_mask = ~pos_mask
+
+        score_pos = logits[pos_mask].clamp(-15, 15)       # 再保險
+        score_neg_all = logits[neg_mask]
+        rho_pos = rho[pos_mask]                           # (P,)
+
+        # -------- 抽 K 個負例 --------
+        if neg_k is not None and score_neg_all.numel() > neg_k:
+            idx = torch.randperm(score_neg_all.size(0), device=logits.device)[:neg_k]
+            score_neg = score_neg_all[idx]
+        else:
+            score_neg = score_neg_all
+        score_neg = score_neg.clamp(-15, 15)
+
+        # ① Σ score(neg)
+        term1 = score_neg.sum()
+
+        # ② Σ min(ρ*score(pos), 1)
+        term2 = torch.minimum(rho_pos * score_pos, torch.ones_like(score_pos)).sum()
+
+        # ③ Σ_{pos,neg} max(ρ*score(pos) - score(neg), 0)
+        if score_pos.numel() and score_neg.numel():
+            diff = rho_pos.unsqueeze(1) * score_pos.unsqueeze(1) - score_neg.unsqueeze(0)
+            term3 = torch.relu(diff).sum()
+        else:
+            term3 = torch.tensor(0., device=logits.device)
+
+        loss = term1 - term2 + term3
+        return loss / logits.size(0)                      # batch mean
+
     def train(self, batch_per_epoch, smoothing, print_every):
         if comm.get_rank() == 0:
             logging.info('>>>>> Predictor: Training')
@@ -68,7 +123,7 @@ class TrainerPredictor(object):
         sampler.set_epoch(0)
 
         for batch_id, batch in enumerate(islice(dataloader, batch_per_epoch)):
-            all_h, all_r, all_t, target, edges_to_remove, sample_w = batch
+            all_h, all_r, all_t, target, edges_to_remove, triple_weight = batch
             all_h = all_h.squeeze(0)
             all_r = all_r.squeeze(0)
             all_t = all_t.squeeze(0)
@@ -76,7 +131,7 @@ class TrainerPredictor(object):
             edges_to_remove = edges_to_remove.squeeze(0)
             target_t = torch.nn.functional.one_hot(all_t, self.train_set.graph.entity_size)
 
-            sample_w = sample_w.squeeze(0)
+            triple_weight = triple_weight.squeeze(0)
             
             if self.device.type == "cuda":
                 all_h = all_h.cuda(device=self.device)
@@ -84,24 +139,40 @@ class TrainerPredictor(object):
                 target = target.cuda(device=self.device)
                 edges_to_remove = edges_to_remove.cuda(device=self.device)
                 target_t = target_t.cuda(device=self.device)
-                sample_w = sample_w.cuda(device=self.device)
+                triple_weight = triple_weight.cuda(device=self.device)
 
             
             target = target * smoothing + target_t * (1 - smoothing)
+            logits, mask = model(all_h, all_r, edges_to_remove) # 這邊的 logits 是 score
 
-            logits, mask = model(all_h, all_r, edges_to_remove)
             if mask.sum().item() != 0:
                 logits = (torch.softmax(logits, dim=1) + 1e-8).log()
-                # logging.info("self.train_counts: {}".format(self.train_counts))
-                # logging.info("logits: {}".format(logits.shape))
-                # logging.info("target: {}".format(target.shape))
-                # logging.info("mask: {}".format(mask.shape))
-                # logging.info("sample_w: {}".format(sample_w.shape))
 
-                # weighted_log = logits * sample_w 
-                # weighted_log = logits * sample_w.sqrt()
-                loss = -(logits[mask] * target[mask]).sum() / torch.clamp(target[mask].sum(), min=1)
-                loss.backward()
+                if self.is_wrnnlogic == 0:
+                    if self.weighted_loss_mode == 'ori':
+                        loss = -(logits[mask] * target[mask]).sum() / torch.clamp(target[mask].sum(), min=1)
+                    else:
+                        if self.weighted_loss_mode == 'triple_count':
+                            weighted_log = logits * triple_weight 
+                        elif self.weighted_loss_mode == 'triple_count_sqrt':
+                            weighted_log = logits * triple_weight.sqrt()
+                        elif self.weighted_loss_mode == 'triple_count_log':
+                            weighted_log = logits * torch.log1p(triple_weight)
+
+                        loss = -(weighted_log[mask] * target[mask]).sum() / torch.clamp(target[mask].sum(), min=1)
+
+                    loss.backward()
+                    
+                else: # wRNNLogic
+                    assert torch.isfinite(logits).all(), "NaN after shift+clamp"             # clip 到 [-15, 15]
+
+                    loss = self.rule_margin_loss(
+                        logits,
+                        target,
+                        rho = triple_weight * target,   # 只給正例乘權重；負例自動 0
+                        mask = mask                # 若已有 padding mask
+                    )
+                    loss.backward()
 
                 self.optimizer.step()
                 self.optimizer.zero_grad()
@@ -129,7 +200,7 @@ class TrainerPredictor(object):
         model.eval()
         all_H_score = torch.zeros(model.num_rules, device=self.device)
         for batch_id, batch in enumerate(dataloader):
-            all_h, all_r, all_t, target, edges_to_remove, sample_w = batch
+            all_h, all_r, all_t, target, edges_to_remove, triple_weight = batch
             all_h = all_h.squeeze(0)
             all_r = all_r.squeeze(0)
             all_t = all_t.squeeze(0)

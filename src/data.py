@@ -57,7 +57,7 @@ class KnowledgeGraph(object):
         self.default_cnt = 1.0 # default count for unseen triples
         
 
-        with open(os.path.join(data_path, "train_with_count.txt")) as fi:
+        with open(os.path.join(data_path, "train_filtered_with_count.txt")) as fi:
             for line in fi:
                 h, r, t, count = line.strip().split('\t')
                 h, r, t = self.entity2id[h], self.relation2id[r], self.entity2id[t]
@@ -93,7 +93,7 @@ class KnowledgeGraph(object):
                     print(f"Error: {r} {h} {t}")
                     raise
 
-        with open(os.path.join(data_path, "valid.txt")) as fi:
+        with open(os.path.join(data_path, "valid_filtered.txt")) as fi:
             for line in fi:
                 h, r, t = line.strip().split('\t')
                 h, r, t = self.entity2id[h], self.relation2id[r], self.entity2id[t]
@@ -121,6 +121,22 @@ class KnowledgeGraph(object):
                 if hr_index not in self.hr2ooo:
                     self.hr2ooo[hr_index] = list()
                 self.hr2ooo[hr_index].append(t)
+
+
+        self.relation2edgecount = []
+        for r, adjs in enumerate(self.relation2adjacency): # 每個 relation 都有一個 [[], []]，第一個是 tail index list，第二個是 head index list
+            # logging.info(adjs)
+            tails_list = adjs[0]     # tail entity idx
+            heads_list = adjs[1]     # head entity idx
+
+            edge_cnt = []
+            for h_idx, t_idx in zip(heads_list, tails_list):              # 順序保持不變
+                h = self.id2entity[h_idx]   # ★ 先變 int
+                t = self.id2entity[t_idx]
+                c = self.triple2count.get((h, r, t), self.default_cnt)
+                edge_cnt.append(c)
+            self.relation2edgecount.append(torch.tensor(edge_cnt, dtype=torch.float)) # r -> [(h1, r, t1 這個 pair 的 count), (h2, r, t2 的 count), ...]
+
 
         for r in range(self.relation_size):
             index = torch.LongTensor(self.relation2adjacency[r])
@@ -158,19 +174,86 @@ class KnowledgeGraph(object):
         value = value[mask]
         return [index, value]
 
+    def grounding_with_count(self, h, r, rule, edges_to_remove):
+        device = h.device
+        B = h.size(0)
+        with torch.no_grad():
+            x = torch.nn.functional.one_hot(h, self.entity_size).transpose(0, 1).unsqueeze(-1).cuda(device)
+
+            min_cnt = torch.full((self.entity_size, B), float("inf"), device=device)
+            min_cnt[h, torch.arange(B, device=device)] = 0.0     # 起點 0
+
+            for r_body in rule: 
+                if r_body == r:
+                    x, min_cnt = self.propagate_with_count(x, min_cnt, r_body, edges_to_remove)
+                else:
+                    x, min_cnt = self.propagate_with_count(x, min_cnt, r_body, None)
+
+        x = x.squeeze(-1).T               # 原本的輸出
+        path_w = min_cnt.T                # (B,E) —— 路徑最小 triple-count
+        return x, path_w
+
     def grounding(self, h, r, rule, edges_to_remove):
         device = h.device
         with torch.no_grad():
-            x = torch.nn.functional.one_hot(h, self.entity_size).transpose(0, 1).unsqueeze(-1)
-            if device.type == "cuda":
-                x = x.cuda(device)
+            x = torch.nn.functional.one_hot(h, self.entity_size).transpose(0, 1).unsqueeze(-1).cuda(device)
+
             for r_body in rule:
                 if r_body == r:
                     x = self.propagate(x, r_body, edges_to_remove)
                 else:
                     x = self.propagate(x, r_body, None)
+
         return x.squeeze(-1).transpose(0, 1)
 
+    
+    def propagate_with_count(self, x, min_cnt, relation, edges_to_remove=None): # recursive propagation
+        device = x.device
+        node_in = self.relation2adjacency[relation][0][1]
+        node_out = self.relation2adjacency[relation][0][0]
+
+        # heads = self.relation2adjacency[relation][0][1]   # head index list
+        # tails = self.relation2adjacency[relation][0][0]   # tail index list
+
+        edge_cnt = self.relation2edgecount[relation].to(x.device)  # (edge,)
+
+        if device.type == "cuda":
+            node_in = node_in.cuda(device)
+            node_out = node_out.cuda(device)
+            edge_cnt = edge_cnt.cuda(device)
+
+        message = x[node_in]
+        cnt_msg  = min_cnt[node_in]
+        E, B, D = message.size()
+
+        cnt_msg = torch.minimum(cnt_msg, edge_cnt.unsqueeze(1))  # (edge, B)
+
+        if edges_to_remove == None:
+            x = scatter(message, node_out, dim=0, dim_size=x.size(0))
+            min_cnt = scatter(cnt_msg, node_out, dim=0, dim_size=min_cnt.size(0), reduce="min")     
+
+        else:
+            # message: edge * batch * dim
+            message = message.view(-1, D)
+            cnt_msg = cnt_msg.view(-1)   # 把 (edge,B) 攤平成 (edge*B,)
+
+            bias = torch.arange(B)
+            if device.type == "cuda":
+                bias = bias.cuda(device)
+
+            edges_to_remove = edges_to_remove * B + bias
+
+            message[edges_to_remove] = 0
+            cnt_msg[edges_to_remove] = float("inf")
+
+            message = message.view(E, B, D)
+            cnt_msg = cnt_msg.view(E, B)
+
+            x = scatter(message, node_out, dim=0, dim_size=x.size(0))
+            min_cnt = scatter(cnt_msg, node_out, dim=0, dim_size=min_cnt.size(0), reduce="min")     
+
+        return x, min_cnt
+    
     def propagate(self, x, relation, edges_to_remove=None):
         device = x.device
         node_in = self.relation2adjacency[relation][0][1]
@@ -243,12 +326,12 @@ class TrainDataset(Dataset):
             edges_to_remove.append(edge)
         edges_to_remove = torch.LongTensor(edges_to_remove)
 
-        sample_w = torch.FloatTensor([
+        triple_weight = torch.FloatTensor([
             self.triple2count.get((h, r, t), self.default_cnt) for (h, r, t) in data
         ])   # shape (B,)
-        sample_w = sample_w.unsqueeze(1)    
+        triple_weight = triple_weight.unsqueeze(1)    
 
-        return all_h, all_r, all_t, target, edges_to_remove, sample_w
+        return all_h, all_r, all_t, target, edges_to_remove, triple_weight
 
 class ValidDataset(Dataset):
     def __init__(self, graph, batch_size):
@@ -325,7 +408,7 @@ class TestDataset(Dataset):
         return all_h, all_r, all_t, mask
 
 class RuleDataset(Dataset):
-    def __init__(self, num_relations, input, cluster_size, relation_cluster_file):
+    def __init__(self, num_relations, input, cluster_size, relation_cluster_file, is_wrnnlogic=0):
         self.rules = list()
         self.num_relations = num_relations
         self.ending_idx = num_relations
@@ -335,6 +418,8 @@ class RuleDataset(Dataset):
         self.rel2cluster = load_relation_clusters(relation_cluster_file)
 
         self.collate_fn = partial(self._collate_static, self.rel2cluster)
+
+        self.rule_accuracies = list()
         
         if type(input) == list:
             rules = input
@@ -343,7 +428,7 @@ class RuleDataset(Dataset):
             with open(input, 'r') as fi:
                 for line in fi:
                     rule = line.strip().split()
-                    rule = [int(_) for _ in rule[0:-1]] + [float(rule[-1]) * 1000]
+                    rule = [int(_) for _ in rule[0:-1]] + [float(rule[-1]) * 1000]                     # [rule head, rule body..., confidence]
                     rules.append(rule)
         
         self.rules = []
