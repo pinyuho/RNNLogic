@@ -44,10 +44,13 @@ def parse_args(args=None):
         description='RNNLogic',
         usage='train.py [<args>] [-h | --help]'
     )
-    parser.add_argument('--config', default='../rnnlogic.yaml', type=str)
+    parser.add_argument('--config', type=str, default='../rnnlogic.yaml')
     parser.add_argument("--local_rank", type=int, default=0)
-    parser.add_argument('--mode', default='ori', type=str)
+    parser.add_argument('--mode', type=str, default='ori')
     parser.add_argument('--subset_ratio', type=float, default=1.0)
+    parser.add_argument('--predictor_weighted_loss_mode', type=str, default='ori')
+    parser.add_argument('--is_wrnnlogic', type=int, default=0, choices=[0, 1], help='Whether to use wRNNLogic (1) or RNNLogic (0).')
+
     return parser.parse_args(args)
 
 def main(args):
@@ -71,7 +74,7 @@ def main(args):
     valid_set = ValidDataset(graph, cfg.data.batch_size)
     test_set = TestDataset(graph, cfg.data.batch_size)
 
-    dataset = RuleDataset(graph.relation_size, cfg.data.rule_file, cfg.data.cluster_size, cfg.data.relation_cluster_file)
+    dataset = RuleDataset(graph.relation_size, cfg.data.rule_file, cfg.data.cluster_size, cfg.data.relation_cluster_file, args.is_wrnnlogic)
 
 
     if args.subset_ratio < 1.0:
@@ -115,11 +118,11 @@ def main(args):
         save_rules(cfg, rules, k)
 
         # Train a reasoning predictor with sampled logic rules.
-        predictor = Predictor(graph, **cfg.predictor.model)
+        predictor = Predictor(graph, args.is_wrnnlogic, **cfg.predictor.model)
         predictor.set_rules(rules)
         optim = torch.optim.Adam(predictor.parameters(), **cfg.predictor.optimizer)
 
-        solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, gpus=cfg.predictor.gpus)
+        solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, args.predictor_weighted_loss_mode, args.is_wrnnlogic, gpus=cfg.predictor.gpus)
         solver_p.train(**cfg.predictor.train)
         valid_mrr_iter = solver_p.evaluate('valid', expectation=cfg.predictor.eval.expectation)
         test_mrr_iter = solver_p.evaluate('test', expectation=cfg.predictor.eval.expectation)
@@ -182,7 +185,7 @@ def main(args):
 
     optim = torch.optim.Adam(predictor.parameters(), **cfg.predictorplus.optimizer)
 
-    solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, gpus=cfg.predictorplus.gpus)
+    solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, args.predictor_weighted_loss_mode, args.is_wrnnlogic, gpus=cfg.predictorplus.gpus)
     best_valid_mrr = 0.0
     test_mrr = 0.0
     for k in range(cfg.final_prediction.num_iters):

@@ -16,7 +16,7 @@ from torch_scatter import scatter, scatter_add, scatter_min, scatter_max, scatte
 from typing import Tuple, Optional
 
 class Predictor(torch.nn.Module):
-    def __init__(self, graph, entity_feature='bias'):
+    def __init__(self, graph, is_wrnnlogic=0, entity_feature='bias'):
         super(Predictor, self).__init__()
         self.graph = graph
         self.num_entities = graph.entity_size
@@ -24,6 +24,8 @@ class Predictor(torch.nn.Module):
         self.entity_feature = entity_feature
         if entity_feature == 'bias':
             self.bias = torch.nn.parameter.Parameter(torch.zeros(self.num_entities))
+
+        self.is_wrnnlogic = is_wrnnlogic
     
     def set_rules(self, input):
         self.rules = list()
@@ -52,33 +54,40 @@ class Predictor(torch.nn.Module):
         self.rule_weights = torch.nn.parameter.Parameter(torch.zeros(self.num_rules))
 
     def forward(self, all_h, all_r, edges_to_remove):
-            query_r = all_r[0].item()
-            assert (all_r != query_r).sum() == 0
-            device = all_r.device
+        query_r = all_r[0].item()
+        assert (all_r != query_r).sum() == 0
+        device = all_r.device
 
-            score = torch.zeros(all_r.size(0), self.num_entities, device=device)
-            mask = torch.zeros(all_r.size(0), self.num_entities, device=device)
-            for index, (r_head, r_body) in self.relation2rules[query_r]:
-                assert r_head == query_r
+        score = torch.zeros(all_r.size(0), self.num_entities, device=device)
+        mask = torch.zeros(all_r.size(0), self.num_entities, device=device)
+        for index, (r_head, r_body) in self.relation2rules[query_r]:
+            assert r_head == query_r
 
+            # wRNNLogic
+            if self.is_wrnnlogic == 1:
+                x, path_w = self.graph.grounding_with_count(all_h, r_head, r_body, edges_to_remove)
+                score += x * self.rule_weights[index] * path_w
+
+            else:
                 x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
                 score += x * self.rule_weights[index]
-                mask += x
-            
-            if mask.sum().item() == 0:
-                if self.entity_feature == 'bias':
-                    return mask + self.bias.unsqueeze(0), (1 - mask).bool()
-                else:
-                    return mask - float('-inf'), mask.bool()
-            
+
+            mask += x
+        
+        if mask.sum().item() == 0:
             if self.entity_feature == 'bias':
-                score = score + self.bias.unsqueeze(0)
-                mask = torch.ones_like(mask).bool()
+                return mask + self.bias.unsqueeze(0), (1 - mask).bool()
             else:
-                mask = (mask != 0)
-                score = score.masked_fill(~mask, float('-inf'))
-            
-            return score, mask
+                return mask - float('-inf'), mask.bool()
+        
+        if self.entity_feature == 'bias':
+            score = score + self.bias.unsqueeze(0)
+            mask = torch.ones_like(mask).bool()
+        else:
+            mask = (mask != 0)
+            score = score.masked_fill(~mask, float('-inf'))
+        
+        return score, mask
 
     def compute_H(self, all_h, all_r, all_t, edges_to_remove):
             query_r = all_r[0].item()
@@ -91,7 +100,7 @@ class Predictor(torch.nn.Module):
             for index, (r_head, r_body) in self.relation2rules[query_r]:
                 assert r_head == query_r
 
-                x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+                x, path_w = self.graph.grounding_with_count(all_h, r_head, r_body, edges_to_remove)
                 score = x * self.rule_weights[index]
                 mask += x
 
@@ -223,7 +232,8 @@ class PredictorPlus(torch.nn.Module):
         for index, (r_head, r_body) in self.relation2rules[query_r]:
             assert r_head == query_r
 
-            count = self.graph.grounding(all_h, r_head, r_body, edges_to_remove).float()
+            count, _ = self.graph.grounding_with_count(all_h, r_head, r_body, edges_to_remove)
+            count = count.float() 
             mask += count
 
             rule_index.append(index)
