@@ -5,17 +5,19 @@ from torch import distributed as dist
 from torch import nn
 from torch.utils import data as torch_data
 from itertools import islice
-from data import RuleDataset, Iterator
+# from data import RuleDataset, Iterator
+from data.rules_dataset import RuleDataset
+from datamodules.utils import Iterator
+import torch.nn.functional as F
 
 class TrainerPredictor(object):
 
-    def __init__(self, model, train_set, valid_set, test_set, optimizer, weighted_loss_mode, is_wrnnlogic=0, scheduler=None, gpus=None, num_worker=0):
+    def __init__(self, model, train_set, valid_set, test_set, optimizer, weighted_loss_mode, scheduler=None, gpus=None, num_worker=0):
         self.rank = comm.get_rank()
         self.world_size = comm.get_world_size()
         self.gpus = gpus
         self.num_worker = num_worker
         self.weighted_loss_mode = weighted_loss_mode
-        self.is_wrnnlogic = is_wrnnlogic
 
         if gpus is None:
             self.device = torch.device("cpu")
@@ -47,59 +49,6 @@ class TrainerPredictor(object):
         self.test_set = test_set
         self.optimizer = optimizer
         self.scheduler = scheduler
-
-    def rule_margin_loss(self, logits, target, rho=None, mask=None, *, neg_k=10):
-        """
-        三段式 margin loss（已加數值護欄）
-        loss = Σ score(neg)
-            - Σ min(ρ*score(pos), 1)
-            + Σ_{pos,neg} max(ρ*score(pos) - score(neg), 0)
-        logits : (B,E) raw score
-        target : (B,E) 1=正例
-        rho    : (B,E) 正例權重 (None→target.float())
-        mask   : (B,E) 有效格
-        neg_k  : 抽樣負例數；None 表示用全部負例
-        """
-        if mask is None:
-            mask = torch.ones_like(target, dtype=torch.bool)
-        if rho is None:
-            rho = target.float()
-
-        # -------- 取有效格並再 clip 一次 --------
-        logits = logits.masked_select(mask).view_as(target)
-        rho = rho.masked_select(mask).view_as(target)
-
-        # -------- 分正負 --------
-        pos_mask = target.bool()
-        neg_mask = ~pos_mask
-
-        score_pos = logits[pos_mask].clamp(-15, 15)       # 再保險
-        score_neg_all = logits[neg_mask]
-        rho_pos = rho[pos_mask]                           # (P,)
-
-        # -------- 抽 K 個負例 --------
-        if neg_k is not None and score_neg_all.numel() > neg_k:
-            idx = torch.randperm(score_neg_all.size(0), device=logits.device)[:neg_k]
-            score_neg = score_neg_all[idx]
-        else:
-            score_neg = score_neg_all
-        score_neg = score_neg.clamp(-15, 15)
-
-        # ① Σ score(neg)
-        term1 = score_neg.sum()
-
-        # ② Σ min(ρ*score(pos), 1)
-        term2 = torch.minimum(rho_pos * score_pos, torch.ones_like(score_pos)).sum()
-
-        # ③ Σ_{pos,neg} max(ρ*score(pos) - score(neg), 0)
-        if score_pos.numel() and score_neg.numel():
-            diff = rho_pos.unsqueeze(1) * score_pos.unsqueeze(1) - score_neg.unsqueeze(0)
-            term3 = torch.relu(diff).sum()
-        else:
-            term3 = torch.tensor(0., device=logits.device)
-
-        loss = term1 - term2 + term3
-        return loss / logits.size(0)                      # batch mean
 
     def train(self, batch_per_epoch, smoothing, print_every):
         if comm.get_rank() == 0:
@@ -148,31 +97,19 @@ class TrainerPredictor(object):
             if mask.sum().item() != 0:
                 logits = (torch.softmax(logits, dim=1) + 1e-8).log()
 
-                if self.is_wrnnlogic == 0:
-                    if self.weighted_loss_mode == 'ori':
-                        loss = -(logits[mask] * target[mask]).sum() / torch.clamp(target[mask].sum(), min=1)
-                    else:
-                        if self.weighted_loss_mode == 'triple_count':
-                            weighted_log = logits * triple_weight 
-                        elif self.weighted_loss_mode == 'triple_count_sqrt':
-                            weighted_log = logits * triple_weight.sqrt()
-                        elif self.weighted_loss_mode == 'triple_count_log':
-                            weighted_log = logits * torch.log1p(triple_weight)
+                if self.weighted_loss_mode == 'ori':
+                    loss = -(logits[mask] * target[mask]).sum() / torch.clamp(target[mask].sum(), min=1)
+                else:
+                    if self.weighted_loss_mode == 'triple_count':
+                        weighted_log = logits * triple_weight 
+                    elif self.weighted_loss_mode == 'triple_count_sqrt':
+                        weighted_log = logits * triple_weight.sqrt()
+                    elif self.weighted_loss_mode == 'triple_count_log':
+                        weighted_log = logits * torch.log1p(triple_weight)
 
-                        loss = -(weighted_log[mask] * target[mask]).sum() / torch.clamp(target[mask].sum(), min=1)
+                    loss = -(weighted_log[mask] * target[mask]).sum() / torch.clamp(target[mask].sum(), min=1)
 
-                    loss.backward()
-                    
-                else: # wRNNLogic
-                    assert torch.isfinite(logits).all(), "NaN after shift+clamp"             # clip 到 [-15, 15]
-
-                    loss = self.rule_margin_loss(
-                        logits,
-                        target,
-                        rho = triple_weight * target,   # 只給正例乘權重；負例自動 0
-                        mask = mask                # 若已有 padding mask
-                    )
-                    loss.backward()
+                loss.backward()
 
                 self.optimizer.step()
                 self.optimizer.zero_grad()
@@ -386,6 +323,41 @@ class TrainerGenerator(object):
             self.device = torch.device(gpu)
 
         model = model.cuda(self.device)
+
+
+    def compute_rule_accuracies_from_logits(self, logits, targets, padding_idx):
+        probs = F.softmax(logits, dim=-1)
+        batch_size, seq_len, num_rel = probs.shape
+
+        probs_flat = probs.view(-1, num_rel)
+        targets_flat = targets.view(-1)
+
+        mask = (targets_flat != padding_idx)
+
+        # gt_probs = probs_flat[torch.arange(probs_flat.size(0)), targets_flat]
+        # 先建立 mask，排除掉 padding idx
+        mask = (targets_flat != padding_idx)
+
+        # 把非法 index 先設為 0（或任何合法 index）
+        safe_targets = targets_flat.clone()
+        safe_targets[~mask] = 0  # 或 any valid index like 0
+
+        # 再 gather ground truth prob
+        gt_probs = probs_flat[torch.arange(probs_flat.size(0)), safe_targets]
+
+        # 再把 mask 應用上去
+        gt_probs = gt_probs * mask.float()
+
+        # gt_probs = gt_probs * mask
+
+        gt_probs = gt_probs.view(batch_size, seq_len)
+        mask = mask.view(batch_size, seq_len)
+
+        rule_scores = gt_probs.sum(dim=1)
+        valid_lens = mask.sum(dim=1)
+
+        rule_accs = (rule_scores / (valid_lens + 1e-8)).tolist()
+        return rule_accs
     
     def train(self, rule_set, num_epoch=10000, lr=1e-3, print_every=100, batch_size=512):
         if comm.get_rank() == 0:

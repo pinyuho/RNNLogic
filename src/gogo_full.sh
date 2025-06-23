@@ -2,7 +2,6 @@
 
 set -e  # 出錯即停止
 
-STAMP=$(date +"%Y%m%d_%H%M%S")
 
 GPUS_PER_NODE=2
 SUBSET_RATIO=1
@@ -66,7 +65,8 @@ for CONFIG_ORIGINAL in "${CONFIG_LIST[@]}"; do
     for RELATION_CLUSTER_METHOD in "${RELATION_CLUSTER_METHODS[@]}"; do
       for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
         for PREDICTOR_WEIGHTED_LOSS_MODE in "${PREDICTOR_WEIGHTED_LOSS_MODES[@]}"; do
-          echo "🔧 Processing config: $CONFIG_FILENAME with LOSS_MODE: $LOSS_MODE, RELATION_CLUSTER_METHOD: $RELATION_CLUSTER_METHOD, CLUSTER_SIZE: $CLUSTER_SIZE"
+          STAMP=$(date +"%Y%m%d_%H%M%S")
+          echo "🔧 Time stamp: $STAMP, Processing config: $CONFIG_FILENAME with LOSS_MODE: $LOSS_MODE, RELATION_CLUSTER_METHOD: $RELATION_CLUSTER_METHOD, CLUSTER_SIZE: $CLUSTER_SIZE, PREDICTOR_WEIGHTED_LOSS_MODE: $PREDICTOR_WEIGHTED_LOSS_MODE"
           CONFIG_PATH="../config/copies_in_process/${LOSS_MODE}_${CONFIG_FILENAME}.yaml"
           cp "$CONFIG_ORIGINAL" "$CONFIG_PATH"
 
@@ -80,7 +80,7 @@ for CONFIG_ORIGINAL in "${CONFIG_LIST[@]}"; do
 
           # sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask/${RELATION_CLUSTER_METHOD}_encode_relation/task1_next_clus/random_init/cluster_${CLUSTER_SIZE}/${LOSS_MODE}_with_count|" "$CONFIG_PATH"
           # sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask/${RELATION_CLUSTER_METHOD}_encode_relation/task1_next_clus/random_init/cluster_${CLUSTER_SIZE}/test_all/${LOSS_MODE}_with_count|" "$CONFIG_PATH"
-          sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask/${RELATION_CLUSTER_METHOD}_encode_relation/task1_next_clus/random_init/cluster_${CLUSTER_SIZE}/0618_all_filtered/${LOSS_MODE}/${PREDICTOR_WEIGHTED_LOSS_MODES}_${STAMP}|" "$CONFIG_PATH"
+          sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask/${RELATION_CLUSTER_METHOD}_encode_relation/task1_next_clus/random_init/cluster_${CLUSTER_SIZE}/0618_all_filtered/${LOSS_MODE}/${PREDICTOR_WEIGHTED_LOSS_MODE}_${STAMP}|" "$CONFIG_PATH"
           # sed -i "s|^save_path: .*|save_path: results/${DATASET}/wRNNLogic_${STAMP}|" "$CONFIG_PATH"
           # sed -i "s|^save_path: .*|save_path: results/test|" "$CONFIG_PATH"
 
@@ -108,7 +108,6 @@ for CONFIG_ORIGINAL in "${CONFIG_LIST[@]}"; do
               --mode $LOSS_MODE \
               --subset_ratio $SUBSET_RATIO \
               --predictor_weighted_loss_mode $PREDICTOR_WEIGHTED_LOSS_MODE \
-              --is_wrnnlogic $IS_WRNNLOGIC \
               > "$LOG_FILE" 2>&1
             then
               echo "❌ Error detected in $EXP_NAME. See log: $LOG_FILE"
@@ -122,7 +121,6 @@ for CONFIG_ORIGINAL in "${CONFIG_LIST[@]}"; do
               --mode $LOSS_MODE \
               --subset_ratio $SUBSET_RATIO \
               --predictor_weighted_loss_mode $PREDICTOR_WEIGHTED_LOSS_MODE \
-              --is_wrnnlogic $IS_WRNNLOGIC \
               > "$LOG_FILE" 2>&1
             then
               echo "❌ Error detected in $EXP_NAME. See log: $LOG_FILE"

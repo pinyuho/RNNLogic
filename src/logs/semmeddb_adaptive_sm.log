@@ -1,56 +1,17 @@
-2025-06-15 19:32:18,659 INFO     Data loading | DONE!
-2025-06-15 19:32:18,812 INFO     Using subset datasets for training, validation, and testing.
-2025-06-15 19:32:18,812 INFO     Subset ratio: 0.1
-2025-06-15 19:32:18,813 INFO     [Subset] TrainDataset: 1231/12313 samples (10%)
-2025-06-15 19:32:18,813 INFO     [Subset] ValidDataset: 47/478 samples (10%)
-2025-06-15 19:32:18,813 INFO     [Subset] TestDataset: 30/300 samples (10%)
-2025-06-15 19:32:18,814 INFO     [Subset] RuleDataset: 1366/13661 samples (10%)
-2025-06-15 19:32:18,814 INFO     -------------------------
-2025-06-15 19:32:18,814 INFO     | Pre-train Generator
-2025-06-15 19:32:18,814 INFO     -------------------------
-2025-06-15 19:32:18,921 INFO     >>>>> Generator: Training
-2025-06-15 19:32:25,986 INFO     [E1000] Total: 0.899639 | Main: 1.024042 | Aux: 0.704591
-2025-06-15 19:32:32,270 INFO     [E2000] Total: 0.811142 | Main: 0.914369 | Aux: 0.658008
-2025-06-15 19:32:38,331 INFO     [E3000] Total: 0.809431 | Main: 0.912779 | Aux: 0.655614
-2025-06-15 19:32:44,470 INFO     [E4000] Total: 0.804784 | Main: 0.906828 | Aux: 0.654339
-2025-06-15 19:32:50,543 INFO     [E5000] Total: 0.806954 | Main: 0.909850 | Aux: 0.653605
-2025-06-15 19:32:56,695 INFO     [E6000] Total: 0.805398 | Main: 0.907767 | Aux: 0.653108
-2025-06-15 19:33:02,806 INFO     [E7000] Total: 0.801614 | Main: 0.902743 | Aux: 0.652811
-2025-06-15 19:33:09,124 INFO     [E8000] Total: 0.804152 | Main: 0.906272 | Aux: 0.652414
-2025-06-15 19:33:15,337 INFO     [E9000] Total: 0.804946 | Main: 0.907663 | Aux: 0.651819
-2025-06-15 19:33:21,616 INFO     [E10000] Total: 0.803913 | Main: 0.906295 | Aux: 0.651919
-2025-06-15 19:33:21,617 INFO     -------------------------
-2025-06-15 19:33:21,617 INFO     | EM Iteration: 1/1
-2025-06-15 19:33:21,617 INFO     -------------------------
-2025-06-15 19:33:21,617 INFO     >>>>> Generator: Rule generation with sampling
-2025-06-15 19:33:21,731 INFO     Predictor: read 145 rules from list.
-2025-06-15 19:33:21,732 INFO     Preprocess training set
-2025-06-15 19:33:21,784 INFO     >>>>> Predictor: Training
-2025-06-15 19:33:27,523 INFO     100 1231 9.042597 69384.0
-2025-06-15 19:33:33,064 INFO     200 1231 8.984808 69384.0
-entity size:  8673
-relation size:  20
-Traceback (most recent call last):
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 212, in <module>
-    main(parse_args())
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 123, in main
-    solver_p.train(**cfg.predictor.train)
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 92, in train
-    logits, mask = model(all_h, all_r, edges_to_remove)
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 67, in forward
-    x, path_w = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 196, in grounding
-    x, min_cnt = self.propagate_with_count(x, min_cnt, r_body, None)
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data.py", line 226, in propagate_with_count
-    min_cnt = scatter(cnt_msg, node_out, dim=0, dim_size=min_cnt.size(0), reduce="min")     
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch_scatter-2.1.2-py3.9-linux-x86_64.egg/torch_scatter/scatter.py", line 173, in scatter
-    return scatter_min(src, index, dim, out, dim_size)[0]
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch_scatter-2.1.2-py3.9-linux-x86_64.egg/torch_scatter/scatter.py", line 75, in scatter_min
-    return torch.ops.torch_scatter.scatter_min(src, index, dim, out, dim_size)
-  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/_ops.py", line 1116, in __call__
-    return self._op(*args, **(kwargs or {}))
-KeyboardInterrupt
+2025-06-23 23:08:06,664 INFO     Data loading | DONE!
+2025-06-23 23:08:06,765 INFO     Using subset datasets for training, validation, and testing.
+2025-06-23 23:08:06,765 INFO     Subset ratio: 0.1
+2025-06-23 23:08:06,766 INFO     [Subset] TrainDataset: 595/5959 samples (10%)
+2025-06-23 23:08:06,766 INFO     [Subset] ValidDataset: 26/260 samples (10%)
+2025-06-23 23:08:06,766 INFO     [Subset] TestDataset: 29/293 samples (10%)
+2025-06-23 23:08:06,767 INFO     [Subset] RuleDataset: 1366/13661 samples (10%)
+2025-06-23 23:08:06,883 INFO     -------------------------
+2025-06-23 23:08:06,883 INFO     | EM Iteration: 1/2
+2025-06-23 23:08:06,883 INFO     -------------------------
+2025-06-23 23:08:06,883 INFO     >>>>> Using miner's rule
+2025-06-23 23:08:06,969 INFO     Predictor: read 13661 rules from list.
+2025-06-23 23:08:07,656 INFO     Preprocess training set
+2025-06-23 23:08:07,723 INFO     >>>>> Predictor: Training
+2025-06-23 23:08:58,584 INFO     100 595 8.952630 69384.0
+2025-06-23 23:09:51,591 INFO     200 595 8.731738 68863.6
+2025-06-23 23:10:37,966 INFO     300 595 8.556711 69384.0

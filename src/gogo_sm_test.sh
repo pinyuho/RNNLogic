@@ -25,11 +25,11 @@ CONFIG_LIST=(
 )
 
 LOSS_MODES=(
-  "ori"
+  # "ori"
   # "fixed"
   # "warmup"
   # "schedule"
-  # "adaptive"
+  "adaptive"
 )
 
 RELATION_CLUSTER_METHODS=(
@@ -43,8 +43,6 @@ PREDICTOR_WEIGHTED_LOSS_MODES=(
   # "triple_count_sqrt"
   # "triple_count_log"
 )
-
-IS_WRNNLOGIC=0  # 是否使用 WRNNLogic 模型
 
 
 mkdir -p logs
@@ -77,7 +75,7 @@ for CONFIG_ORIGINAL in "${CONFIG_LIST[@]}"; do
             sed -i '/^[[:space:]]*gpus:/c\  gpus: [0]' "$CONFIG_PATH"
           fi
 
-          sed -i "s|^save_path: .*|save_path: results/${DATASET}/sm_test/wRNNLogic|" "$CONFIG_PATH"
+          sed -i "s|^save_path: .*|save_path: results/${DATASET}/sm_test/tttt|" "$CONFIG_PATH"
           # sed -i "s|^save_path: .*|save_path: results/test|" "$CONFIG_PATH"
 
           sed -i "s|data_path: .*|data_path: ../data/${DATASET}|" "$CONFIG_PATH"
@@ -105,7 +103,6 @@ for CONFIG_ORIGINAL in "${CONFIG_LIST[@]}"; do
               --mode $LOSS_MODE \
               --subset_ratio $SUBSET_RATIO \
               --predictor_weighted_loss_mode $PREDICTOR_WEIGHTED_LOSS_MODE \
-              --is_wrnnlogic $IS_WRNNLOGIC \
               > "$LOG_FILE" 2>&1
             then
               echo "❌ Error detected in $EXP_NAME. See log: $LOG_FILE"
@@ -119,7 +116,6 @@ for CONFIG_ORIGINAL in "${CONFIG_LIST[@]}"; do
               --mode $LOSS_MODE \
               --subset_ratio $SUBSET_RATIO \
               --predictor_weighted_loss_mode $PREDICTOR_WEIGHTED_LOSS_MODE \
-              --is_wrnnlogic $IS_WRNNLOGIC \
               > "$LOG_FILE" 2>&1
             then
               echo "❌ Error detected in $EXP_NAME. See log: $LOG_FILE"

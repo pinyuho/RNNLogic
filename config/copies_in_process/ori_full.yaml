@@ -1,4 +1,4 @@
-save_path: results/semmeddb/multitask/matrix_encode_relation/cluster_3/random_init/sm_test/ori
+save_path: results/semmeddb/multitask/matrix_encode_relation/task1_next_clus/random_init/cluster_3/0618_all_filtered/ori
 load_path: null
 seed: 1
 
@@ -6,7 +6,7 @@ data:
   data_path: ../data/semmeddb
   rule_file: ../data/semmeddb/mined_rules.txt
   cluster_size: 3
-  relation_cluster_file: ../data/semmeddb/relation_cluster_3_matrix.dict
+  relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_3.dict
   # batch_size: 32
   batch_size: 8
   
@@ -39,7 +39,7 @@ generator:
     batch_size: 512
 
 predictor:
-  gpus: [0]
+  gpus: [0, 1]
   model:
     entity_feature: bias
   optimizer:
@@ -60,7 +60,7 @@ final_prediction:
   max_length: [1, 2, 3, 4, 5]
 
 predictorplus:
-  gpus: [0]
+  gpus: [0, 1]
   model:
     hidden_dim: 16
     aggregator: pna

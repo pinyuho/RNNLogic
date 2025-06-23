@@ -14,7 +14,7 @@ from sklearn.decomposition import PCA, TruncatedSVD
 
 
 from collections import Counter, defaultdict
-from data import KnowledgeGraph
+from data.graph import KnowledgeGraph
 
 TYPE_SIZE = 136
 

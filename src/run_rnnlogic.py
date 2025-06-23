@@ -12,7 +12,11 @@ import torch
 # from torch.utils.data import DataLoader
 from torch import distributed as dist
 
-from data import KnowledgeGraph, TrainDataset, ValidDataset, TestDataset, RuleDataset
+# from data import KnowledgeGraph, TrainDataset, ValidDataset, TestDataset, RuleDataset
+from data.graph import KnowledgeGraph
+from data.triples_dataset import TrainDataset, ValidDataset, TestDataset
+from data.rules_dataset import RuleDataset
+
 from predictors import Predictor, PredictorPlus
 from generators import Generator
 from generator_multitask import GeneratorMultitask
@@ -49,7 +53,6 @@ def parse_args(args=None):
     parser.add_argument('--mode', type=str, default='ori')
     parser.add_argument('--subset_ratio', type=float, default=1.0)
     parser.add_argument('--predictor_weighted_loss_mode', type=str, default='ori')
-    parser.add_argument('--is_wrnnlogic', type=int, default=0, choices=[0, 1], help='Whether to use wRNNLogic (1) or RNNLogic (0).')
 
     return parser.parse_args(args)
 
@@ -74,7 +77,7 @@ def main(args):
     valid_set = ValidDataset(graph, cfg.data.batch_size)
     test_set = TestDataset(graph, cfg.data.batch_size)
 
-    dataset = RuleDataset(graph.relation_size, cfg.data.rule_file, cfg.data.cluster_size, cfg.data.relation_cluster_file, args.is_wrnnlogic)
+    dataset = RuleDataset(graph.relation_size, cfg.data.rule_file, cfg.data.cluster_size, cfg.data.relation_cluster_file)
 
 
     if args.subset_ratio < 1.0:
@@ -89,20 +92,12 @@ def main(args):
         if comm.get_rank() == 0:
             logging.info('Using full datasets for training, validation, and testing.')
 
-
-
-    if comm.get_rank() == 0:
-        logging.info('-------------------------')
-        logging.info('| Pre-train Generator')
-        logging.info('-------------------------')
-    
+    # Init generator
     if args.mode == 'ori':
         generator = Generator(graph, **cfg.generator.model)
     else:
         generator = GeneratorMultitask(graph, cfg.data.cluster_size, args.mode, **cfg.generator.model)
     solver_g = TrainerGenerator(generator, args.mode, gpu=cfg.generator.gpu)
-
-    solver_g.train(dataset, **cfg.generator.pre_train)
 
     replay_buffer = list()
     for k in range(cfg.EM.num_iters):
@@ -110,23 +105,29 @@ def main(args):
             logging.info('-------------------------')
             logging.info('| EM Iteration: {}/{}'.format(k + 1, cfg.EM.num_iters))
             logging.info('-------------------------')
-        
-        # Sample logic rules.
-        sampled_rules = solver_g.sample(cfg.EM.num_rules, cfg.EM.max_length)
+
+        if k == 0:
+            # EM round 0: Use mined rules as RP's input
+            logging.info('>>>>> Using miner\'s rule')
+            sampled_rules = dataset.rp_input
+        else:
+            # Sample logic rules with Generator
+            logging.info('>>>>> Using Generator\'s sample rule')
+            sampled_rules = solver_g.sample(cfg.EM.num_rules, cfg.EM.max_length)
+
         prior = [rule[-1] for rule in sampled_rules]
         rules = [rule[0:-1] for rule in sampled_rules]
-        save_rules(cfg, rules, k)
+        save_rules(cfg, rules, k) # 記錄用
 
-        # Train a reasoning predictor with sampled logic rules.
-        predictor = Predictor(graph, args.is_wrnnlogic, **cfg.predictor.model)
+        predictor = Predictor(graph, **cfg.predictor.model)
         predictor.set_rules(rules)
         optim = torch.optim.Adam(predictor.parameters(), **cfg.predictor.optimizer)
 
-        solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, args.predictor_weighted_loss_mode, args.is_wrnnlogic, gpus=cfg.predictor.gpus)
+        solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, args.predictor_weighted_loss_mode, gpus=cfg.predictor.gpus)
         solver_p.train(**cfg.predictor.train)
         valid_mrr_iter = solver_p.evaluate('valid', expectation=cfg.predictor.eval.expectation)
         test_mrr_iter = solver_p.evaluate('test', expectation=cfg.predictor.eval.expectation)
-        
+
         # E-step: Compute H scores of logic rules.
         likelihood = solver_p.compute_H(**cfg.predictor.H_score)
         posterior = [l + p * cfg.EM.prior_weight for l, p in zip(likelihood, prior)]
@@ -138,7 +139,7 @@ def main(args):
         dataset = RuleDataset(graph.relation_size, rules, cfg.data.cluster_size, cfg.data.relation_cluster_file)
 
         solver_g.train(dataset, **cfg.generator.train)
-        
+
     if replay_buffer != []:
         if comm.get_rank() == 0:
             logging.info('-------------------------')
@@ -185,7 +186,7 @@ def main(args):
 
     optim = torch.optim.Adam(predictor.parameters(), **cfg.predictorplus.optimizer)
 
-    solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, args.predictor_weighted_loss_mode, args.is_wrnnlogic, gpus=cfg.predictorplus.gpus)
+    solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, args.predictor_weighted_loss_mode, gpus=cfg.predictorplus.gpus)
     best_valid_mrr = 0.0
     test_mrr = 0.0
     for k in range(cfg.final_prediction.num_iters):

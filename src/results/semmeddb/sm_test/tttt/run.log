@@ -1,0 +1,17 @@
+2025-06-23 23:08:06 INFO     Data loading | DONE!
+2025-06-23 23:08:06 INFO     Using subset datasets for training, validation, and testing.
+2025-06-23 23:08:06 INFO     Subset ratio: 0.1
+2025-06-23 23:08:06 INFO     [Subset] TrainDataset: 595/5959 samples (10%)
+2025-06-23 23:08:06 INFO     [Subset] ValidDataset: 26/260 samples (10%)
+2025-06-23 23:08:06 INFO     [Subset] TestDataset: 29/293 samples (10%)
+2025-06-23 23:08:06 INFO     [Subset] RuleDataset: 1366/13661 samples (10%)
+2025-06-23 23:08:06 INFO     -------------------------
+2025-06-23 23:08:06 INFO     | EM Iteration: 1/2
+2025-06-23 23:08:06 INFO     -------------------------
+2025-06-23 23:08:06 INFO     >>>>> Using miner's rule
+2025-06-23 23:08:06 INFO     Predictor: read 13661 rules from list.
+2025-06-23 23:08:07 INFO     Preprocess training set
+2025-06-23 23:08:07 INFO     >>>>> Predictor: Training
+2025-06-23 23:08:58 INFO     100 595 8.952630 69384.0
+2025-06-23 23:09:51 INFO     200 595 8.731738 68863.6
+2025-06-23 23:10:37 INFO     300 595 8.556711 69384.0

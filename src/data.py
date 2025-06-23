@@ -209,6 +209,7 @@ class KnowledgeGraph(object):
     
     def propagate_with_count(self, x, min_cnt, relation, edges_to_remove=None): # recursive propagation
         device = x.device
+
         node_in = self.relation2adjacency[relation][0][1]
         node_out = self.relation2adjacency[relation][0][0]
 
@@ -408,7 +409,7 @@ class TestDataset(Dataset):
         return all_h, all_r, all_t, mask
 
 class RuleDataset(Dataset):
-    def __init__(self, num_relations, input, cluster_size, relation_cluster_file, is_wrnnlogic=0):
+    def __init__(self, num_relations, input, cluster_size, relation_cluster_file, is_wrnnlogic=False):
         self.rules = list()
         self.num_relations = num_relations
         self.ending_idx = num_relations
@@ -421,20 +422,27 @@ class RuleDataset(Dataset):
 
         self.rule_accuracies = list()
         
-        if type(input) == list:
-            rules = input
-        elif type(input) == str:
-            rules = list()
+        if isinstance(input, list):
+            rules_flat = input                          # sample() 回傳的那種
+        elif isinstance(input, str):
+            rules_flat = []
             with open(input, 'r') as fi:
                 for line in fi:
-                    rule = line.strip().split()
-                    rule = [int(_) for _ in rule[0:-1]] + [float(rule[-1]) * 1000]                     # [rule head, rule body..., confidence]
-                    rules.append(rule)
-        
-        self.rules = []
-        for rule in rules:
-            rule_len = len(rule)
-            formatted_rule = [rule[0:-1] + [self.ending_idx], self.padding_idx, rule[-1] + 1e-5]
+                    parts = line.strip().split()
+                    # [head, body..., conf*1000]
+                    rule = [int(x) for x in parts[:-1]] + [float(parts[-1])*1000]
+                    rules_flat.append(rule)
+        else:
+            raise ValueError("input 必須是 list 或檔案路徑")
+
+        # 把「扁平格式」保留下來，方便第一輪 RP 直接使用
+        self.rp_input = rules_flat
+
+        # ───────── 轉成三段式 (原本流程) ─────────
+        for rule in rules_flat:
+            conf = rule[-1]
+            rels = rule[:-1] + [self.ending_idx]
+            formatted_rule = [rels, self.padding_idx, conf + 1e-5]
             self.rules.append(formatted_rule)
     
     def __len__(self):

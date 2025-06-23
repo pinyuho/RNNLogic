@@ -1,113 +1,1219 @@
-2025-06-19 03:09:21 INFO     Data loading | DONE!
-2025-06-19 03:09:21 INFO     Using subset datasets for training, validation, and testing.
-2025-06-19 03:09:21 INFO     Subset ratio: 0.1
-2025-06-19 03:09:21 INFO     [Subset] TrainDataset: 595/5959 samples (10%)
-2025-06-19 03:09:21 INFO     [Subset] ValidDataset: 26/260 samples (10%)
-2025-06-19 03:09:21 INFO     [Subset] TestDataset: 29/293 samples (10%)
-2025-06-19 03:09:21 INFO     [Subset] RuleDataset: 1366/13661 samples (10%)
-2025-06-19 03:09:21 INFO     -------------------------
-2025-06-19 03:09:21 INFO     | Pre-train Generator
-2025-06-19 03:09:21 INFO     -------------------------
-2025-06-19 03:09:21 INFO     >>>>> Generator: Training
-2025-06-19 03:09:22 INFO     1 10 3.035268
-2025-06-19 03:09:22 INFO     2 10 2.901269
-2025-06-19 03:09:22 INFO     3 10 2.854052
-2025-06-19 03:09:22 INFO     4 10 2.508984
-2025-06-19 03:09:22 INFO     5 10 2.461400
-2025-06-19 03:09:22 INFO     6 10 2.393885
-2025-06-19 03:09:22 INFO     7 10 2.247263
-2025-06-19 03:09:22 INFO     8 10 2.249944
-2025-06-19 03:09:22 INFO     9 10 2.097890
-2025-06-19 03:09:22 INFO     10 10 1.988451
-2025-06-19 03:09:22 INFO     -------------------------
-2025-06-19 03:09:22 INFO     | EM Iteration: 1/1
-2025-06-19 03:09:22 INFO     -------------------------
-2025-06-19 03:09:22 INFO     >>>>> Generator: Rule generation with sampling
-2025-06-19 03:09:22 INFO     Predictor: read 182 rules from list.
-2025-06-19 03:09:22 INFO     Preprocess training set
-2025-06-19 03:09:22 INFO     >>>>> Predictor: Training
-2025-06-19 03:09:26 INFO     100 595 9.044236 69384.0
-2025-06-19 03:09:29 INFO     200 595 8.982674 68863.6
-2025-06-19 03:09:32 INFO     300 595 8.932099 69384.0
-2025-06-19 03:09:35 INFO     400 595 8.882923 69037.1
-2025-06-19 03:09:39 INFO     500 595 8.831002 69384.0
-2025-06-19 03:09:42 INFO     >>>>> Predictor: Evaluating on valid
-2025-06-19 03:09:42 INFO     Data : 208
-2025-06-19 03:09:42 INFO     Hit1 : 0.038462
-2025-06-19 03:09:42 INFO     Hit3 : 0.057692
-2025-06-19 03:09:42 INFO     Hit10: 0.115385
-2025-06-19 03:09:42 INFO     MR   : 1639.692308
-2025-06-19 03:09:42 INFO     MRR  : 0.062746
-2025-06-19 03:09:42 INFO     >>>>> Predictor: Evaluating on test
-2025-06-19 03:09:43 INFO     Data : 232
-2025-06-19 03:09:43 INFO     Hit1 : 0.043103
-2025-06-19 03:09:43 INFO     Hit3 : 0.081897
-2025-06-19 03:09:43 INFO     Hit10: 0.133621
-2025-06-19 03:09:43 INFO     MR   : 1466.237069
-2025-06-19 03:09:43 INFO     MRR  : 0.075189
-2025-06-19 03:09:43 INFO     >>>>> Predictor: Computing H scores of rules
-2025-06-19 03:10:14 INFO     >>>>> Generator: Training
-2025-06-19 03:10:14 INFO     1 10 2.615498
-2025-06-19 03:10:14 INFO     2 10 2.613709
-2025-06-19 03:10:14 INFO     3 10 2.611925
-2025-06-19 03:10:14 INFO     4 10 2.610145
-2025-06-19 03:10:14 INFO     5 10 2.608370
-2025-06-19 03:10:14 INFO     6 10 2.606594
-2025-06-19 03:10:14 INFO     7 10 2.604822
-2025-06-19 03:10:14 INFO     8 10 2.603059
-2025-06-19 03:10:14 INFO     9 10 2.601300
-2025-06-19 03:10:14 INFO     10 10 2.599548
-2025-06-19 03:10:14 INFO     -------------------------
-2025-06-19 03:10:14 INFO     | Post-train Generator
-2025-06-19 03:10:14 INFO     -------------------------
-2025-06-19 03:10:14 INFO     >>>>> Generator: Training
-2025-06-19 03:10:14 INFO     1 10 2.597800
-2025-06-19 03:10:14 INFO     2 10 2.596044
-2025-06-19 03:10:14 INFO     3 10 2.594300
-2025-06-19 03:10:14 INFO     4 10 2.592557
-2025-06-19 03:10:14 INFO     5 10 2.590819
-2025-06-19 03:10:14 INFO     6 10 2.589091
-2025-06-19 03:10:14 INFO     7 10 2.587363
-2025-06-19 03:10:14 INFO     8 10 2.585635
-2025-06-19 03:10:14 INFO     9 10 2.583917
-2025-06-19 03:10:14 INFO     10 10 2.582201
-2025-06-19 03:10:14 INFO     -------------------------
-2025-06-19 03:10:14 INFO     | Beam Search Best Rules
-2025-06-19 03:10:14 INFO     -------------------------
-2025-06-19 03:10:14 INFO     >>>>> Generator: Rule generation with beam search
-2025-06-19 03:10:15 INFO     >>>>> Generator: Rule generation with beam search
-2025-06-19 03:10:54 INFO     Using subset datasets for final predictor+ training, validation, and testing.
-2025-06-19 03:10:54 INFO     Subset ratio: 0.1
-2025-06-19 03:10:54 INFO     Subset sizes: train=595, valid=26, test=29, rule dataset=1042
-2025-06-19 03:10:54 INFO     -------------------------
-2025-06-19 03:10:54 INFO     | Train Final Predictor+
-2025-06-19 03:10:54 INFO     -------------------------
-2025-06-19 03:10:54 INFO     Predictor+: read 1042 rules from list.
-2025-06-19 03:10:54 INFO     Preprocess training set
-2025-06-19 03:10:54 INFO     -------------------------
-2025-06-19 03:10:54 INFO     | Iteration: 1/1
-2025-06-19 03:10:54 INFO     -------------------------
-2025-06-19 03:10:54 INFO     >>>>> Predictor: Training
-2025-06-19 03:11:21 INFO     100 595 8.272977 68776.9
-2025-06-19 03:11:46 INFO     200 595 7.891151 69384.0
-2025-06-19 03:12:11 INFO     300 595 7.502378 69384.0
-2025-06-19 03:12:36 INFO     400 595 7.728127 69384.0
-2025-06-19 03:13:02 INFO     500 595 7.651444 69384.0
-2025-06-19 03:13:26 INFO     >>>>> Predictor: Evaluating on valid
-2025-06-19 03:13:34 INFO     Data : 208
-2025-06-19 03:13:34 INFO     Hit1 : 0.043269
-2025-06-19 03:13:34 INFO     Hit3 : 0.072115
-2025-06-19 03:13:34 INFO     Hit10: 0.120192
-2025-06-19 03:13:34 INFO     MR   : 1617.713942
-2025-06-19 03:13:34 INFO     MRR  : 0.072286
-2025-06-19 03:13:34 INFO     >>>>> Predictor: Evaluating on test
-2025-06-19 03:13:43 INFO     Data : 232
-2025-06-19 03:13:43 INFO     Hit1 : 0.021552
-2025-06-19 03:13:43 INFO     Hit3 : 0.060345
-2025-06-19 03:13:43 INFO     Hit10: 0.142241
-2025-06-19 03:13:43 INFO     MR   : 1294.321121
-2025-06-19 03:13:43 INFO     MRR  : 0.062078
-2025-06-19 03:13:43 INFO     Save checkpoint to results/semmeddb/sm_test/wRNNLogic/predictor.pt
-2025-06-19 03:13:43 INFO     -------------------------
-2025-06-19 03:13:43 INFO     | Final Test MRR: 0.062078
-2025-06-19 03:13:43 INFO     -------------------------
+2025-06-20 15:48:21 INFO     Data loading | DONE!
+2025-06-20 15:48:21 INFO     Using subset datasets for training, validation, and testing.
+2025-06-20 15:48:21 INFO     Subset ratio: 0.1
+2025-06-20 15:48:21 INFO     [Subset] TrainDataset: 595/5959 samples (10%)
+2025-06-20 15:48:21 INFO     [Subset] ValidDataset: 26/260 samples (10%)
+2025-06-20 15:48:21 INFO     [Subset] TestDataset: 29/293 samples (10%)
+2025-06-20 15:48:21 INFO     [Subset] RuleDataset: 1366/13661 samples (10%)
+2025-06-20 15:48:21 INFO     -------------------------
+2025-06-20 15:48:21 INFO     | Pre-train Generator
+2025-06-20 15:48:21 INFO     -------------------------
+2025-06-20 15:48:21 INFO     >>>>> Generator: Training
+2025-06-20 15:48:22 INFO     1 10 3.035268
+2025-06-20 15:48:22 INFO     2 10 2.901269
+2025-06-20 15:48:22 INFO     3 10 2.854052
+2025-06-20 15:48:22 INFO     4 10 2.508984
+2025-06-20 15:48:22 INFO     5 10 2.461400
+2025-06-20 15:48:22 INFO     6 10 2.393885
+2025-06-20 15:48:22 INFO     7 10 2.247263
+2025-06-20 15:48:22 INFO     8 10 2.249944
+2025-06-20 15:48:22 INFO     9 10 2.097890
+2025-06-20 15:48:22 INFO     10 10 1.988451
+2025-06-20 15:48:22 INFO     >>>>> Generator: Computing rule accuracy scores
+2025-06-20 15:48:22 INFO     -------------------------
+2025-06-20 15:48:22 INFO     | EM Iteration: 1/1
+2025-06-20 15:48:22 INFO     -------------------------
+2025-06-20 15:48:22 INFO     >>>>> Generator: Rule generation with sampling
+2025-06-20 15:48:22 INFO     Predictor: read 182 rules from list.
+2025-06-20 15:48:22 INFO     Preprocess training set
+2025-06-20 15:48:22 INFO     >>>>> Predictor: Training
+2025-06-20 15:48:22 INFO     Loss: 0.046548 | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:22 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:23 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     100 595 nan 69384.0
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:24 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:25 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 17346
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     200 595 nan 68863.6
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:26 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:27 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     300 595 nan 69384.0
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:28 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 34692
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     400 595 nan 69037.1
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:29 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:30 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     500 595 nan 69384.0
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:31 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:32 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     Loss: nan | Masked Size: 69384
+2025-06-20 15:48:33 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-20 15:48:33 INFO     Data : 208
+2025-06-20 15:48:33 INFO     Hit1 : 1.000000
+2025-06-20 15:48:33 INFO     Hit3 : 1.000000
+2025-06-20 15:48:33 INFO     Hit10: 1.000000
+2025-06-20 15:48:33 INFO     MR   : 1.000000
+2025-06-20 15:48:33 INFO     MRR  : 1.000000
+2025-06-20 15:48:33 INFO     >>>>> Predictor: Evaluating on test
+2025-06-20 15:48:33 INFO     Data : 232
+2025-06-20 15:48:33 INFO     Hit1 : 1.000000
+2025-06-20 15:48:33 INFO     Hit3 : 1.000000
+2025-06-20 15:48:33 INFO     Hit10: 1.000000
+2025-06-20 15:48:33 INFO     MR   : 1.000000
+2025-06-20 15:48:33 INFO     MRR  : 1.000000
+2025-06-20 15:48:33 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-20 15:48:40 INFO     >>>>> Generator: Training
+2025-06-20 15:48:40 INFO     1 10 nan
+2025-06-20 15:48:40 INFO     2 10 nan
+2025-06-20 15:48:40 INFO     3 10 nan
+2025-06-20 15:48:40 INFO     4 10 nan
+2025-06-20 15:48:40 INFO     5 10 nan
+2025-06-20 15:48:40 INFO     6 10 nan
+2025-06-20 15:48:40 INFO     7 10 nan
+2025-06-20 15:48:40 INFO     8 10 nan
+2025-06-20 15:48:40 INFO     9 10 nan
+2025-06-20 15:48:40 INFO     10 10 nan
+2025-06-20 15:48:40 INFO     >>>>> Generator: Computing rule accuracy scores
+2025-06-20 15:48:40 INFO     -------------------------
+2025-06-20 15:48:40 INFO     | Post-train Generator
+2025-06-20 15:48:40 INFO     -------------------------
+2025-06-20 15:48:40 INFO     >>>>> Generator: Training
+2025-06-20 15:48:40 INFO     1 10 nan
+2025-06-20 15:48:40 INFO     2 10 nan
+2025-06-20 15:48:40 INFO     3 10 nan
+2025-06-20 15:48:40 INFO     4 10 nan
+2025-06-20 15:48:40 INFO     5 10 nan
+2025-06-20 15:48:40 INFO     6 10 nan
+2025-06-20 15:48:40 INFO     7 10 nan
+2025-06-20 15:48:40 INFO     8 10 nan
+2025-06-20 15:48:40 INFO     9 10 nan
+2025-06-20 15:48:40 INFO     10 10 nan
+2025-06-20 15:48:40 INFO     >>>>> Generator: Computing rule accuracy scores
+2025-06-20 15:48:40 INFO     -------------------------
+2025-06-20 15:48:40 INFO     | Beam Search Best Rules
+2025-06-20 15:48:40 INFO     -------------------------
+2025-06-20 15:48:40 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-20 15:48:40 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-20 15:48:50 INFO     Using subset datasets for final predictor+ training, validation, and testing.
+2025-06-20 15:48:50 INFO     Subset ratio: 0.1
+2025-06-20 15:48:50 INFO     Subset sizes: train=595, valid=26, test=29, rule dataset=1042
+2025-06-20 15:48:50 INFO     -------------------------
+2025-06-20 15:48:50 INFO     | Train Final Predictor+
+2025-06-20 15:48:50 INFO     -------------------------
+2025-06-20 15:48:50 INFO     Predictor+: read 1042 rules from list.
+2025-06-20 15:48:50 INFO     Preprocess training set
+2025-06-20 15:48:50 INFO     -------------------------
+2025-06-20 15:48:50 INFO     | Iteration: 1/1
+2025-06-20 15:48:50 INFO     -------------------------
+2025-06-20 15:48:50 INFO     >>>>> Predictor: Training
+2025-06-20 15:48:50 INFO     Loss: 0.042200 | Masked Size: 69384
+2025-06-20 15:48:50 INFO     Loss: 0.058502 | Masked Size: 69384
+2025-06-20 15:48:50 INFO     Loss: 0.048492 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.057507 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.034380 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.080867 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.370455 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.089638 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.052258 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.033635 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.055792 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.026595 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.036965 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.085497 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.113945 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.053545 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.036883 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.034535 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.129822 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.132895 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.042025 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.018565 | Masked Size: 69384
+2025-06-20 15:48:51 INFO     Loss: 0.079090 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.027040 | Masked Size: 8673
+2025-06-20 15:48:52 INFO     Loss: 0.032182 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.054242 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.041928 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.019452 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.077370 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.022562 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.034335 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.021173 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.122393 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.039407 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.042730 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.050602 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.025995 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.036213 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.042500 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.032833 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.238087 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.030392 | Masked Size: 69384
+2025-06-20 15:48:52 INFO     Loss: 0.029273 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.035490 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.040347 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.035365 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.048420 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.026912 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.136322 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.100620 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.070770 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.348225 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.250018 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.102312 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.025047 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.071390 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.591272 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.097402 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.037335 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.049615 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.030640 | Masked Size: 69384
+2025-06-20 15:48:53 INFO     Loss: 0.051385 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.100252 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.036222 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.017072 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.034467 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.047187 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.131600 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.028515 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.019260 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.076127 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.105255 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.019535 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.069365 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.016897 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.026540 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.080595 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.040030 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.153775 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.047192 | Masked Size: 69384
+2025-06-20 15:48:54 INFO     Loss: 0.062463 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.100620 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.050580 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.045032 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.026330 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.049925 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.177717 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.060443 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.018798 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.031465 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.259677 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.221490 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.030560 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.026385 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.041168 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.033187 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.023130 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.046660 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.104227 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     Loss: 0.032935 | Masked Size: 69384
+2025-06-20 15:48:55 INFO     100 595 0.073764 68776.9
+2025-06-20 15:48:55 INFO     Loss: 0.176045 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.028252 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.043927 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.039303 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.029235 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.178428 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.036120 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.027097 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.028272 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.142580 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.018742 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.152975 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.032020 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.063287 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.096095 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.043462 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.051540 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.089972 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.096083 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.027483 | Masked Size: 69384
+2025-06-20 15:48:56 INFO     Loss: 0.029973 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.036368 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.146197 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.061557 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.041515 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.083610 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.184405 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.089107 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.040490 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.035723 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.031060 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.180315 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.027240 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.030190 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.062170 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.013745 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.033860 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.059120 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.056403 | Masked Size: 69384
+2025-06-20 15:48:57 INFO     Loss: 0.047285 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.036187 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.042790 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.040352 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.042270 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.044552 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.055618 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.081830 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.051310 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.131312 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.136348 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.172362 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.031230 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.185037 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.029392 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.113228 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.158073 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.041320 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.030458 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.065265 | Masked Size: 69384
+2025-06-20 15:48:58 INFO     Loss: 0.028470 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.053982 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.041060 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.068490 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.021525 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.014645 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.095830 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.028930 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.024150 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.135798 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.052570 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.063713 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.054905 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.047008 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.049510 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.045050 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.068265 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.016802 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.053900 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.082307 | Masked Size: 69384
+2025-06-20 15:48:59 INFO     Loss: 0.047215 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.181860 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.052890 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.056132 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.019770 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.051662 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.039087 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.038830 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.068452 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.039790 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.032428 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.044930 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.085605 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.040133 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.049892 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.072420 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.036405 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.045765 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.045045 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.806145 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     Loss: 0.078008 | Masked Size: 69384
+2025-06-20 15:49:00 INFO     200 595 0.071596 69384.0
+2025-06-20 15:49:00 INFO     Loss: 0.041010 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.475215 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.266845 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.033462 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.154252 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.032620 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.060108 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.029502 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.020732 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.056860 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.487285 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.143695 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.069795 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.030112 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.109048 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.038752 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.049617 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.115070 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.041968 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.017692 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.023268 | Masked Size: 69384
+2025-06-20 15:49:01 INFO     Loss: 0.043878 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.070365 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.046305 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.092265 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.110302 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.061945 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.246422 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.075277 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.031312 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.099302 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.012357 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.037070 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.060588 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.124065 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.081453 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.038380 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.279537 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.021665 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.150090 | Masked Size: 69384
+2025-06-20 15:49:02 INFO     Loss: 0.093057 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.058368 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.039145 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.030600 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.070677 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.041025 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.107252 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.048792 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.115747 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.069500 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.067730 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.037025 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.026352 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.032360 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.052152 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.151643 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.139965 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.016217 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.062162 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.040575 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.034185 | Masked Size: 69384
+2025-06-20 15:49:03 INFO     Loss: 0.036770 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.031030 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.037468 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.083678 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.055005 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.059042 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.052705 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.031185 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.024905 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.031527 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.511328 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.035288 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.067123 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.051278 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.037805 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.073628 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.032192 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.080405 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.056457 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.090765 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.037658 | Masked Size: 69384
+2025-06-20 15:49:04 INFO     Loss: 0.084068 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.082230 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.046482 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.094477 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.037050 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.026805 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.072467 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.028238 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.055060 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.047660 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.026522 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.056190 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.026177 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.197265 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.052977 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.066298 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.041848 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.057760 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     300 595 0.079308 69384.0
+2025-06-20 15:49:05 INFO     Loss: 0.039010 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.075237 | Masked Size: 69384
+2025-06-20 15:49:05 INFO     Loss: 0.022118 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.140910 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.074755 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.024797 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.034737 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.120095 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.022705 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.080870 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.045037 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.018917 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.034198 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.050747 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.027858 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.030385 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.027225 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.025992 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.035377 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.073188 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.023385 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.041740 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.020257 | Masked Size: 69384
+2025-06-20 15:49:06 INFO     Loss: 0.081782 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.040835 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.026392 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.048053 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.037835 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.146595 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.169767 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.064732 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.030825 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.322265 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.023713 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.043572 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.067823 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.040177 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.185848 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.034467 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.024245 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.078185 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.962140 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.075558 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.057365 | Masked Size: 69384
+2025-06-20 15:49:07 INFO     Loss: 0.077725 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.049410 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.045183 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.220310 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.140868 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.021675 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.109992 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.103670 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.036480 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.107657 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.053213 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.326330 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.042705 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.071798 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.057388 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.168865 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.071520 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.273398 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.031870 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.028215 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.030082 | Masked Size: 69384
+2025-06-20 15:49:08 INFO     Loss: 0.026572 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.026283 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.032957 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.067958 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.765162 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.029167 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.025378 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.030277 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.022027 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.053883 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.095250 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.038225 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.050822 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.073780 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.030645 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.020110 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.021640 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.064342 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.079440 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.045982 | Masked Size: 69384
+2025-06-20 15:49:09 INFO     Loss: 0.016447 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.178985 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.027678 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.078700 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.311518 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.018345 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.079938 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.112398 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.075823 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.019015 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.024855 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.125820 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.042225 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.054347 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.064122 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     400 595 0.085502 69384.0
+2025-06-20 15:49:10 INFO     Loss: 0.054302 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.066185 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.046680 | Masked Size: 69384
+2025-06-20 15:49:10 INFO     Loss: 0.100225 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.332855 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.014713 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.056215 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.029425 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.037547 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.032112 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.085068 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.536798 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.033775 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.012990 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.084922 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.062625 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.160395 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.016945 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.033828 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.042180 | Masked Size: 69384
+2025-06-20 15:49:11 INFO     Loss: 0.029615 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.019953 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.076892 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.064130 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.016445 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.059370 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.093120 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.056805 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.026900 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.040265 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.031365 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.782272 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.031350 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.127675 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.036927 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.029715 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.041572 | Masked Size: 69384
+2025-06-20 15:49:12 INFO     Loss: 0.082515 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.080695 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.047165 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.051467 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.101053 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.336625 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.045642 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.038390 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.114465 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.098922 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.053038 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.046885 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.036728 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.067255 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.042388 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.112808 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.021958 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.093735 | Masked Size: 69384
+2025-06-20 15:49:13 INFO     Loss: 0.074040 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.046945 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.068495 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.036082 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.053968 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.040432 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.018793 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.020903 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.033155 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.047390 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.153563 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.044873 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.029317 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.034597 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.079275 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.044260 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.043305 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.028595 | Masked Size: 69384
+2025-06-20 15:49:14 INFO     Loss: 0.050030 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.035763 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.020280 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.098000 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.010895 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.427417 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.038560 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.025403 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.025848 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.033950 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.029872 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.032205 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.040642 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.124267 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.054623 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.035430 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.043685 | Masked Size: 69384
+2025-06-20 15:49:15 INFO     Loss: 0.036100 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.032282 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.182390 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.049680 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.052055 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.129010 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.073913 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.524583 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.260962 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.043770 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     500 595 0.082855 69384.0
+2025-06-20 15:49:16 INFO     Loss: 0.034977 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.039515 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.042865 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.157092 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.023410 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 0.042342 | Masked Size: 69384
+2025-06-20 15:49:16 INFO     Loss: 1.010715 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.036345 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.053902 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.091935 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.028900 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.039522 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.053082 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.032793 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.091712 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.039570 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.024458 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.500183 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.053155 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.112055 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.085897 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.018698 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.014798 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.116487 | Masked Size: 69384
+2025-06-20 15:49:17 INFO     Loss: 0.082742 | Masked Size: 69384
+2025-06-20 15:49:18 INFO     Loss: 0.049582 | Masked Size: 69384

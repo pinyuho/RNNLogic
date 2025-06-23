@@ -49,14 +49,12 @@ curcumin	treats	malignant_neoplasm_of_cervix_uteri
 naloxone	treats	shock
 clonazepam	treats	phobia,_social
 misoprostol	treats	postpartum_hemorrhage
-misoprostol	treats	postpartum_hemorrhage
 meperidine	treats	acute_onset_pain
 sural	treats	weight_gain
 duloxetine	treats	fibromyalgia
 brain_natriuretic_peptide	treats	kidney_failure,_chronic
 methylphenidate	treats	depressive_symptoms
 fluoxetine	treats	panic_attacks
-3-iodobenzylguanidine	treats	neuroblastoma
 3-iodobenzylguanidine	treats	neuroblastoma
 fludrocortisone	treats	wasting
 pemetrexed	treats	refractory_neoplasm
@@ -174,7 +172,6 @@ gastrin|gast	treats	gastrinoma
 argipressin	treats	anaphylaxis
 sodium_nitroprusside	treats	systemic_arterial_pressure
 sotalol	treats	ventricular_premature_complexes
-teriparatide	treats	bone_necrosis
 recombinant_fviia	treats	cerebral_hemisphere_hemorrhage
 immunologic_adjuvants	treats	cervical_squamous_cell_carcinoma
 ascorbic_acid	treats	well_adult
@@ -187,7 +184,6 @@ ciprofloxacin	treats	pneumonia
 botulinum_toxins	treats	benign_prostatic_hypertrophy
 tranexamic_acid	treats	acute_upper_gastrointestinal_hemorrhage
 clonidine	treats	menopausal_symptom
-valproic_acid	treats	agitation
 valproic_acid	treats	agitation
 isoniazid	treats	hiv_seropositivity
 serotonin_uptake_inhibitors	treats	depressive_symptoms
@@ -212,7 +208,6 @@ cidofovir	treats	respiratory_papillomatosis
 vasodilator_agents	treats	hearing_loss,_sudden
 naloxone	treats	constipation
 recombinant_growth_hormone	treats	small-for-dates_unspecified
-adsorbents	treats	diastasis
 adsorbents	treats	diastasis
 cisplatin	treats	malignant_neoplasm_of_urinary_bladder
 cabergoline	treats	pituitary_adenoma
@@ -246,7 +241,6 @@ benidipine	treats	hypertensive
 therapeutic_agent_(substance)	treats	neuroblastoma
 sodium_nitroprusside	treats	hypertensive
 lidocaine	treats	pain,_intractable
-lidocaine	treats	pain,_intractable
 bupropion	treats	depressive_symptoms
 memantine	treats	memory_impairment
 mullerian-inhibiting_hormone	treats	polycystic_ovary_syndrome
@@ -257,7 +251,6 @@ follicle_stimulating_hormone	treats	oligospermia
 landiolol	treats	atrial_flutter
 angiotensin-converting_enzyme_inhibitors	treats	infarction
 verapamil	treats	exercise-induced_angina
-norepinephrine	treats	septic_shock
 norepinephrine	treats	septic_shock
 synthetic_opioids	treats	heroin_dependence
 tolvaptan	treats	dyspnea
@@ -278,7 +271,6 @@ adrenergic_beta-antagonists	treats	syncope
 haloperidol	treats	anxiety_state
 antihypertensive_agents	treats	increase_in_blood_pressure
 adriamycin	treats	secondary_malignant_neoplasm_of_liver
-fluorouracil	treats	malignant_tumor_of_colon
 fluorouracil	treats	malignant_tumor_of_colon
 cytostatic_agents	treats	acute_leukemia
 analgesics	treats	secondary_malignant_neoplasm_of_bone
@@ -317,7 +309,6 @@ pth_protein,_human|pth	treats	hypoparathyroidism
 vinflunine	treats	metastatic_carcinoma
 sertraline	treats	generalized_anxiety_disorder
 escitalopram	treats	unipolar_depression
-escitalopram	treats	unipolar_depression
 venlafaxine	treats	unipolar_depression
 gemcitabine	treats	carcinoma_of_nasopharynx
 prochlorperazine	treats	migraine_disorders
@@ -340,7 +331,6 @@ quetiapine	treats	anorexia_nervosa
 dopamine	treats	neuroblastoma
 metronidazole	treats	alcoholic_intoxication,_chronic
 corticotropin|pomc	treats	acth-secreting_pituitary_adenoma
-hydrocortisone	treats	shock
 hydrocortisone	treats	shock
 amlodipine	treats	hypertensive
 zonisamide	treats	binge_eating_disorder
@@ -489,7 +479,6 @@ gabapentin	treats	severe_pain
 prolactin|prl	treats	prolactinoma
 chlorambucil	treats	polycythemia_vera
 citalopram	treats	unipolar_depression
-citalopram	treats	unipolar_depression
 resins,_plant	treats	diastasis
 venlafaxine	treats	hot_flushes
 naloxone	treats	sedation
@@ -538,7 +527,6 @@ progestins	treats	metrorrhagia
 streptokinase	treats	venous_thrombosis
 duloxetine	treats	peripheral_neuropathic_pain
 thyrotropin	treats	hypothyroidism
-tranexamic_acid	treats	wounds_and_injuries
 tranexamic_acid	treats	wounds_and_injuries
 incretin	treats	hyperglycemia
 cytotoxic_agent	treats	hematologic_neoplasms
@@ -593,7 +581,6 @@ fluoxetine	treats	major_depressive_disorder,_single_episode,_unspecified
 gonadotropins	treats	superovulation
 glucagon	treats	fasting
 chickenpox_vaccine	treats	immunocompromised_host
-melatonin	treats	delirium
 melatonin	treats	delirium
 tranexamic_acid	treats	hyperpigmentation
 thiazolidinediones	treats	insulin_sensitivity
@@ -661,12 +648,10 @@ anti-anxiety_agents	treats	generalized_anxiety_disorder
 phentolamine	treats	systemic_arterial_pressure
 analgesics,_opioid	treats	low_back_pain
 naltrexone	treats	alcoholic_intoxication,_chronic
-naltrexone	treats	alcoholic_intoxication,_chronic
 thioguanine	treats	leukemia,_lymphocytic,_acute,_l1
 everolimus	treats	lymphoma,_large-cell,_diffuse
 ethinyl_estradiol	treats	prostate_carcinoma
 caffeine	treats	well_adult
-ondansetron	treats	nausea
 ondansetron	treats	nausea
 atorvastatin	treats	hematoma,_subdural,_chronic
 pth_protein,_human|pth	treats	bone_mass
@@ -675,7 +660,6 @@ adjuvant_analgesic	treats	cancer_pain
 lidocaine	treats	acute_onset_pain
 taxanes	treats	breast_cancer_recurrent
 dobutamine	treats	infarction
-tranexamic_acid	treats	traumatic_brain_injury
 tranexamic_acid	treats	traumatic_brain_injury
 flecainide	treats	tachyarrhythmia
 buspirone	treats	obsessive-compulsive_disorder
@@ -709,7 +693,6 @@ adrenergic_beta-antagonists	treats	systemic_arterial_pressure
 naloxone	treats	septic_shock
 streptokinase	treats	myocardial_infarction
 dantrolene	treats	crisis
-dantrolene	treats	crisis
 thalidomide	treats	metastatic_melanoma
 fenoldopam	treats	hypertensive
 pentoxifylline	treats	shock,_hemorrhagic
@@ -735,7 +718,6 @@ omeprazole	treats	heartburn
 travoprost	treats	glaucoma
 leptin|lep	treats	periodontitis
 irinotecan	treats	secondary_malignant_neoplasm_of_liver
-ascorbic_acid	treats	septic_shock
 ascorbic_acid	treats	septic_shock
 kinase_inhibitor	treats	gastrointestinal_stromal_tumors
 clomiphene_citrate	treats	unexplained_infertility
@@ -765,7 +747,6 @@ diphenhydramine	treats	pruritus
 clonazepam	treats	mania_acute
 carboplatin	treats	secondary_malignant_neoplasm_of_liver
 avastin	treats	macular_retinal_edema
-thiamine	treats	septic_shock
 thiamine	treats	septic_shock
 leucovorin	treats	secondary_malignant_neoplasm_of_pancreas
 apatinib	treats	neoplasms
@@ -849,7 +830,6 @@ naproxen_sodium	treats	pain,_postoperative
 lamivudine	treats	liver_failure
 risperidone	treats	behavioral_symptoms
 warfarin	treats	thromboembolism
-warfarin	treats	thromboembolism
 thyrotropin	treats	thyroid_nodule
 quetiapine_fumarate	treats	acute_schizophrenia
 denosumab	treats	postmenopausal_state
@@ -889,7 +869,6 @@ interferon-alpha	treats	kaposi_sarcoma
 sulfasalazine	treats	ankylosing_spondylitis
 oxybutynin	treats	hyperhidrosis_disorder
 piracetam	treats	myoclonus
-methotrexate	treats	keratoacanthoma
 methotrexate	treats	keratoacanthoma
 ziprasidone	treats	schizophreniform_disorders
 anti-arrhythmia_agents	treats	atrial_flutter
@@ -1013,7 +992,6 @@ human_chorionic_gonadotropin	treats	normal_pregnancy
 follicle_stimulating_hormone|brd2	treats	infertility,_male
 cannabidiol	treats	neuropathic_pain
 methadone	treats	cancer_pain
-methadone	treats	cancer_pain
 bevacizumab	treats	locally_advanced_malignant_neoplasm
 moclobemide	treats	atypical_depressive_disorder
 nadolol	treats	angina_pectoris
@@ -1029,7 +1007,6 @@ tazarotene	treats	psoriasis
 diazepam	treats	spasm
 phenylephrine	treats	normal_blood_pressure
 trazodone	treats	bulimia
-melatonin	treats	sleep_disorders
 melatonin	treats	sleep_disorders
 methylprednisolone	treats	optic_neuritis
 radiopharmaceuticals	treats	neoplasms
@@ -1060,7 +1037,6 @@ fluconazole	treats	onychomycosis
 lamotrigine	treats	stress_disorders,_post-traumatic
 nitroglycerin	treats	acute_infarct
 morphine	treats	pain,_intractable
-morphine	treats	pain,_intractable
 naloxone	treats	respiratory_depression
 tocainide	treats	ventricular_premature_complexes
 bevacizumab	treats	colorectal_carcinoma
@@ -1069,7 +1045,6 @@ folfirinox	treats	locally_advanced_malignant_neoplasm
 topiramate	treats	aggressive_behavior
 toremifene	treats	mastodynia
 venlafaxine	treats	major_depressive_disorder,_single_episode,_unspecified
-haloperidol	treats	delirium
 haloperidol	treats	delirium
 topotecan	treats	retinoblastoma
 imatinib_mesylate	treats	hypereosinophilic_syndrome
@@ -1100,7 +1075,6 @@ salmeterol	treats	moderate_asthma
 clonazepam	treats	neuropathic_pain
 trastuzumab	treats	inflammatory_breast_carcinoma
 losartan	treats	normal_blood_pressure
-metformin	treats	malignant_neoplasm_of_endometrium
 metformin	treats	malignant_neoplasm_of_endometrium
 botulinum_toxins	treats	bruxism
 nmda_receptor_antagonist	treats	neuropathic_pain
@@ -1221,7 +1195,6 @@ piroxicam	treats	[d]renal_colic,_unspecified
 anticoagulants	treats	hematoma
 retinoids	treats	precancerous_lesions
 valproic_acid	treats	manic
-valproic_acid	treats	manic
 carbamazepine	treats	aggressive_behavior
 vinblastine	treats	advanced_disease
 leukotriene_antagonists	treats	mild_asthma
@@ -1250,14 +1223,12 @@ paroxetine	treats	generalized_anxiety_disorder
 immunologic_adjuvants	treats	colon_carcinoma
 antibiotics	treats	associated_disease
 prednisone	treats	myasthenia_gravis
-prednisone	treats	myasthenia_gravis
 opioids	treats	analgesic_effect
 immunologic_adjuvants	treats	nausea
 formoterol	treats	chronic_obstructive_airway_disease
 argipressin	treats	ventricular_fibrillation
 capecitabine	treats	carcinoma_breast_stage_iv
 analgesics	treats	cancer_pain
-lidocaine	treats	neuralgia
 8-mop	treats	psoriasis
 erlotinib	treats	adverse_event
 protein-tyrosine_kinase_inhibitor	treats	malignant_neoplasm_of_thyroid
@@ -1301,7 +1272,6 @@ gabapentin	treats	seizures,_focal
 brain_natriuretic_peptide	treats	ejection_fraction
 temozolomide	treats	central_nervous_system_neoplasms
 digoxin	treats	tachyarrhythmia
-tranexamic_acid	treats	postpartum_hemorrhage
 tranexamic_acid	treats	postpartum_hemorrhage
 quetiapine	treats	memory_impairment
 entecavir	treats	liver_failure
@@ -1382,7 +1352,6 @@ progestins	treats	endometriosis,_site_unspecified
 venlafaxine	treats	panic_disorder
 recombinant_interleukin-2	treats	metastatic_melanoma
 fluoxetine	treats	unipolar_depression
-fluoxetine	treats	unipolar_depression
 interferon_alpha,_human|ifna1	treats	hepatitis_c,_chronic
 prednisone	treats	iga_glomerulonephritis
 norepinephrine	treats	smoker
@@ -1412,7 +1381,6 @@ droperidol	treats	agitation
 imatinib	treats	leukemia,_lymphocytic,_acute,_l2
 nifedipine	treats	mean_blood_pressure
 levosimendan	treats	shock,_cardiogenic
-levosimendan	treats	shock,_cardiogenic
 methylphenidate	treats	drowsiness
 nicotine	treats	nicotine_withdrawal
 vincristine	treats	lymphoma,_follicular
@@ -1421,7 +1389,6 @@ prednisone	treats	bulla
 lactate	treats	shock
 carbamazepine	treats	trigeminal_neuralgia
 radiation-sensitizing_agents	treats	brain_neoplasms
-oral_anticoagulants	treats	thromboembolism
 oral_anticoagulants	treats	thromboembolism
 leptin	treats	anorexia_nervosa
 calcium_channel_blockers	treats	cerebrovascular_disorders
@@ -1529,7 +1496,6 @@ alendronate	treats	bone_necrosis
 dexmedetomidine	treats	acute_onset_pain
 rituximab	treats	cytopenia
 analgesics,_opioid	treats	cancer_pain
-analgesics,_opioid	treats	cancer_pain
 irinotecan	treats	malignant_tumor_of_colon
 glucose	treats	vitality
 clonidine	treats	aggressive_behavior
@@ -1538,7 +1504,6 @@ angiotensin-converting_enzyme_inhibitors	treats	cardiac_hypertrophy
 vinblastine	treats	mast_cell_neoplasm
 biological_response_modifiers	treats	neoplasms
 aromatase_inhibitors	treats	breast_cancer_metastatic
-dexmedetomidine	treats	shivering
 dexmedetomidine	treats	shivering
 n-terminal_pro-b-type_natriuretic_peptide	treats	ventricular_dysfunction,_left
 phenytoin	treats	tachycardia,_ventricular
@@ -1557,7 +1522,6 @@ leptin|lep	treats	infertility
 botulinum_toxins	treats	bladder_dysfunction
 oxycodone	treats	chronic_cancer_pain
 sunitinib	treats	gastrointestinal_stromal_tumors
-oxycodone	treats	pain,_postoperative
 oxycodone	treats	pain,_postoperative
 atenolol	treats	stable_angina_pectoris
 prednisone	treats	ulcer
@@ -1651,7 +1615,6 @@ diazoxide	treats	hypertensive
 antineoplastic_agents	treats	malignant_tumor_of_cervix
 antidotes	treats	extravasation
 colchicine	treats	flare
-colchicine	treats	flare
 cabergoline	treats	pituitary_macroadenoma
 chemopreventive_agent	treats	malignant_neoplasm_of_mouth
 alprazolam	treats	anxiety_disorders
@@ -1734,7 +1697,6 @@ retinoids	treats	neuroblastoma
 carboplatin	treats	squamous_cell_carcinoma_of_lung
 microbicides	treats	ulcer
 buprenorphine	treats	opiate_addiction
-buprenorphine	treats	opiate_addiction
 alprazolam	treats	generalized_anxiety_disorder
 thiotepa	treats	primary_central_nervous_system_lymphoma
 calcium_channel_blockers	treats	ventricular_dysfunction,_left
@@ -1816,17 +1778,14 @@ methylprednisolone	treats	pneumonia
 theophylline	treats	severe_asthma
 narcotic_antagonists	treats	alcoholic_intoxication,_chronic
 curcumin	treats	malignant_neoplasm_of_urinary_bladder
-curcumin	treats	malignant_neoplasm_of_urinary_bladder
 artesunate	treats	malaria,_falciparum
 angiogenesis_inhibitors	treats	osteosarcoma
 leptin|lep	treats	anorexia_nervosa
 furosemide	treats	hyponatremia
 doxorubicin	treats	osteosarcoma
-doxorubicin	treats	osteosarcoma
 levocarnitine	treats	septic_shock
 pantoprazole	treats	heartburn
 propafenone	treats	tachyarrhythmia
-mitotane	treats	adrenocortical_carcinoma
 mitotane	treats	adrenocortical_carcinoma
 infliximab	treats	adverse_event
 tace	treats	liver_neoplasms
@@ -2034,7 +1993,6 @@ isotretinoin	treats	metastatic_renal_cell_carcinoma
 interferons	treats	respiratory_papillomatosis
 risperidone	treats	dystonia
 sertraline	treats	unipolar_depression
-sertraline	treats	unipolar_depression
 tacrolimus	treats	diarrhea
 lisuride	treats	fluctuation
 ok-432	treats	lymphangioma
@@ -2072,7 +2030,6 @@ amitriptyline	treats	peripheral_neuropathic_pain
 interferons	treats	hiv_seropositivity
 paroxetine	treats	obsessive-compulsive_disorder
 immunomodulators	treats	refractory_disease
-somatropin	treats	somatotropin_deficiency
 somatropin	treats	somatotropin_deficiency
 calcitriol	treats	hyperparathyroidism
 droperidol	treats	postoperative_nausea
@@ -2125,7 +2082,6 @@ agomelatine	treats	sleeplessness
 gefitinib	treats	small_cell_lung_cancer_recurrent
 rituximab	treats	small_lymphocytic_lymphoma
 ketamine	treats	depressive_symptoms
-ketamine	treats	depressive_symptoms
 valproate	treats	seizures,_focal
 warfarin	treats	venous_thrombosis
 alprazolam	treats	panic_attacks
@@ -2142,7 +2098,6 @@ diltiazem	treats	hypertensive
 diazepam	treats	poisoning
 hypericin	treats	malignant_glioma
 pulmonary_surfactants	treats	respiratory_distress_syndrome,_newborn
-ketamine	treats	pain,_postoperative
 ketamine	treats	pain,_postoperative
 methylene_blue	treats	septic_shock
 verapamil	treats	normal_blood_pressure
@@ -2207,7 +2162,6 @@ gastrin	treats	duodenal_ulcer
 fluconazole	treats	mycoses
 finasteride	treats	lower_urinary_tract_symptoms
 lorazepam	treats	agitation
-lorazepam	treats	agitation
 alemtuzumab	treats	lymphoproliferative_disorders
 sedatives	treats	agitation
 nimustine	treats	malignant_neoplasm_of_brain
@@ -2240,7 +2194,6 @@ protein-tyrosine_kinase_inhibitor	treats	medullary_carcinoma
 meloxicam	treats	fibromatosis,_aggressive
 somatotropin	treats	growth_retardation
 caffeine	treats	memory_impairment
-vinblastine	treats	hodgkin_disease
 vinblastine	treats	hodgkin_disease
 lorazepam	treats	withdrawal_symptoms
 protein-tyrosine_kinase_inhibitor	treats	blast_phase
@@ -2339,13 +2292,11 @@ erythropoietin|epo	treats	stemi
 dabigatran_etexilate	treats	thromboembolism
 phenylbutazone	treats	hodgkin_disease
 lactulose	treats	constipation
-lactulose	treats	constipation
 human_chorionic_gonadotropin|cga|htc2|cgb5	treats	gestational_trophoblastic_neoplasms
 antineoplastic_agents	treats	non-small_cell_lung_carcinoma
 gemcitabine	treats	locally_advanced_malignant_neoplasm
 antiemetics	treats	postoperative_nausea
 selegiline	treats	disability_nos
-analgesics,_opioid	treats	breakthrough_pain
 ara-c	treats	leukemia,_lymphocytic,_acute
 metformin	treats	neoplasms
 triamcinolone_acetonide	treats	choroidal_neovascularization
@@ -2355,7 +2306,6 @@ warfarin	treats	hematoma
 human_chorionic_gonadotropin	treats	hypogonadotropic_hypogonadism
 antifibrinolytic_agents	treats	subarachnoid_hemorrhage,_aneurysmal
 levamisole	treats	colon_cancer_stage_iii
-buprenorphine	treats	chronic_pain
 buprenorphine	treats	chronic_pain
 anti-arrhythmia_agents	treats	sinus_rhythm
 streptozocin	treats	insulinoma
@@ -2375,7 +2325,6 @@ hepatitis_b_surface_antigens	treats	carrier_of_disorder
 carbimazole	treats	hyperthyroidism
 milrinone	treats	low_cardiac_output_syndrome
 opioids	treats	dyspnea
-dexamethasone	treats	nausea
 dexamethasone	treats	nausea
 resistin|retn	treats	psoriasis
 microbicides	treats	innate_immune_response
