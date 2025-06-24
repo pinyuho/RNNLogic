@@ -27,3 +27,14 @@
 2025-06-24 14:35:54,169 INFO     MR   : 2551.187500
 2025-06-24 14:35:54,169 INFO     MRR  : 0.069722
 2025-06-24 14:35:54,169 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-24 15:26:01,544 INFO     >>>>> Generator: Training
+entity size:  8673
+relation size:  20
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 218, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 143, in main
+    solver_g.train(dataset, **cfg.generator.train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 478, in train
+    total_step_loss += w * step_loss
+TypeError: can't multiply sequence by non-int of type 'float'

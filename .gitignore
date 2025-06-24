@@ -13,3 +13,6 @@ checkpoint
 drugdiscovery
 scratch
 dataset
+data/semmeddb/route_all.pkl
+data/semmeddb/relation_strength_all.pkl
+data/semmeddb/relation_strength_train.pkl
