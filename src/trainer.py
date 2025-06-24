@@ -359,65 +359,139 @@ class TrainerGenerator(object):
         rule_accs = (rule_scores / (valid_lens + 1e-8)).tolist()
         return rule_accs
     
-    def train(self, rule_set, num_epoch=10000, lr=1e-3, print_every=100, batch_size=512):
+    # def train(self, rule_set, num_epoch=10000, lr=1e-3, print_every=100, batch_size=512):
+    #     if comm.get_rank() == 0:
+    #         logging.info('>>>>> Generator: Training')
+    #     model = self.model
+    #     model.train()
+
+    #     dataloader = torch_data.DataLoader(rule_set, batch_size, shuffle=True, collate_fn=rule_set.collate_fn)
+    #     iterator = Iterator(dataloader)
+    #     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+
+    #     total_loss = 0.0
+    #     total_main_loss = 0.0
+    #     total_aux_rel_cluster_loss = 0.0
+    #     total_aux_ent_type_loss = 0.0
+    #     for epoch in range(num_epoch):
+    #         batch = next(iterator)
+    #         # inputs, main_target, aux_target, aux2_target, mask, weight = batch
+    #         # hidden = self.zero_state(inputs.size(0))
+
+    #         for k, v in batch.items():
+    #             if torch.is_tensor(v):
+    #                 batch[k] = v.cuda(self.device, non_blocking=True)
+
+    #         hidden = self.zero_state(batch["sequence"].size(0))
+            
+    #         # if self.device.type == "cuda":
+    #         #     inputs = inputs.cuda(self.device)
+    #         #     main_target = main_target.cuda(self.device)
+    #         #     aux_target = aux_target.cuda(self.device)
+    #         #     aux2_target = aux2_target.cuda(self.device)
+    #         #     mask = mask.cuda(self.device)
+    #         #     weight = weight.cuda(self.device)
+
+    #         # if self.mode != 'ori': # multitask 
+    #         #     loss, main_loss, aux2_loss = model.loss(inputs, main_target, aux_target, aux2_target, epoch, mask, weight, hidden)
+    #         # else:
+    #         #     loss = model.loss(inputs, main_target, mask, weight, hidden)
+
+    #         if self.mode != "ori": # multitask
+    #             main_loss = model.loss(batch, hidden, task="main")
+    #             aux_rel_cluster_loss = model.loss(batch, hidden, task="aux_rel_cluster")
+    #             aux_ent_type_loss = model.loss(batch, hidden, task="aux_ent_type") 
+    #         else: # origin
+    #             loss = model.loss(batch, hidden)
+            
+    #         loss.backward()
+            
+    #         optimizer.step()
+    #         optimizer.zero_grad()
+
+    #         total_loss += loss.item()
+
+    #         if self.mode != 'ori':
+    #             total_main_loss += main_loss.item()
+    #             total_aux_rel_cluster_loss += aux_rel_cluster_loss.item()
+    #             total_aux_ent_type_loss +=  aux_ent_type_loss.item()
+
+    #         if (epoch + 1) % print_every == 0:
+    #             avg_total_loss = total_loss / print_every
+
+    #             if self.mode != 'ori':
+    #                 avg_main_loss = total_main_loss / print_every
+    #                 avg_aux_rel_cluster_loss = total_aux_rel_cluster_loss / print_every
+    #                 avg_aux_ent_type_loss = total_aux_ent_type_loss / print_every
+    #             if comm.get_rank() == 0:
+    #                 if self.mode != 'ori':
+    #                     logging.info(f"[E{epoch + 1:03d}] Total: {avg_total_loss:.6f} | Main: {avg_main_loss:.6f} | Aux1: {avg_aux_rel_cluster_loss:.6f} | Aux2: {avg_aux_ent_type_loss:.6f}")
+    #                 else:
+    #                     logging.info('{} {} {:.6f}'.format(epoch + 1, num_epoch, total_loss / print_every))
+    #             # if comm.get_rank() == 0:
+    #             #     logging.info('{} {} {:.6f}'.format(epoch + 1, num_epoch, total_loss / print_every))
+    #             total_loss = 0.0
+
+    #             if self.mode != 'ori':
+    #                 total_main_loss = 0.0
+    #                 total_aux_rel_cluster_loss = 0.0
+    #                 total_aux_ent_type_loss = 0.0
+
+    def train(self, rule_set,
+            num_epoch=10000, lr=1e-3,
+            print_every=100, batch_size=512):
+
         if comm.get_rank() == 0:
             logging.info('>>>>> Generator: Training')
-        model = self.model
+
+        model     = self.model
         model.train()
 
-        dataloader = torch_data.DataLoader(rule_set, batch_size, shuffle=True, collate_fn=rule_set.collate_fn)
-        iterator = Iterator(dataloader)
+        dataloader = torch_data.DataLoader(
+            rule_set, batch_size, shuffle=True,
+            collate_fn=rule_set.collate_fn)
+        iterator  = Iterator(dataloader)
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
-        total_loss = 0.0
-        total_main_loss = 0.0
-        total_aux_loss = 0.0
-        for epoch in range(num_epoch):
+        # -------- 多任務設定 --------
+        if self.mode == "ori":
+            loss_w = {"main":1.0}    # 其餘任務不計
+        else:
+            loss_w = {"main":0.8, "aux_rel_cluster":0.1, "aux_ent_type":0.1} # TODO: 改成 adaptive loss
+
+        task_list = list(loss_w.keys())
+
+        running = {k:0.0 for k in ["total"]+task_list}   # 累計器
+
+        for epoch in range(1, num_epoch+1):
             batch = next(iterator)
-            inputs, main_target, aux_target, aux2_target, mask, weight = batch
-            hidden = self.zero_state(inputs.size(0))
-            
-            if self.device.type == "cuda":
-                inputs = inputs.cuda(self.device)
-                main_target = main_target.cuda(self.device)
-                aux_target = aux_target.cuda(self.device)
-                aux2_target = aux2_target.cuda(self.device)
-                mask = mask.cuda(self.device)
-                weight = weight.cuda(self.device)
 
-            if self.mode != 'ori':
-                loss, main_loss, aux2_loss = model.loss(inputs, main_target, aux_target, aux2_target, epoch, mask, weight, hidden)
-            else:
-                loss = model.loss(inputs, main_target, mask, weight, hidden)
-            loss.backward()
+            for k,v in batch.items():
+                if torch.is_tensor(v):
+                    batch[k] = v.cuda(self.device, non_blocking=True)
 
-            optimizer.step()
-            optimizer.zero_grad()
+            hidden = self.zero_state(batch["sequence"].size(0))
 
-            total_loss += loss.item()
+            total_step_loss = 0.0
+            for task, w in loss_w.items():
+                step_loss = model.loss(batch, hidden, task=task)   # 回 (loss, hidden)
+                total_step_loss += w * step_loss
+                running[task]   += step_loss.item()
 
-            if self.mode != 'ori':
-                total_main_loss += main_loss.item()
-                total_aux_loss += aux2_loss.item()
+            running["total"] += total_step_loss.item()
 
-            if (epoch + 1) % print_every == 0:
-                avg_total_loss = total_loss / print_every
+            total_step_loss.backward()
+            optimizer.step(); optimizer.zero_grad()
 
-                if self.mode != 'ori':
-                    avg_main_loss = total_main_loss / print_every
-                    avg_aux_loss = total_aux_loss / print_every
-                if comm.get_rank() == 0:
-                    if self.mode != 'ori':
-                        logging.info(f"[E{epoch + 1:03d}] Total: {avg_total_loss:.6f} | Main: {avg_main_loss:.6f} | Aux: {avg_aux_loss:.6f}")
-                    else:
-                        logging.info('{} {} {:.6f}'.format(epoch + 1, num_epoch, total_loss / print_every))
-                # if comm.get_rank() == 0:
-                #     logging.info('{} {} {:.6f}'.format(epoch + 1, num_epoch, total_loss / print_every))
-                total_loss = 0.0
-
-                if self.mode != 'ori':
-                    total_main_loss = 0.0
-                    total_aux_loss = 0.0
+            if epoch % print_every == 0 and comm.get_rank() == 0:
+                avg = {k: v/print_every for k,v in running.items()}
+                logging.info(
+                    f"[E{epoch:05d}] "
+                    f"Total {avg['total']:.6f} | "
+                    f"Main {avg['main']:.6f} | "
+                    f"Aux1 {avg['aux_rel_cluster']:.6f} | "
+                    f"Aux2 {avg['aux_ent_type']:.6f}")
+                running = {k:0.0 for k in running}     
     
     def zero_state(self, batch_size): 
         state_shape = (self.model.num_layers, batch_size, self.model.hidden_dim)

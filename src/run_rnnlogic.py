@@ -20,6 +20,7 @@ from data.rules_dataset import RuleDataset
 from predictors import Predictor, PredictorPlus
 from generators import Generator
 from generator_multitask import GeneratorMultitask
+from generator_multitask_models.multitask_mmoe import MultitaskMMOE
 from utils import load_config, save_config, set_logger, set_seed, get_subset_dataset
 from trainer import TrainerPredictor, TrainerGenerator
 import comm
@@ -96,7 +97,8 @@ def main(args):
     if args.mode == 'ori':
         generator = Generator(graph, **cfg.generator.model)
     else:
-        generator = GeneratorMultitask(graph, cfg.data.cluster_size, args.mode, **cfg.generator.model)
+        # generator = GeneratorMultitask(graph, cfg.data.cluster_size, args.mode, **cfg.generator.model)
+        generator = MultitaskMMOE(graph, cfg.data.cluster_size, args.mode, **cfg.generator.model)
     solver_g = TrainerGenerator(generator, args.mode, gpu=cfg.generator.gpu)
 
     replay_buffer = list()

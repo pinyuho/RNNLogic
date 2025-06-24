@@ -107,3 +107,14 @@ def get_subset_dataset(dataset, ratio: float = 1.0, seed: int = 42):
     if comm.get_rank() == 0:
         logging.info(f"[Subset] {dataset.__class__.__name__}: {k}/{n} samples ({ratio:.0%})")
     return SubsetProxy(dataset, idx)
+
+def build_rotate_embedding(path, num_extra=2, scale=0.01):
+    """
+    讀 RotatE 向量，再補 2 格隨機權重 ⇒ nn.Embedding
+    """
+    base = torch.as_tensor(np.load(path), dtype=torch.float)          # (R, D)
+    extra = torch.randn(num_extra, base.size(1)).mul_(scale)          # (2, D)
+    weight = torch.cat([base, extra], dim=0)                          # (R+2, D)
+    return torch.nn.Embedding.from_pretrained(
+        weight, freeze=True, padding_idx=weight.size(0)-1             # 最後一格當 padding
+    )

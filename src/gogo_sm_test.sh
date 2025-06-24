@@ -5,7 +5,7 @@ set -e  # 出錯即停止
 STAMP=$(date +"%Y%m%d_%H%M%S")
 
 GPUS_PER_NODE=2
-SUBSET_RATIO=0.1
+SUBSET_RATIO=0.01
 PYTHON_SCRIPT="run_rnnlogic.py"
 
 DATASET="semmeddb" 

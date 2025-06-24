@@ -1,11 +1,10 @@
 import torch
-import torch.nn.functional as F
-from sklearn.metrics import classification_report
-import numpy as np
+from utils import build_rotate_embedding
+
 import logging
 
 class GeneratorMultitask(torch.nn.Module):
-    def __init__(self, graph, cluster_size, loss_mode, num_layers, embedding_dim, hidden_dim, emb_init_mode="random"):
+    def __init__(self, graph, cluster_size, loss_mode, num_layers, embedding_dim, hidden_dim, emb_init_mode="rotate"):
         super(GeneratorMultitask, self).__init__()
         self.graph = graph
         self.num_relations = graph.relation_size
@@ -24,17 +23,13 @@ class GeneratorMultitask(torch.nn.Module):
         self.cluster_size = cluster_size
 
         if emb_init_mode == "random":
-            self.embedding = torch.nn.Embedding(self.vocab_size, self.embedding_dim, padding_idx=self.padding_idx)
-        else: # rotate
-            rotate_relation_emb = np.load("../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_512/relation_embedding.npy")
-            rotate_relation_emb = torch.tensor(rotate_relation_emb, dtype=torch.float)
-            # 隨機初始化額外兩個 embedding
-            num_extra = 2
-            embedding_dim = rotate_relation_emb.shape[1]
-            extra_embeddings = torch.randn(num_extra, embedding_dim) * 0.01  # 小一點較穩定
-            # 合併
-            full_embedding = torch.cat([rotate_relation_emb, extra_embeddings], dim=0)  # [num_relations + 2, dim]
-            self.embedding = torch.nn.Embedding.from_pretrained(full_embedding, freeze=True)
+            self.embedding = torch.nn.Embedding(self.vocab_size, self.embedding_dim,
+                                          padding_idx=self.padding_idx)
+        else:  # rotate
+            logging.info("rotate ing...")
+            self.embedding = build_rotate_embedding(
+                "../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_512/relation_embedding.npy"
+            )
 
         # ori
         self.encoder = torch.nn.LSTM(self.embedding_dim * 2, self.hidden_dim, self.num_layers, batch_first=True)

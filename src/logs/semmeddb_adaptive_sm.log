@@ -1,17 +1,29 @@
-2025-06-23 23:08:06,664 INFO     Data loading | DONE!
-2025-06-23 23:08:06,765 INFO     Using subset datasets for training, validation, and testing.
-2025-06-23 23:08:06,765 INFO     Subset ratio: 0.1
-2025-06-23 23:08:06,766 INFO     [Subset] TrainDataset: 595/5959 samples (10%)
-2025-06-23 23:08:06,766 INFO     [Subset] ValidDataset: 26/260 samples (10%)
-2025-06-23 23:08:06,766 INFO     [Subset] TestDataset: 29/293 samples (10%)
-2025-06-23 23:08:06,767 INFO     [Subset] RuleDataset: 1366/13661 samples (10%)
-2025-06-23 23:08:06,883 INFO     -------------------------
-2025-06-23 23:08:06,883 INFO     | EM Iteration: 1/2
-2025-06-23 23:08:06,883 INFO     -------------------------
-2025-06-23 23:08:06,883 INFO     >>>>> Using miner's rule
-2025-06-23 23:08:06,969 INFO     Predictor: read 13661 rules from list.
-2025-06-23 23:08:07,656 INFO     Preprocess training set
-2025-06-23 23:08:07,723 INFO     >>>>> Predictor: Training
-2025-06-23 23:08:58,584 INFO     100 595 8.952630 69384.0
-2025-06-23 23:09:51,591 INFO     200 595 8.731738 68863.6
-2025-06-23 23:10:37,966 INFO     300 595 8.556711 69384.0
+2025-06-24 14:13:03,574 INFO     Data loading | DONE!
+2025-06-24 14:13:03,672 INFO     Using subset datasets for training, validation, and testing.
+2025-06-24 14:13:03,672 INFO     Subset ratio: 0.01
+2025-06-24 14:13:03,672 INFO     [Subset] TrainDataset: 59/5959 samples (1%)
+2025-06-24 14:13:03,673 INFO     [Subset] ValidDataset: 2/260 samples (1%)
+2025-06-24 14:13:03,673 INFO     [Subset] TestDataset: 2/293 samples (1%)
+2025-06-24 14:13:03,673 INFO     [Subset] RuleDataset: 136/13661 samples (1%)
+2025-06-24 14:13:03,910 INFO     -------------------------
+2025-06-24 14:13:03,911 INFO     | EM Iteration: 1/2
+2025-06-24 14:13:03,911 INFO     -------------------------
+2025-06-24 14:13:03,911 INFO     >>>>> Using miner's rule
+2025-06-24 14:13:03,936 INFO     Predictor: read 13661 rules from list.
+2025-06-24 14:13:04,681 INFO     Preprocess training set
+2025-06-24 14:13:04,778 INFO     >>>>> Predictor: Training
+2025-06-24 14:34:16,723 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-24 14:35:05,432 INFO     Data : 16
+2025-06-24 14:35:05,433 INFO     Hit1 : 0.000000
+2025-06-24 14:35:05,433 INFO     Hit3 : 0.000000
+2025-06-24 14:35:05,433 INFO     Hit10: 0.000000
+2025-06-24 14:35:05,433 INFO     MR   : 2996.375000
+2025-06-24 14:35:05,433 INFO     MRR  : 0.012503
+2025-06-24 14:35:05,433 INFO     >>>>> Predictor: Evaluating on test
+2025-06-24 14:35:54,169 INFO     Data : 16
+2025-06-24 14:35:54,169 INFO     Hit1 : 0.000000
+2025-06-24 14:35:54,169 INFO     Hit3 : 0.125000
+2025-06-24 14:35:54,169 INFO     Hit10: 0.125000
+2025-06-24 14:35:54,169 INFO     MR   : 2551.187500
+2025-06-24 14:35:54,169 INFO     MRR  : 0.069722
+2025-06-24 14:35:54,169 INFO     >>>>> Predictor: Computing H scores of rules

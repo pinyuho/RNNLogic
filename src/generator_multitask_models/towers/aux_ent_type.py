@@ -1,24 +1,18 @@
-# towers/aux_ent_type.py
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 class AuxEntTypeTower(nn.Module):
-    """
-    預測「下一個 entity 的語意 / type」(例如 WordNet lexname)。
-    feature : (B, L, H)
-    target  : (B, L)  type id，無標註填 -1
-    mask    : (B, L)  bool，有效 token
-    """
-    def __init__(self, hidden_dim, num_type):
+    def __init__(self, hidden_dim, type_size):
         super().__init__()
-        self.head = nn.Linear(hidden_dim, num_type)
+        self.head = nn.Linear(hidden_dim, type_size)
+        self.type_size = type_size
         self.criterion = nn.CrossEntropyLoss(ignore_index=-1)
 
-    def forward(self, feature, target, mask, weight=None):
-        logits_full = self.head(feature)
-
-        logits = logits_full[mask]   # (N, T)
-        target = target[mask]        # (N,)
+    def forward(self, feature, target, mask, weight=None): # weight 沒有用到，忽略即可
+        logits = self.head(feature)
+        logits = torch.masked_select(logits, mask.unsqueeze(-1)).view(-1, self.type_size)
+        target = torch.masked_select(target, mask)
 
         loss = self.criterion(logits, target)
 

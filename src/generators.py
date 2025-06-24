@@ -29,12 +29,31 @@ class Generator(torch.nn.Module):
         logits = self.linear(outputs)
         return logits, hidden
 
-    def loss(self, inputs, target, mask, weight, hidden):
-        logits, hidden = self.forward(inputs, inputs[:, 0], hidden)
-        logits = torch.masked_select(logits, mask.unsqueeze(-1)).view(-1, self.label_size)
-        target = torch.masked_select(target, mask)
-        weight = torch.masked_select((mask.t() * weight).t(), mask)
-        loss = (self.criterion(logits, target) * weight).sum() / weight.sum()
+    # def loss(self, inputs, target, mask, weight, hidden):
+    #     logits, hidden = self.forward(inputs, inputs[:, 0], hidden)
+    #     logits = torch.masked_select(logits, mask.unsqueeze(-1)).view(-1, self.label_size)
+    #     target = torch.masked_select(target, mask)
+    #     weight = torch.masked_select((mask.t() * weight).t(), mask)
+    #     loss = (self.criterion(logits, target) * weight).sum() / weight.sum()
+    #     return loss
+
+    def loss(self, batch, hidden):
+        sequence     = batch["sequence"]
+        relation     = batch["relation"]
+        target       = batch["main_target"]
+        mask         = batch["mask"]
+        weight       = batch["weight"]
+
+        logits, hidden = self.forward(sequence, relation, hidden)   # (B,L,|V|)
+
+        logits  = logits[mask]          # (N, |V|)
+        target  = target[mask]          # (N,)
+        weight  = weight[mask]          # (N,)
+
+        _loss = self.criterion(logits, target)             # (N,)
+        loss     = (_loss * weight).sum() / weight.sum()
+
         return loss
+
 
     

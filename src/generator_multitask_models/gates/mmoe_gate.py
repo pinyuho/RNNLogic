@@ -4,8 +4,8 @@ import torch.nn.functional as F
 
 class MMOEGate(nn.Module):
     """
-    shared_feature         : (B, L, D)      ← shared feature
-    expert_outputs  : list[(B, L, D)]，長度 = num_experts
+    shared_feature      : (B, L, D)      ← shared feature
+    expert_outputs      : list[(B, L, D)]，長度 = num_experts
     """
     def __init__(self, input_dim, num_experts, normalize="softmax"):
         super().__init__()

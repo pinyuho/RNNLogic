@@ -57,33 +57,37 @@ class RuleDataset(Dataset):
     def _collate_static(rel2cluster, data):
         inputs = [item[0][0:len(item[0])-1] for item in data]
         main_target = [item[0][1:len(item[0])] for item in data]
+
         weight = [float(item[-1]) for item in data]
         max_len = max([len(_) for _ in inputs])
         padding_index = [int(item[-2]) for item in data]
 
-        aux_target = [
-            [rel2cluster.get(r, -1) for r in seq]
-            for seq in main_target
-        ]
-
-        aux2_target = [
-            [rel2cluster.get(r, -1) for r in seq]
-            for seq in inputs
-        ]
+        aux_rel_cluster_target = [[rel2cluster.get(r, -1) for r in seq] for seq in main_target]
+        aux_ent_type_target = [[rel2cluster.get(r, -1) for r in seq] for seq in main_target] # TODO:
 
         for k in range(len(data)):
             for i in range(max_len - len(inputs[k])):
                 inputs[k].append(padding_index[k])
                 main_target[k].append(padding_index[k])
-                aux_target[k].append(-1)  # -1 代表 padding，避開有效 cluster id 範圍
-                aux2_target[k].append(-1)  # -1 代表 padding，避開有效 cluster id 範圍
+                aux_rel_cluster_target[k].append(-1)  # -1 代表 padding，避開有效 cluster id 範圍, CrossEntropy 要搭配設定 ignore index = -1
+                aux_ent_type_target[k].append(-1)     # -1 代表 padding，避開有效 cluster id 範圍, CrossEntropy 要搭配設定 ignore index = -1
 
         inputs = torch.tensor(inputs, dtype=torch.long)
         main_target = torch.tensor(main_target, dtype=torch.long)
-        aux_target = torch.tensor(aux_target, dtype=torch.long)
-        aux2_target = torch.tensor(aux2_target, dtype=torch.long)
+        aux_rel_cluster_target = torch.tensor(aux_rel_cluster_target, dtype=torch.long)
+        aux_ent_type_target = torch.tensor(aux_ent_type_target, dtype=torch.long)
         weight = torch.tensor(weight)
         mask = (main_target != torch.tensor(padding_index, dtype=torch.long).unsqueeze(1))
 
-        # return inputs, target, mask, weight
-        return inputs, main_target, aux_target, aux2_target, mask, weight
+        # return inputs, main_target, aux_target, aux_ent_type_target, mask, weight
+        batch = {
+            "sequence":               inputs,                           # rule sequence
+            "relation":               inputs[:, 0],                     # rule head (第一個 token)
+            "mask":                   mask,
+            "weight":                 weight,
+            "main_target":            main_target,
+            "aux_rel_cluster_target": aux_rel_cluster_target,
+            "aux_ent_type_target":    aux_ent_type_target,
+        }
+        return batch
+
