@@ -9,8 +9,12 @@ class AuxEntTypeTower(nn.Module):
         self.type_size = type_size
         self.criterion = nn.CrossEntropyLoss(ignore_index=-1)
 
-    def forward(self, feature, target, mask, weight=None): # weight 沒有用到，忽略即可
+    def forward(self, feature, target=None, mask=None, weight=None): # weight 沒有用到，忽略即可
         logits = self.head(feature)
+
+        if target is None or mask is None or weight is None:
+            return logits, None  # 👉 inference 模式只回傳 logits
+    
         logits = torch.masked_select(logits, mask.unsqueeze(-1)).view(-1, self.type_size)
         target = torch.masked_select(target, mask)
 

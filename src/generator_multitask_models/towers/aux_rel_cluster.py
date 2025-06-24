@@ -9,8 +9,11 @@ class AuxRelClusterTower(nn.Module):
         self.cluster_size = cluster_size
         self.criterion = nn.CrossEntropyLoss(ignore_index=-1)
 
-    def forward(self, feature, target, mask, weight=None):
+    def forward(self, feature, target=None, mask=None, weight=None):
         logits= self.linear(feature)
+
+        if target is None or mask is None or weight is None:
+            return logits, None  # 👉 inference 模式只回傳 logits
 
         logits = torch.masked_select(logits, mask.unsqueeze(-1)).view(-1, self.cluster_size)
         target = torch.masked_select(target, mask)

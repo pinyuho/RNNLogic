@@ -112,6 +112,7 @@ def main(args):
             # EM round 0: Use mined rules as RP's input
             logging.info('>>>>> Using miner\'s rule')
             sampled_rules = dataset.rp_input
+            sampled_rules = sampled_rules[:10]
         else:
             # Sample logic rules with Generator
             logging.info('>>>>> Using Generator\'s sample rule')

@@ -1,40 +1,93 @@
-2025-06-24 14:13:03,574 INFO     Data loading | DONE!
-2025-06-24 14:13:03,672 INFO     Using subset datasets for training, validation, and testing.
-2025-06-24 14:13:03,672 INFO     Subset ratio: 0.01
-2025-06-24 14:13:03,672 INFO     [Subset] TrainDataset: 59/5959 samples (1%)
-2025-06-24 14:13:03,673 INFO     [Subset] ValidDataset: 2/260 samples (1%)
-2025-06-24 14:13:03,673 INFO     [Subset] TestDataset: 2/293 samples (1%)
-2025-06-24 14:13:03,673 INFO     [Subset] RuleDataset: 136/13661 samples (1%)
-2025-06-24 14:13:03,910 INFO     -------------------------
-2025-06-24 14:13:03,911 INFO     | EM Iteration: 1/2
-2025-06-24 14:13:03,911 INFO     -------------------------
-2025-06-24 14:13:03,911 INFO     >>>>> Using miner's rule
-2025-06-24 14:13:03,936 INFO     Predictor: read 13661 rules from list.
-2025-06-24 14:13:04,681 INFO     Preprocess training set
-2025-06-24 14:13:04,778 INFO     >>>>> Predictor: Training
-2025-06-24 14:34:16,723 INFO     >>>>> Predictor: Evaluating on valid
-2025-06-24 14:35:05,432 INFO     Data : 16
-2025-06-24 14:35:05,433 INFO     Hit1 : 0.000000
-2025-06-24 14:35:05,433 INFO     Hit3 : 0.000000
-2025-06-24 14:35:05,433 INFO     Hit10: 0.000000
-2025-06-24 14:35:05,433 INFO     MR   : 2996.375000
-2025-06-24 14:35:05,433 INFO     MRR  : 0.012503
-2025-06-24 14:35:05,433 INFO     >>>>> Predictor: Evaluating on test
-2025-06-24 14:35:54,169 INFO     Data : 16
-2025-06-24 14:35:54,169 INFO     Hit1 : 0.000000
-2025-06-24 14:35:54,169 INFO     Hit3 : 0.125000
-2025-06-24 14:35:54,169 INFO     Hit10: 0.125000
-2025-06-24 14:35:54,169 INFO     MR   : 2551.187500
-2025-06-24 14:35:54,169 INFO     MRR  : 0.069722
-2025-06-24 14:35:54,169 INFO     >>>>> Predictor: Computing H scores of rules
-2025-06-24 15:26:01,544 INFO     >>>>> Generator: Training
-entity size:  8673
-relation size:  20
-Traceback (most recent call last):
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 218, in <module>
-    main(parse_args())
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 143, in main
-    solver_g.train(dataset, **cfg.generator.train)
-  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 478, in train
-    total_step_loss += w * step_loss
-TypeError: can't multiply sequence by non-int of type 'float'
+2025-06-24 16:57:09,376 INFO     Data loading | DONE!
+2025-06-24 16:57:09,476 INFO     Using subset datasets for training, validation, and testing.
+2025-06-24 16:57:09,476 INFO     Subset ratio: 0.01
+2025-06-24 16:57:09,476 INFO     [Subset] TrainDataset: 59/5959 samples (1%)
+2025-06-24 16:57:09,477 INFO     [Subset] ValidDataset: 2/260 samples (1%)
+2025-06-24 16:57:09,477 INFO     [Subset] TestDataset: 2/293 samples (1%)
+2025-06-24 16:57:09,477 INFO     [Subset] RuleDataset: 136/13661 samples (1%)
+2025-06-24 16:57:09,718 INFO     -------------------------
+2025-06-24 16:57:09,718 INFO     | EM Iteration: 1/2
+2025-06-24 16:57:09,718 INFO     -------------------------
+2025-06-24 16:57:09,718 INFO     >>>>> Using miner's rule
+2025-06-24 16:57:09,719 INFO     Predictor: read 10 rules from list.
+2025-06-24 16:57:10,374 INFO     Preprocess training set
+2025-06-24 16:57:10,462 INFO     >>>>> Predictor: Training
+2025-06-24 16:57:16,953 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-24 16:57:17,256 INFO     Data : 16
+2025-06-24 16:57:17,257 INFO     Hit1 : 0.000000
+2025-06-24 16:57:17,257 INFO     Hit3 : 0.000000
+2025-06-24 16:57:17,257 INFO     Hit10: 0.062500
+2025-06-24 16:57:17,257 INFO     MR   : 2373.875000
+2025-06-24 16:57:17,257 INFO     MRR  : 0.008906
+2025-06-24 16:57:17,257 INFO     >>>>> Predictor: Evaluating on test
+2025-06-24 16:57:17,462 INFO     Data : 16
+2025-06-24 16:57:17,462 INFO     Hit1 : 0.000000
+2025-06-24 16:57:17,462 INFO     Hit3 : 0.000000
+2025-06-24 16:57:17,462 INFO     Hit10: 0.000000
+2025-06-24 16:57:17,462 INFO     MR   : 2367.812500
+2025-06-24 16:57:17,462 INFO     MRR  : 0.004095
+2025-06-24 16:57:17,462 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-24 16:57:18,886 INFO     >>>>> Generator: Training
+2025-06-24 16:57:20,088 INFO     [E00001] Total 3.051874 | Main 3.061481 | Aux1 1.088472 | Aux2 4.938416
+2025-06-24 16:57:20,874 INFO     [E00002] Total 3.051546 | Main 3.061299 | Aux1 1.088018 | Aux2 4.937055
+2025-06-24 16:57:21,915 INFO     [E00003] Total 3.051406 | Main 3.061043 | Aux1 1.088716 | Aux2 4.936997
+2025-06-24 16:57:22,652 INFO     [E00004] Total 3.049458 | Main 3.058811 | Aux1 1.088163 | Aux2 4.935928
+2025-06-24 16:57:23,438 INFO     [E00005] Total 3.049113 | Main 3.058267 | Aux1 1.088010 | Aux2 4.936985
+2025-06-24 16:57:24,326 INFO     [E00006] Total 3.047354 | Main 3.055905 | Aux1 1.088794 | Aux2 4.937502
+2025-06-24 16:57:25,139 INFO     [E00007] Total 3.046850 | Main 3.055518 | Aux1 1.088891 | Aux2 4.935471
+2025-06-24 16:57:26,018 INFO     [E00008] Total 3.047045 | Main 3.055690 | Aux1 1.088490 | Aux2 4.936445
+2025-06-24 16:57:27,006 INFO     [E00009] Total 3.046008 | Main 3.054550 | Aux1 1.088435 | Aux2 4.935244
+2025-06-24 16:57:28,180 INFO     [E00010] Total 3.045455 | Main 3.054035 | Aux1 1.087169 | Aux2 4.935107
+2025-06-24 16:57:28,181 INFO     -------------------------
+2025-06-24 16:57:28,181 INFO     | EM Iteration: 2/2
+2025-06-24 16:57:28,181 INFO     -------------------------
+2025-06-24 16:57:28,181 INFO     >>>>> Using Generator's sample rule
+2025-06-24 16:57:28,181 INFO     >>>>> Generator: Rule generation with sampling
+2025-06-24 16:57:34,099 INFO     Predictor: read 199 rules from list.
+2025-06-24 16:57:34,099 INFO     Preprocess training set
+2025-06-24 16:57:34,106 INFO     >>>>> Predictor: Training
+2025-06-24 16:57:52,816 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-24 16:57:53,370 INFO     Data : 16
+2025-06-24 16:57:53,370 INFO     Hit1 : 0.000000
+2025-06-24 16:57:53,370 INFO     Hit3 : 0.000000
+2025-06-24 16:57:53,370 INFO     Hit10: 0.000000
+2025-06-24 16:57:53,370 INFO     MR   : 2105.312500
+2025-06-24 16:57:53,370 INFO     MRR  : 0.004785
+2025-06-24 16:57:53,370 INFO     >>>>> Predictor: Evaluating on test
+2025-06-24 16:57:53,964 INFO     Data : 16
+2025-06-24 16:57:53,964 INFO     Hit1 : 0.000000
+2025-06-24 16:57:53,964 INFO     Hit3 : 0.000000
+2025-06-24 16:57:53,964 INFO     Hit10: 0.000000
+2025-06-24 16:57:53,964 INFO     MR   : 2345.281250
+2025-06-24 16:57:53,964 INFO     MRR  : 0.008178
+2025-06-24 16:57:53,964 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-24 16:58:27,580 INFO     >>>>> Generator: Training
+2025-06-24 16:58:28,859 INFO     [E00001] Total 3.037458 | Main 3.045516 | Aux1 1.097489 | Aux2 4.912964
+2025-06-24 16:58:29,761 INFO     [E00002] Total 3.037254 | Main 3.045363 | Aux1 1.097221 | Aux2 4.912413
+2025-06-24 16:58:30,683 INFO     [E00003] Total 3.036767 | Main 3.044893 | Aux1 1.097138 | Aux2 4.911387
+2025-06-24 16:58:31,747 INFO     [E00004] Total 3.036761 | Main 3.044904 | Aux1 1.096818 | Aux2 4.911562
+2025-06-24 16:58:32,478 INFO     [E00005] Total 3.036543 | Main 3.044689 | Aux1 1.096652 | Aux2 4.911271
+2025-06-24 16:58:33,366 INFO     [E00006] Total 3.035989 | Main 3.044025 | Aux1 1.096777 | Aux2 4.910903
+2025-06-24 16:58:34,385 INFO     [E00007] Total 3.035999 | Main 3.044137 | Aux1 1.096287 | Aux2 4.910609
+2025-06-24 16:58:35,297 INFO     [E00008] Total 3.035733 | Main 3.043939 | Aux1 1.095901 | Aux2 4.909921
+2025-06-24 16:58:36,212 INFO     [E00009] Total 3.035537 | Main 3.043655 | Aux1 1.095885 | Aux2 4.910244
+2025-06-24 16:58:37,187 INFO     [E00010] Total 3.035300 | Main 3.043474 | Aux1 1.095719 | Aux2 4.909491
+2025-06-24 16:58:37,187 INFO     -------------------------
+2025-06-24 16:58:37,187 INFO     | Post-train Generator
+2025-06-24 16:58:37,187 INFO     -------------------------
+2025-06-24 16:58:37,188 INFO     >>>>> Generator: Training
+2025-06-24 16:58:38,070 INFO     [E00001] Total 3.035090 | Main 3.043165 | Aux1 1.095096 | Aux2 4.910478
+2025-06-24 16:58:38,930 INFO     [E00002] Total 3.034863 | Main 3.043032 | Aux1 1.094706 | Aux2 4.909667
+2025-06-24 16:58:39,980 INFO     [E00003] Total 3.034756 | Main 3.042891 | Aux1 1.094706 | Aux2 4.909730
+2025-06-24 16:58:40,895 INFO     [E00004] Total 3.034252 | Main 3.042344 | Aux1 1.094540 | Aux2 4.909226
+2025-06-24 16:58:41,678 INFO     [E00005] Total 3.034126 | Main 3.042276 | Aux1 1.094441 | Aux2 4.908612
+2025-06-24 16:58:42,573 INFO     [E00006] Total 3.033826 | Main 3.041943 | Aux1 1.094409 | Aux2 4.908309
+2025-06-24 16:58:43,549 INFO     [E00007] Total 3.033654 | Main 3.041847 | Aux1 1.093807 | Aux2 4.907957
+2025-06-24 16:58:44,515 INFO     [E00008] Total 3.033391 | Main 3.041550 | Aux1 1.093881 | Aux2 4.907619
+2025-06-24 16:58:45,433 INFO     [E00009] Total 3.033026 | Main 3.041113 | Aux1 1.093878 | Aux2 4.907483
+2025-06-24 16:58:46,210 INFO     [E00010] Total 3.032919 | Main 3.041132 | Aux1 1.093232 | Aux2 4.906899
+2025-06-24 16:58:46,210 INFO     -------------------------
+2025-06-24 16:58:46,211 INFO     | Beam Search Best Rules
+2025-06-24 16:58:46,211 INFO     -------------------------
+2025-06-24 16:58:46,211 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-24 16:59:13,156 INFO     >>>>> Generator: Rule generation with beam search

@@ -10,8 +10,12 @@ class MainNextRelTower(nn.Module):
         self.padding_idx = padding_idx
         self.criterion = nn.CrossEntropyLoss(reduction="none")
 
-    def forward(self, feature, target, mask, weight):
+    def forward(self, feature, target=None, mask=None, weight=None):
         logits = self.head(feature)
+        
+        if target is None or mask is None or weight is None:
+            return logits, None  # 👉 inference 模式只回傳 logits
+    
         logits = torch.masked_select(logits, mask.unsqueeze(-1)).view(-1, self.label_size)
         target = torch.masked_select(target, mask)
         weight = torch.masked_select((mask.t() * weight).t(), mask)

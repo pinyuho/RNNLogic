@@ -67,6 +67,7 @@ class MultitaskMMOE(nn.Module):
         self.aux2_criterion  = torch.nn.CrossEntropyLoss(ignore_index=-1)
 
     def shared_encode(self, inputs, relation, hidden):
+        
         embedding = self.embedding(inputs)
         embedding_r = self.embedding(relation).unsqueeze(1).expand(-1, inputs.size(1), -1)
         embedding = torch.cat([embedding, embedding_r], dim=-1)
@@ -78,10 +79,6 @@ class MultitaskMMOE(nn.Module):
     
     # def forward(self, inputs, relation, hidden, task="main"):
     def forward(self, batch, hidden, task="main"):
-        """
-        task: "main" or "aux_rel_cluster" or "aux_ent_type"
-        回傳 logits 與 hidden（保持原介面）
-        """
         shared, _ = self.shared_encode(batch["sequence"], batch["relation"], hidden)             # (B,L,H)
 
         # -------- MMOE ----------
@@ -107,4 +104,4 @@ class MultitaskMMOE(nn.Module):
 
         # 在 train 模式下 forward 會算好 loss；eval 模式 loss= None
         # 這裡只在訓練階段被呼叫，所以直接回傳
-        return loss, hidden
+        return loss

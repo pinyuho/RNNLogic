@@ -444,7 +444,7 @@ class TrainerGenerator(object):
         if comm.get_rank() == 0:
             logging.info('>>>>> Generator: Training')
 
-        model     = self.model
+        model = self.model
         model.train()
 
         dataloader = torch_data.DataLoader(
@@ -526,20 +526,48 @@ class TrainerGenerator(object):
         log_prob = log_prob.sum(-1)
         return log_prob.data.cpu().numpy().tolist()
 
-    @torch.no_grad()
-    def next_relation_log_probability(self, seq, temperature):
-        model = self.model
-        model.eval()
+    # @torch.no_grad()
+    # def next_relation_log_probability(self, seq, temperature):
+    #     model = self.model
+    #     model.eval()
 
-        inputs = torch.tensor([seq], dtype=torch.long, device=self.device)
-        relation = torch.tensor([seq[0]], dtype=torch.long, device=self.device)
-        hidden = self.zero_state(1)
-        if self.mode == 'ori':
-            logits, hidden = model(inputs, relation, hidden)
-        else:
-            _, logits, hidden = model(inputs, relation, hidden)
-        # logits, hidden = model(inputs, relation, hidden)
-        log_prob = torch.log_softmax(logits[0, -1, :] / temperature, dim=-1).data.cpu().numpy().tolist()
+    #     inputs = torch.tensor([seq], dtype=torch.long, device=self.device)
+    #     relation = torch.tensor([seq[0]], dtype=torch.long, device=self.device)
+    #     hidden = self.zero_state(1)
+    #     if self.mode == 'ori':
+    #         logits, hidden = model(inputs, relation, hidden)
+    #     else:
+    #         _, logits, hidden = model(inputs, relation, hidden)
+    #     # logits, hidden = model(inputs, relation, hidden)
+    #     log_prob = torch.log_softmax(logits[0, -1, :] / temperature, dim=-1).data.cpu().numpy().tolist()
+    #     return log_prob
+
+    @torch.no_grad()
+    def next_relation_log_probability(self, rule, temperature):
+        """
+        rule: List of relation IDs so far (e.g., [12, 4, 7])
+        returns: log probability of next relation (shape: [label_size])
+        """
+        model = self.model
+        device = self.device
+
+        inputs = torch.tensor(rule, dtype=torch.long, device=device).unsqueeze(0)  # shape [1, L]
+        relation = torch.tensor([rule[0]], dtype=torch.long, device=device)       # head relation
+        mask = torch.ones_like(inputs, dtype=torch.bool)
+        weight = torch.ones_like(inputs, dtype=torch.float)
+
+        batch = {
+            "sequence": inputs,     # [1, L]
+            "relation": relation,   # [1]
+            "mask": mask,           # [1, L]
+            "weight": weight        # [1, L]
+        }
+
+        logits, _, _ = model(batch, hidden=None, task="main")  # logits: [1, L, label_size]
+        logits = logits[:, -1, :]   # 取最後一個 token 的 output → shape: [1, label_size]
+        logits = logits.squeeze(0) / temperature
+
+        log_prob = torch.log_softmax(logits, dim=-1)  # shape: [label_size]
         return log_prob
     
     @torch.no_grad()
@@ -590,10 +618,18 @@ class TrainerGenerator(object):
             for pst in range(max_len):
                 inputs = rules[:, pst].unsqueeze(-1)
 
+                batch = {
+                    "sequence": inputs,                  # [B, 1]
+                    "relation": head,                    # [B]
+                    "mask": torch.ones_like(inputs, dtype=torch.bool),     # [B, 1]
+                    "weight": torch.ones_like(inputs, dtype=torch.float),  # [B, 1]
+                }
+                
                 if self.mode == 'ori':
-                    logits, hidden = model(inputs, head, hidden)
+                    logits, hidden = model(batch, hidden, task="main")
                 else:
-                    _, logits, hidden = model(inputs, head, hidden)
+                    logits, loss, hidden = model(batch, hidden, task="main")
+
                 logits /= temperature
                 log_probability = torch.log_softmax(logits.squeeze(1), dim=-1)
                 probability = torch.softmax(logits.squeeze(1), dim=-1)
