@@ -16,7 +16,7 @@ from torch_scatter import scatter, scatter_add, scatter_min, scatter_max, scatte
 from typing import Tuple, Optional
 
 class Predictor(torch.nn.Module):
-    def __init__(self, graph, is_wrnnlogic=False, gen_rule_accu=None, entity_feature='bias'): # gen_rule_accu: rule * accuracy
+    def __init__(self, graph, gen_rule_accu=None, entity_feature='bias'): # gen_rule_accu: rule * accuracy
         super(Predictor, self).__init__()
         self.graph = graph
         self.num_entities = graph.entity_size
@@ -27,7 +27,7 @@ class Predictor(torch.nn.Module):
         if entity_feature == 'bias':
             self.bias = torch.nn.parameter.Parameter(torch.zeros(self.num_entities))
 
-        self.is_wrnnlogic = is_wrnnlogic
+        # self.is_wrnnlogic = is_wrnnlogic
     
     def set_rules(self, input):
         self.rules = list()
@@ -66,13 +66,11 @@ class Predictor(torch.nn.Module):
             assert r_head == query_r
 
             # wRNNLogic
-            if self.is_wrnnlogic == True:
-                x, path_w = self.graph.grounding_with_count(all_h, r_head, r_body, edges_to_remove)
-                score += x * self.rule_weights[index] * path_w
+            # x, path_w = self.graph.grounding_with_count(all_h, r_head, r_body, edges_to_remove)
+            # score += x * self.rule_weights[index] * path_w
 
-            else:
-                x = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
-                score += x * self.rule_weights[index]
+            x, _ = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+            score += x * self.rule_weights[index]
 
             mask += x
         
@@ -91,48 +89,79 @@ class Predictor(torch.nn.Module):
         
         return score, mask
 
-    def compute_H(self, all_h, all_r, all_t, edges_to_remove): # gen_rule_accu: rule * accuracy
-        query_r = all_r[0].item()
-        assert (all_r != query_r).sum() == 0
-        device = all_r.device
+    def compute_H(self, all_h, all_r, all_t, edges_to_remove,
+              record_pool=None):
 
-        rule_score = list()
-        rule_index = list()
-        mask = torch.zeros(all_r.size(0), self.num_entities, device=device)
-        for index, (r_head, r_body) in self.relation2rules[query_r]:
+        query_r = all_r[0].item()
+        assert (all_r != query_r).sum() == 0          # ✔ 仍保證同 relation
+        device,  B = all_r.device, all_h.size(0)
+
+        rule_score, rule_index = [], []
+        mask = torch.zeros(B, self.num_entities, device=device)
+
+        # ───────────────────────── Rule loop ──────────────────────────
+        for rule_id, (r_head, r_body) in self.relation2rules[query_r]:
+            # ↑ ★ 1. 用  `rule_id` 直接拿「規則在全模型中的索引」
+            #      不可改成 Python 的 enumerate(idx)，否則和 self.rule_weights
+            #      的對應會被打亂！(relation2rules 已保存原本順序)
+
             assert r_head == query_r
 
-            x, path_w = self.graph.grounding_with_count(all_h, r_head, r_body, edges_to_remove)
-            score = x * self.rule_weights[index]
-            mask += x
+            # ① grounding → 暫存 x_layers
+            x_fin, x_layers = self.graph.grounding(
+                all_h, r_head, r_body, edges_to_remove,
+                keep_layers = record_pool is not None      # ✔
+            )
 
+            # ② 回溯路徑（只有 record_pool 時才做）
+            if record_pool is not None:
+                for b in range(B):
+                    # ★ 2. layer[b] 取完就是 1-D Tensor → 保持原寫法
+                    path_b = self.graph.recover_path(
+                        h_b        = int(all_h[b]),
+                        rule_body  = r_body,
+                        x_layers_b = [layer[b] for layer in x_layers])
+
+                    if not path_b:
+                        continue       # 沒走到尾端 ⇒ 不記
+
+                    hr_idx     = self.graph.encode_hr(all_h[b].item(), r_head)
+                    true_tail  = path_b[-1][2]
+                    is_correct = int(true_tail in self.graph.hr2o.get(hr_idx, []))
+
+                    record_pool.append({
+                        # "rule" : r_body + ["END"],
+                        "rule" : r_body,
+                        "head" : int(all_h[b]),
+                        "path" : path_b,
+                        "label": is_correct,
+                    })
+
+            # ③ 原來的規則得分
+            score = x_fin * self.rule_weights[rule_id]     # ★ 3. 用 rule_id！
+            mask  += x_fin
             rule_score.append(score)
-            rule_index.append(index)
+            rule_index.append(rule_id)
 
-        rule_index = torch.tensor(rule_index, dtype=torch.long, device=device)
-        pos_index = F.one_hot(all_t, self.num_entities).bool()
-        if device.type == "cuda":
-            pos_index = pos_index.cuda(device)
-        neg_index = (mask != 0)
-
-        if len(rule_score) == 0:
+        # ─────────────────── H-score 計算 ───────────────────
+        if not rule_score:                                # relation 沒規則
             return None, None
 
-        rule_H_score = list()
+        rule_index = torch.as_tensor(rule_index, device=device)
+
+        pos_index = F.one_hot(all_t, self.num_entities).bool().to(device)
+        neg_index = (mask != 0)
+
+        H_list = []
         for score in rule_score:
-            if self.is_wrnnlogic:
-                pos_score = (score * pos_index).sum(1) / torch.clamp(pos_index.sum(1), min=0.0001)
-                neg_score = (score * neg_index).sum(1) / torch.clamp(neg_index.sum(1), min=0.0001)
-            else:
-                pos_score = (score * pos_index).sum(1) / torch.clamp(pos_index.sum(1), min=1)
-                neg_score = (score * neg_index).sum(1) / torch.clamp(neg_index.sum(1), min=1)
-            H_score = pos_score - neg_score
-            rule_H_score.append(H_score.unsqueeze(-1))
+            pos = (score * pos_index).sum(1) / pos_index.sum(1).clamp(min=1)
+            neg = (score * neg_index).sum(1) / neg_index.sum(1).clamp(min=1)
+            H_list.append((pos - neg).unsqueeze(-1))
 
-        rule_H_score = torch.cat(rule_H_score, dim=-1)
-        rule_H_score = torch.softmax(rule_H_score, dim=-1).sum(0)
+        H_mat   = torch.cat(H_list, dim=-1)          # (B , #rules_for_r)
+        H_final = torch.softmax(H_mat, dim=-1).sum(0)
 
-        return rule_H_score, rule_index
+        return H_final, rule_index
 
 
 class PredictorPlus(torch.nn.Module):
@@ -238,8 +267,12 @@ class PredictorPlus(torch.nn.Module):
         for index, (r_head, r_body) in self.relation2rules[query_r]:
             assert r_head == query_r
 
-            count, _ = self.graph.grounding_with_count(all_h, r_head, r_body, edges_to_remove)
-            count = count.float() 
+            # wRNNLogic
+            # count, _ = self.graph.grounding_with_count(all_h, r_head, r_body, edges_to_remove)
+            # count = count.float() 
+
+            count, _ = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+            count = count.float()
             mask += count
 
             rule_index.append(index)

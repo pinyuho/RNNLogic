@@ -1,4 +1,4 @@
-save_path: results/semmeddb/multitask/matrix_encode_relation/task1_next_clus/random_init/cluster_3/0618_all_filtered/adaptive/triple_count_sqrt_20250620_010253
+save_path: results/semmeddb/multitask/matrix_encode_relation/task1_next_clus/random_init/cluster_3/0618_all_filtered/adaptive/triple_count_20250629_143220
 load_path: null
 seed: 1
 
@@ -19,7 +19,7 @@ EM:
 generator:
   gpu: 0
   model:
-    embedding_dim: 512
+    embedding_dim: 512 # 256 
     hidden_dim: 256
     num_layers: 1
   pre_train:
@@ -39,7 +39,7 @@ generator:
     batch_size: 512
 
 predictor:
-  gpus: [0, 1]
+  gpus: [0]
   model:
     entity_feature: bias
   optimizer:
@@ -60,7 +60,7 @@ final_prediction:
   max_length: [1, 2, 3, 4, 5]
 
 predictorplus:
-  gpus: [0, 1]
+  gpus: [0]
   model:
     hidden_dim: 16
     aggregator: pna

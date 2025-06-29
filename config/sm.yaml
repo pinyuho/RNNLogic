@@ -55,7 +55,7 @@ predictor:
 
 final_prediction:
   num_iters: 1
-  num_rules: [100, 500]
+  num_rules: [100]
   max_length: [1, 3, 5]
 
 predictorplus:

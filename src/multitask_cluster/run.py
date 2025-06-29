@@ -2,6 +2,8 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
 
+import gzip
+import pickle
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import BoundaryNorm
@@ -23,74 +25,142 @@ class RelationClusterer:
         self.dbname = dbname
         self.graph = graph
         self.workingdir = workingdir
-        self.ent2type = self.load_entity_type_dict(entity_type_path)
+        self.ent2types = self.load_entity_type_dict(entity_type_path)
         self.id2rel = self.load_relation_dict(relation_dict_path)
         self.cluster_size = cluster_size
 
     def load_entity_type_dict(self, file_path):
-        ent2type = {}
-        with open(file_path, "r", encoding="utf-8") as f:
-            for line in f:
-                eid, tid = line.strip().split('\t')
-                ent2type[int(eid)] = int(tid)
-        return ent2type
+        ent2types = {}
+        # with open(file_path, "r", encoding="utf-8") as f:
+        #     for line in f:
+        #         eid, tid = line.strip().split('\t')
+        #         ent2type[int(eid)] = int(tid)
+        with gzip.open(file_path, "rb") as f:
+            ent2types = pickle.load(f)   # 直接得到原 dict
+        return ent2types
 
     def load_relation_dict(self, file_path):
         return {int(idx): rel for idx, rel in \
                 (line.strip().split("\t") for line in open(file_path, "r", encoding="utf-8"))}
 
-    def encode_relation_features(self, mode="naive", svd=False, svd_dim=5):
-        num_lexnames = max(self.ent2type.values()) + 1
-        relation_to_pairs = defaultdict(list)
+    # def encode_relation_features(self, mode="naive", svd=False, svd_dim=5):
+    #     num_lexnames = max(self.ent2type.values()) + 1
+    #     relation_to_pairs = defaultdict(list)
 
+    #     for h, r, t in self.graph.train_facts:
+    #         relation_to_pairs[r].append((h, t))
+
+    #     if mode == "naive":
+    #         relation_features = {}
+    #         for r, pairs in relation_to_pairs.items():
+    #             feats = [
+    #                 F.one_hot(torch.tensor(self.ent2type.get(h, 0)), num_classes=num_lexnames).float() +
+    #                 F.one_hot(torch.tensor(self.ent2type.get(t, 0)), num_classes=num_lexnames).float()
+    #                 for h, t in pairs
+    #             ]
+    #             relation_features[r] = torch.stack(feats).mean(dim=0)
+
+    #         rel_ids = list(relation_features.keys())
+    #         X = torch.stack([relation_features[r] for r in rel_ids])
+    #         return X, rel_ids
+        
+    #     elif mode == "matrix":
+    #         relation_matrix = {r: torch.zeros(TYPE_SIZE, TYPE_SIZE) for r in relation_to_pairs.keys()}
+    #         for r, pairs in relation_to_pairs.items():
+    #             for h, t in pairs:
+    #                 if r in [7, 12, 15, 16]: # bi-directional relations: compared_with, associated_with, interacts_with, coexists_with
+    #                     relation_matrix[r][self.ent2type.get(h, -1)][self.ent2type.get(t, -1)] += 1
+    #                     relation_matrix[r][self.ent2type.get(t, -1)][self.ent2type.get(h, -1)] += 1
+    #                 else: # one-directional relations
+    #                     relation_matrix[r][self.ent2type.get(h, -1)][self.ent2type.get(t, -1)] += 1
+
+            
+    #         rel_ids = list(relation_matrix.keys())
+    #         X = torch.stack([relation_matrix[r] for r in rel_ids], dim=0)  # tensor_mat.shape == (num_rel, TYPE_SIZE, TYPE_SIZE)
+    #         flat_X = X.view(len(rel_ids), -1)     # (num_rel, TYPE_SIZE**2)
+
+    #         if svd == True:
+    #             # svd = TruncatedSVD(n_components=512)
+    #             # svd.fit(flat_X)
+    #             # cum_var = svd.explained_variance_ratio_.cumsum()
+    #             # # 找到 cum_var >= 0.90 的最小 dim，比如 80、120
+    #             # # threshold = 0.90
+    #             # dim_90 = np.searchsorted(cum_var, 0.90) + 1
+    #             # print(f"需要 {dim_90} 維才能覆蓋 ≥90% 變異量") 
+
+    #             svd_reducer = TruncatedSVD(n_components=svd_dim, random_state=42)
+    #             flat_X_reduced  = svd_reducer.fit_transform(flat_X) 
+    #             return flat_X_reduced, rel_ids
+
+    #         return flat_X, rel_ids
+    #     else:
+    #         return None, None
+
+    def encode_relation_features(self, mode="naive", svd=False, svd_dim=5):
+        # 1. 計算 type vocab size  (max id + 1)
+        num_type = max(t for ts in self.ent2types.values() for t in ts) + 1
+
+        relation_to_pairs = defaultdict(list)
         for h, r, t in self.graph.train_facts:
             relation_to_pairs[r].append((h, t))
 
+        # ==========  NAIVE  ==========
         if mode == "naive":
             relation_features = {}
             for r, pairs in relation_to_pairs.items():
-                feats = [
-                    F.one_hot(torch.tensor(self.ent2type.get(h, 0)), num_classes=num_lexnames).float() +
-                    F.one_hot(torch.tensor(self.ent2type.get(t, 0)), num_classes=num_lexnames).float()
-                    for h, t in pairs
-                ]
+                feats = []
+                for h, t in pairs:
+                    # ---- head multi-hot ----
+                    h_vec = torch.zeros(num_type)
+                    h_types = self.ent2types.get(h, [])
+                    h_vec[h_types] = 1.0
+
+                    # ---- tail multi-hot ----
+                    t_vec = torch.zeros(num_type)
+                    t_types = self.ent2types.get(t, [])
+                    t_vec[t_types] = 1.0
+
+                    feats.append(h_vec + t_vec)     # (B, T)
                 relation_features[r] = torch.stack(feats).mean(dim=0)
 
             rel_ids = list(relation_features.keys())
             X = torch.stack([relation_features[r] for r in rel_ids])
             return X, rel_ids
-        
+
+        # ==========  MATRIX  ==========
         elif mode == "matrix":
-            relation_matrix = {r: torch.zeros(TYPE_SIZE, TYPE_SIZE) for r in relation_to_pairs.keys()}
+            TYPE_SIZE = num_type
+            relation_matrix = {
+                r: torch.zeros(TYPE_SIZE, TYPE_SIZE)
+                for r in relation_to_pairs
+            }
+
             for r, pairs in relation_to_pairs.items():
                 for h, t in pairs:
-                    if r in [7, 12, 15, 16]: # bi-directional relations: compared_with, associated_with, interacts_with, coexists_with
-                        relation_matrix[r][self.ent2type.get(h, -1)][self.ent2type.get(t, -1)] += 1
-                        relation_matrix[r][self.ent2type.get(t, -1)][self.ent2type.get(h, -1)] += 1
-                    else: # one-directional relations
-                        relation_matrix[r][self.ent2type.get(h, -1)][self.ent2type.get(t, -1)] += 1
+                    h_types = self.ent2types.get(h, [])
+                    t_types = self.ent2types.get(t, [])
 
-            
+                    # 笛卡兒積：所有 (h_type, t_type) 組合都 +1
+                    for ht in h_types:
+                        for tt in t_types:
+                            relation_matrix[r][ht][tt] += 1
+                            # 雙向關係再加一次
+                            if r in {7, 12, 15, 16}:          # compared_with 等
+                                relation_matrix[r][tt][ht] += 1
+
             rel_ids = list(relation_matrix.keys())
-            X = torch.stack([relation_matrix[r] for r in rel_ids], dim=0)  # tensor_mat.shape == (num_rel, TYPE_SIZE, TYPE_SIZE)
-            flat_X = X.view(len(rel_ids), -1)     # (num_rel, TYPE_SIZE**2)
+            X = torch.stack([relation_matrix[r] for r in rel_ids])      # (R, T, T)
+            flat_X = X.view(len(rel_ids), -1)
 
-            if svd == True:
-                # svd = TruncatedSVD(n_components=512)
-                # svd.fit(flat_X)
-                # cum_var = svd.explained_variance_ratio_.cumsum()
-                # # 找到 cum_var >= 0.90 的最小 dim，比如 80、120
-                # # threshold = 0.90
-                # dim_90 = np.searchsorted(cum_var, 0.90) + 1
-                # print(f"需要 {dim_90} 維才能覆蓋 ≥90% 變異量") 
-
-                svd_reducer = TruncatedSVD(n_components=svd_dim, random_state=42)
-                flat_X_reduced  = svd_reducer.fit_transform(flat_X) 
-                return flat_X_reduced, rel_ids
-
+            if svd:
+                flat_X = TruncatedSVD(
+                    n_components=svd_dim, random_state=42
+                ).fit_transform(flat_X)
             return flat_X, rel_ids
+
         else:
             return None, None
+
 
     def plot_elbow_curve(self, X, max_k):
         X_np = X.numpy() if isinstance(X, torch.Tensor) else X
@@ -138,6 +208,7 @@ class RelationClusterer:
         plt.tight_layout()
         # save_path = os.path.join(self.dbname, f"cluster_{self.cluster_size}", "kmeans_scores_over_k.png")
         save_path = os.path.join(self.workingdir, "kmeans_scores_over_k.png")
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         plt.savefig(save_path)
         print(f"[Cluster Evaluation Plot] Saved to {save_path}")
 
@@ -256,11 +327,11 @@ if __name__ == "__main__":
     svd_dim = 20
 
     for mode in ["naive", "matrix"]:
-        for cluster_size in [5, 6, 7, 8]:
+        for cluster_size in [3, 4, 5, 6, 7, 8]:
             if mode == "matrix":
-                workingdir = f"{dbname}/{mode}/ori/cluster_{cluster_size}"
+                workingdir = f"semmeddb_alltypes_0629/{mode}/ori/cluster_{cluster_size}"
             else:
-                workingdir = f"{dbname}/{mode}/cluster_{cluster_size}"
+                workingdir = f"semmeddb_alltypes_0629/{mode}/cluster_{cluster_size}"
             # workingdir = f"{dbname}/{mode}/svd/dim_{svd_dim}"
             # workingdir = f"{dbname}/bidirectional/cluster_{cluster_size}"
             graph = KnowledgeGraph(f"../../data/{dbname}")
@@ -270,7 +341,8 @@ if __name__ == "__main__":
                 cluster_size=cluster_size,
                 workingdir=workingdir,
                 graph=graph,
-                entity_type_path=f"{dbname}/entity_type.dict",
+                # entity_type_path=f"./entity_type.dict",
+                entity_type_path="entid2typeids.pkl.gz",
                 relation_dict_path=f"../../data/{dbname}/relations.dict"
             )
 

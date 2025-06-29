@@ -1,8 +1,12 @@
 import torch
 from torch_scatter import scatter
+import torch.nn.functional as F
+
 import os
 import logging
 import comm
+import gzip
+import pickle
 
 class KnowledgeGraph(object):
     def __init__(self, data_path):
@@ -13,6 +17,9 @@ class KnowledgeGraph(object):
         self.id2entity = dict()
         self.id2relation = dict()
         # self.rel2cluster = dict() # auxiliary task
+        # self.ent2type = dict()
+        self.ent2types = dict()
+        self.id2type = dict()
 
         seen = set()
         with open(os.path.join(data_path, 'entities.dict')) as fi:
@@ -132,13 +139,25 @@ class KnowledgeGraph(object):
                 edge_cnt.append(c)
             self.relation2edgecount.append(torch.tensor(edge_cnt, dtype=torch.float)) # r -> [(h1, r, t1 這個 pair 的 count), (h2, r, t2 的 count), ...]
 
-
         for r in range(self.relation_size):
             index = torch.LongTensor(self.relation2adjacency[r])
             value = torch.ones(index.size(1))
             self.relation2adjacency[r] = [index, value]
 
             self.relation2outdegree[r] = torch.LongTensor(self.relation2outdegree[r])
+
+        # with open(os.path.join(data_path, "entity_type.dict")) as f:
+        #     for line in f:
+        #         eid, tid = line.strip().split('\t')
+        #         self.ent2type[int(eid)] = int(tid)
+
+        with gzip.open(os.path.join(data_path, "entid2typeids.pkl.gz"), "rb") as f:
+            self.ent2types = pickle.load(f)   # 直接得到原 dict
+
+        with open(os.path.join(data_path, "types.dict")) as f:
+            for line in f:
+                tid, semtype = line.strip().split('\t')
+                self.id2type[int(tid)] = str(semtype)
 
         if comm.get_rank() == 0:
             logging.info("Data loading | DONE!")
@@ -188,18 +207,83 @@ class KnowledgeGraph(object):
         path_w = min_cnt.T                # (B,E) —— 路徑最小 triple-count
         return x, path_w
 
-    def grounding(self, h, r, rule, edges_to_remove):
-        device = h.device
-        with torch.no_grad():
-            x = torch.nn.functional.one_hot(h, self.entity_size).transpose(0, 1).unsqueeze(-1).cuda(device)
+    def recover_path(self, h_b, rule_body, x_layers_b):
+        cur_ent = torch.nonzero(x_layers_b[-1]).flatten()
+        if cur_ent.numel() == 0:
+            return []
+        cur_ent = cur_ent[0].item()
 
-            for r_body in rule:
-                if r_body == r:
-                    x = self.propagate(x, r_body, edges_to_remove)
-                else:
-                    x = self.propagate(x, r_body, None)
+        path = []
+        # depth 與 x_layers_b 同長度：len(rule_body)
+        for depth in reversed(range(len(rule_body))):
+            r = rule_body[depth]
+            tails, heads = self.relation2adjacency[r][0]   # tails=dst, heads=src
+            tails = tails.tolist(); heads = heads.tolist()
 
-        return x.squeeze(-1).transpose(0, 1)
+            found = False
+            for s, t in zip(heads, tails):
+                if t == cur_ent and x_layers_b[depth][s]:  # ★ 注意 depth
+                    path.append((s, r, t))
+                    cur_ent = s
+                    found = True
+                    break
+            if not found:
+                return []          # 無法回溯完整路徑
+
+        path.reverse()
+        return path                # [(h,r1,e1), …]
+
+
+    def grounding(self, h, r_head, rule_body,
+                edges_to_remove=None, keep_layers=False):
+        """
+        keep_layers=True  → return (x_final, x_layers)
+                    False → return (x_final, None)
+
+        x_layers: List[(B,E)]，長度 = len(rule_body)+1
+                第 0 層 = head one-hot
+                第 i 層 = 完成第 i 步 relation 後可達實體的 one-hot
+        """
+        device  = h.device
+        x = F.one_hot(h, self.entity_size).T.unsqueeze(-1).to(device)   # (E,B,1)
+
+        x_layers = None
+        if keep_layers:
+            x_layers = [x.squeeze(-1).T.clone()]   # ★ layer-0 先放進去
+
+        for r_body in rule_body:
+            mask = edges_to_remove if r_body == r_head else None
+            x = self.propagate(x, r_body, mask)    # (E,B,1)
+
+            if keep_layers:
+                x_layers.append(x.squeeze(-1).T.clone())
+
+        return x.squeeze(-1).T, x_layers           # (B,E) ,  List or None
+
+    
+    def propagate(self, x, relation, edges_to_remove=None):
+        device = x.device
+        node_in, node_out = self.relation2adjacency[relation][0][1], \
+                            self.relation2adjacency[relation][0][0]
+
+        if device.type == "cuda":
+            node_in  = node_in.to(device, non_blocking=True)
+            node_out = node_out.to(device, non_blocking=True)
+
+        message = x[node_in]          # (E,B,1)
+        E, B, D = message.size()
+
+        if edges_to_remove is None:
+            x = scatter(message, node_out, dim=0, dim_size=x.size(0))
+        else:
+            message = message.view(-1, D)
+            bias = torch.arange(B, device=device)
+            edges_to_remove = edges_to_remove * B + bias
+            message[edges_to_remove] = 0
+            message = message.view(E, B, D)
+            x = scatter(message, node_out, dim=0, dim_size=x.size(0))
+
+        return x                      # (E,B,1)
 
     
     def propagate_with_count(self, x, min_cnt, relation, edges_to_remove=None): # recursive propagation
@@ -249,29 +333,3 @@ class KnowledgeGraph(object):
             min_cnt = scatter(cnt_msg, node_out, dim=0, dim_size=min_cnt.size(0), reduce="min")     
 
         return x, min_cnt
-    
-    def propagate(self, x, relation, edges_to_remove=None):
-        device = x.device
-        node_in = self.relation2adjacency[relation][0][1]
-        node_out = self.relation2adjacency[relation][0][0]
-        if device.type == "cuda":
-            node_in = node_in.cuda(device)
-            node_out = node_out.cuda(device)
-
-        message = x[node_in]
-        E, B, D = message.size()
-
-        if edges_to_remove == None:
-            x = scatter(message, node_out, dim=0, dim_size=x.size(0))
-        else:
-            # message: edge * batch * dim
-            message = message.view(-1, D)
-            bias = torch.arange(B)
-            if device.type == "cuda":
-                bias = bias.cuda(device)
-            edges_to_remove = edges_to_remove * B + bias
-            message[edges_to_remove] = 0
-            message = message.view(E, B, D)
-            x = scatter(message, node_out, dim=0, dim_size=x.size(0))
-
-        return x

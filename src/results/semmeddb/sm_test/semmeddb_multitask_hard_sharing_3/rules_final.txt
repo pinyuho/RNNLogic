@@ -1,0 +1,4 @@
+['diagnoses', 'stimulates']
+['part_of', 'causes']
+['isa', 'augments']
+['compared_with', 'disrupts']

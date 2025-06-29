@@ -1,4 +1,4 @@
-save_path: results/semmeddb/sm_test/tttt
+save_path: results/semmeddb/sm_test/semmeddb_multitask_mmoe_3
 load_path: null
 seed: 1
 
@@ -55,7 +55,7 @@ predictor:
 
 final_prediction:
   num_iters: 1
-  num_rules: [100, 500]
+  num_rules: [100]
   max_length: [1, 3, 5]
 
 predictorplus:

@@ -1,0 +1,45 @@
+2025-06-29 21:58:04,436 INFO     Data loading | DONE!
+2025-06-29 21:58:04,534 INFO     Using full datasets for training, validation, and testing.
+2025-06-29 21:58:04,644 INFO     -------------------------
+2025-06-29 21:58:04,644 INFO     | EM Iteration: 1/5
+2025-06-29 21:58:04,644 INFO     -------------------------
+2025-06-29 21:58:04,644 INFO     >>>>> Using miner's rule
+2025-06-29 21:58:04,669 INFO     Predictor: read 13661 rules from list.
+2025-06-29 21:58:05,381 INFO     Preprocess training set
+2025-06-29 21:58:05,382 INFO     >>>>> Predictor: Training
+2025-06-29 22:07:11,921 INFO     1000 5959 8.299284 69314.6
+2025-06-29 22:16:27,812 INFO     2000 5959 7.689227 69271.3
+2025-06-29 22:25:39,022 INFO     3000 5959 7.425850 69245.2
+2025-06-29 22:34:50,933 INFO     4000 5959 7.285955 69340.6
+2025-06-29 22:44:11,528 INFO     5000 5959 7.136692 69340.6
+2025-06-29 22:53:07,607 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-29 22:55:24,585 INFO     Data : 2077
+2025-06-29 22:55:24,585 INFO     Hit1 : 0.065479
+2025-06-29 22:55:24,585 INFO     Hit3 : 0.127106
+2025-06-29 22:55:24,585 INFO     Hit10: 0.199326
+2025-06-29 22:55:24,585 INFO     MR   : 1120.920077
+2025-06-29 22:55:24,585 INFO     MRR  : 0.114382
+2025-06-29 22:55:24,585 INFO     >>>>> Predictor: Evaluating on test
+2025-06-29 22:57:59,996 INFO     Data : 2342
+2025-06-29 22:57:59,996 INFO     Hit1 : 0.078992
+2025-06-29 22:57:59,997 INFO     Hit3 : 0.124253
+2025-06-29 22:57:59,997 INFO     Hit10: 0.208796
+2025-06-29 22:57:59,997 INFO     MR   : 1044.279889
+2025-06-29 22:57:59,997 INFO     MRR  : 0.122250
+2025-06-29 22:57:59,997 INFO     >>>>> Predictor: Computing H scores of rules
+entity size:  8673
+relation size:  20
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 257, in <module>
+    
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 160, in main
+    likelihood = solver_p.compute_H(dump_path, **cfg.predictor.H_score) # 順便算 groundings
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 162, in compute_H
+    H, index = model.compute_H(
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 120, in compute_H
+    path_b = self.graph.recover_path(
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data/graph.py", line 205, in recover_path
+    
+KeyboardInterrupt

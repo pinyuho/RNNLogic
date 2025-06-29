@@ -1,12 +1,12 @@
-save_path: results/semmeddb/sm_test/random_init/bidirectional_cluster_2/fixed
+save_path: results/semmeddb/multitask_mmoe/semmeddb_multitask_mmoe_6_20250629_235132
 load_path: null
 seed: 1
 
 data:
   data_path: ../data/semmeddb
   rule_file: ../data/semmeddb/mined_rules.txt
-  cluster_size: 2
-  relation_cluster_file: ../data/semmeddb/relation_cluster/bidirectional_2.dict
+  cluster_size: 6
+  relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_6.dict
   # batch_size: 32
   batch_size: 8
   
@@ -19,7 +19,7 @@ EM:
 generator:
   gpu: 0
   model:
-    embedding_dim: 512
+    embedding_dim: 512 # 256 
     hidden_dim: 256
     num_layers: 1
   pre_train:
@@ -39,7 +39,7 @@ generator:
     batch_size: 512
 
 predictor:
-  gpus: [0]
+  gpus: [1]
   model:
     entity_feature: bias
   optimizer:
@@ -60,7 +60,7 @@ final_prediction:
   max_length: [1, 2, 3, 4, 5]
 
 predictorplus:
-  gpus: [0]
+  gpus: [1]
   model:
     hidden_dim: 16
     aggregator: pna

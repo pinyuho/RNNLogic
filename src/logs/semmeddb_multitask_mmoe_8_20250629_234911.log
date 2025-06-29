@@ -1,0 +1,45 @@
+2025-06-29 23:49:12,957 INFO     Data loading | DONE!
+2025-06-29 23:49:13,050 INFO     Using full datasets for training, validation, and testing.
+2025-06-29 23:49:13,158 INFO     -------------------------
+2025-06-29 23:49:13,158 INFO     | EM Iteration: 1/5
+2025-06-29 23:49:13,158 INFO     -------------------------
+2025-06-29 23:49:13,158 INFO     >>>>> Using miner's rule
+2025-06-29 23:49:13,232 INFO     Predictor: read 13661 rules from list.
+entity size:  8673
+relation size:  20
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 259, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 143, in main
+    optim = torch.optim.Adam(predictor.parameters(), **cfg.predictor.optimizer)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/optim/adam.py", line 78, in __init__
+    super().__init__(params, defaults)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/optim/optimizer.py", line 371, in __init__
+    self.add_param_group(cast(dict, param_group))
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/_compile.py", line 27, in inner
+    import torch._dynamo
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/_dynamo/__init__.py", line 3, in <module>
+    from . import convert_frame, eval_frame, resume_execution
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/_dynamo/convert_frame.py", line 31, in <module>
+    from torch._dynamo.utils import CompileTimeInstructionCounter
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/_dynamo/utils.py", line 62, in <module>
+    import torch.fx.experimental.symbolic_shapes
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/fx/experimental/symbolic_shapes.py", line 65, in <module>
+    from torch.utils._sympy.functions import (
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/utils/_sympy/functions.py", line 7, in <module>
+    import sympy
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/sympy/__init__.py", line 173, in <module>
+    from .solvers import (solve, solve_linear_system, solve_linear_system_LU,
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/sympy/solvers/__init__.py", line 21, in <module>
+    from .ode import checkodesol, classify_ode, dsolve, \
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/sympy/solvers/ode/__init__.py", line 1, in <module>
+    from .ode import (allhints, checkinfsol, classify_ode,
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/sympy/solvers/ode/ode.py", line 3575, in <module>
+    from .single import SingleODEProblem, SingleODESolver, solver_map
+  File "<frozen importlib._bootstrap>", line 1007, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 986, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 680, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 846, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 978, in get_code
+  File "<frozen importlib._bootstrap_external>", line 647, in _compile_bytecode
+KeyboardInterrupt

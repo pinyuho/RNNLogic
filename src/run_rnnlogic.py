@@ -1,29 +1,41 @@
 import sys
 import os
-import os.path as osp
 import logging
 import argparse
 import random
-import json
 from easydict import EasyDict
 import numpy as np
 from datetime import datetime
 import torch
-# from torch.utils.data import DataLoader
-from torch import distributed as dist
+import torch.distributed as dist
 
-# from data import KnowledgeGraph, TrainDataset, ValidDataset, TestDataset, RuleDataset
 from data.graph import KnowledgeGraph
 from data.triples_dataset import TrainDataset, ValidDataset, TestDataset
 from data.rules_dataset import RuleDataset
 
 from predictors import Predictor, PredictorPlus
 from generators import Generator
-from generator_multitask import GeneratorMultitask
+
 from generator_multitask_models.multitask_mmoe import MultitaskMMOE
+from generator_multitask_models.multitask_hard_sharing import MultitaskHardSharing
+
 from utils import load_config, save_config, set_logger, set_seed, get_subset_dataset
 from trainer import TrainerPredictor, TrainerGenerator
 import comm
+
+from grd_for_aux import grd2encoding
+
+SOFT_LABEL = False
+TEST_MODE = False
+
+# ------- util -----------
+def bcast_obj(obj, src=0):
+    if not dist.is_available() or not dist.is_initialized() or dist.get_world_size()==1:
+        return obj
+    buf = [obj] if dist.get_rank()==src else [None]
+    dist.broadcast_object_list(buf, src)
+    return buf[0]
+
 
 def save_rules(cfg, rules, label):
     relation_map = {}
@@ -49,10 +61,11 @@ def parse_args(args=None):
         description='RNNLogic',
         usage='train.py [<args>] [-h | --help]'
     )
-    parser.add_argument('--config', type=str, default='../rnnlogic.yaml')
     parser.add_argument("--local_rank", type=int, default=0)
-    parser.add_argument('--mode', type=str, default='ori')
+    parser.add_argument('--config', type=str, default='../rnnlogic.yaml')
     parser.add_argument('--subset_ratio', type=float, default=1.0)
+    parser.add_argument('--model', type=str, default='ori')
+    parser.add_argument('--multitask_loss_mode', type=str, default='adaptive')
     parser.add_argument('--predictor_weighted_loss_mode', type=str, default='ori')
 
     return parser.parse_args(args)
@@ -94,12 +107,14 @@ def main(args):
             logging.info('Using full datasets for training, validation, and testing.')
 
     # Init generator
-    if args.mode == 'ori':
+    if args.model == 'ori':
         generator = Generator(graph, **cfg.generator.model)
-    else:
-        # generator = GeneratorMultitask(graph, cfg.data.cluster_size, args.mode, **cfg.generator.model)
-        generator = MultitaskMMOE(graph, cfg.data.cluster_size, args.mode, **cfg.generator.model)
-    solver_g = TrainerGenerator(generator, args.mode, gpu=cfg.generator.gpu)
+    elif args.model == 'multitask_hard_sharing':
+        generator = MultitaskHardSharing(graph, cfg.data.cluster_size, args.multitask_loss_mode, **cfg.generator.model)
+    else: # multitask_mmoe
+        generator = MultitaskMMOE(graph, cfg.data.cluster_size, args.multitask_loss_mode, soft_label=SOFT_LABEL, **cfg.generator.model)
+
+    solver_g = TrainerGenerator(generator, args.model, args.multitask_loss_mode, gpu=cfg.generator.gpu)
 
     replay_buffer = list()
     for k in range(cfg.EM.num_iters):
@@ -112,7 +127,8 @@ def main(args):
             # EM round 0: Use mined rules as RP's input
             logging.info('>>>>> Using miner\'s rule')
             sampled_rules = dataset.rp_input
-            sampled_rules = sampled_rules[:10]
+            if TEST_MODE:
+                sampled_rules = sampled_rules[:10] 
         else:
             # Sample logic rules with Generator
             logging.info('>>>>> Using Generator\'s sample rule')
@@ -132,14 +148,33 @@ def main(args):
         test_mrr_iter = solver_p.evaluate('test', expectation=cfg.predictor.eval.expectation)
 
         # E-step: Compute H scores of logic rules.
-        likelihood = solver_p.compute_H(**cfg.predictor.H_score)
+        dump_dir = "grd_dumps"
+        dump_path = os.path.join(
+            cfg.save_path,
+            dump_dir,              # 子資料夾
+            f"edge_iter_{k}.jsonl.gz"   # 檔名
+        )
+        # ── 建資料夾（不存在就自動建立）────────────────────────
+        os.makedirs(os.path.dirname(dump_path), exist_ok=True)
+
+        likelihood = solver_p.compute_H(dump_path, **cfg.predictor.H_score) # 順便算 groundings
         posterior = [l + p * cfg.EM.prior_weight for l, p in zip(likelihood, prior)]
         for i in range(len(rules)):
             rules[i].append(posterior[i])
         replay_buffer += rules
         
         # M-step: Update the rule generator.
+        # FIXME: FIXME: FIXME:
+        # grd_encoding = grd2encoding(rules, dump_path, graph.ent2type, len(graph.id2type), soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
+        grd_encoding = grd2encoding(rules, dump_path, graph.ent2types, len(graph.id2type), soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
+        assert len(grd_encoding) == len(rules)
+        for mh, r in zip(grd_encoding, rules):
+            # mh.shape[0] 應該 ＝ len(r)   (rule_head + body)   ← 先不含 END
+            assert mh.shape[0] == len(r), f"{mh.shape} vs rule len {len(r)}"
+            assert mh.shape[1] == len(graph.id2type)
+
         dataset = RuleDataset(graph.relation_size, rules, cfg.data.cluster_size, cfg.data.relation_cluster_file)
+        dataset.update_grd_multihot(grd_encoding, len(graph.id2type))
 
         solver_g.train(dataset, **cfg.generator.train)
 
@@ -148,7 +183,11 @@ def main(args):
             logging.info('-------------------------')
             logging.info('| Post-train Generator')
             logging.info('-------------------------')
+        # grd_encoding = grd2encoding(replay_buffer, dump_path, graph.ent2type, len(graph.id2type), soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
+        grd_encoding = grd2encoding(replay_buffer, dump_path, graph.ent2types, len(graph.id2type), soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
+        
         dataset = RuleDataset(graph.relation_size, replay_buffer, cfg.data.cluster_size, cfg.data.relation_cluster_file)
+        dataset.update_grd_multihot(grd_encoding, len(graph.id2type))
         solver_g.train(dataset, **cfg.generator.post_train)
 
     if comm.get_rank() == 0:
@@ -163,6 +202,7 @@ def main(args):
         
     prior = [rule[-1] for rule in sampled_rules]
     rules = [rule[0:-1] for rule in sampled_rules]
+    rules = bcast_obj(rules, src=0)   
 
     if args.subset_ratio < 1.0:
         if comm.get_rank() == 0:

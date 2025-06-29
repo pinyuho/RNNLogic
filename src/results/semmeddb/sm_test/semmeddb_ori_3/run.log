@@ -1,0 +1,122 @@
+2025-06-25 00:53:49 INFO     Data loading | DONE!
+2025-06-25 00:53:49 INFO     Using subset datasets for training, validation, and testing.
+2025-06-25 00:53:49 INFO     Subset ratio: 0.01
+2025-06-25 00:53:49 INFO     [Subset] TrainDataset: 59/5959 samples (1%)
+2025-06-25 00:53:49 INFO     [Subset] ValidDataset: 2/260 samples (1%)
+2025-06-25 00:53:49 INFO     [Subset] TestDataset: 2/293 samples (1%)
+2025-06-25 00:53:49 INFO     [Subset] RuleDataset: 136/13661 samples (1%)
+2025-06-25 00:53:49 INFO     -------------------------
+2025-06-25 00:53:49 INFO     | EM Iteration: 1/2
+2025-06-25 00:53:49 INFO     -------------------------
+2025-06-25 00:53:49 INFO     >>>>> Using miner's rule
+2025-06-25 00:53:49 INFO     Predictor: read 10 rules from list.
+2025-06-25 00:53:49 INFO     Preprocess training set
+2025-06-25 00:53:50 INFO     >>>>> Predictor: Training
+2025-06-25 00:53:58 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-25 00:53:59 INFO     Data : 16
+2025-06-25 00:53:59 INFO     Hit1 : 0.000000
+2025-06-25 00:53:59 INFO     Hit3 : 0.000000
+2025-06-25 00:53:59 INFO     Hit10: 0.062500
+2025-06-25 00:53:59 INFO     MR   : 2373.875000
+2025-06-25 00:53:59 INFO     MRR  : 0.008906
+2025-06-25 00:53:59 INFO     >>>>> Predictor: Evaluating on test
+2025-06-25 00:53:59 INFO     Data : 16
+2025-06-25 00:53:59 INFO     Hit1 : 0.000000
+2025-06-25 00:53:59 INFO     Hit3 : 0.000000
+2025-06-25 00:53:59 INFO     Hit10: 0.000000
+2025-06-25 00:53:59 INFO     MR   : 2367.812500
+2025-06-25 00:53:59 INFO     MRR  : 0.004095
+2025-06-25 00:53:59 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-25 00:54:00 INFO     >>>>> Generator: Training
+2025-06-25 00:54:01 INFO     [E00001] Total 2.986599 | main 2.986599
+2025-06-25 00:54:01 INFO     [E00002] Total 2.977408 | main 2.977408
+2025-06-25 00:54:01 INFO     [E00003] Total 2.968212 | main 2.968212
+2025-06-25 00:54:01 INFO     [E00004] Total 2.959030 | main 2.959030
+2025-06-25 00:54:01 INFO     [E00005] Total 2.949876 | main 2.949876
+2025-06-25 00:54:01 INFO     [E00006] Total 2.940690 | main 2.940690
+2025-06-25 00:54:01 INFO     [E00007] Total 2.931561 | main 2.931561
+2025-06-25 00:54:01 INFO     [E00008] Total 2.922433 | main 2.922433
+2025-06-25 00:54:02 INFO     [E00009] Total 2.913304 | main 2.913304
+2025-06-25 00:54:02 INFO     [E00010] Total 2.904217 | main 2.904217
+2025-06-25 00:54:02 INFO     -------------------------
+2025-06-25 00:54:02 INFO     | EM Iteration: 2/2
+2025-06-25 00:54:02 INFO     -------------------------
+2025-06-25 00:54:02 INFO     >>>>> Using Generator's sample rule
+2025-06-25 00:54:02 INFO     >>>>> Generator: Rule generation with sampling
+2025-06-25 00:54:05 INFO     Predictor: read 199 rules from list.
+2025-06-25 00:54:05 INFO     Preprocess training set
+2025-06-25 00:54:05 INFO     >>>>> Predictor: Training
+2025-06-25 00:54:24 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-25 00:54:25 INFO     Data : 16
+2025-06-25 00:54:25 INFO     Hit1 : 0.000000
+2025-06-25 00:54:25 INFO     Hit3 : 0.000000
+2025-06-25 00:54:25 INFO     Hit10: 0.000000
+2025-06-25 00:54:25 INFO     MR   : 1910.781250
+2025-06-25 00:54:25 INFO     MRR  : 0.003355
+2025-06-25 00:54:25 INFO     >>>>> Predictor: Evaluating on test
+2025-06-25 00:54:26 INFO     Data : 16
+2025-06-25 00:54:26 INFO     Hit1 : 0.000000
+2025-06-25 00:54:26 INFO     Hit3 : 0.000000
+2025-06-25 00:54:26 INFO     Hit10: 0.062500
+2025-06-25 00:54:26 INFO     MR   : 2373.437500
+2025-06-25 00:54:26 INFO     MRR  : 0.014929
+2025-06-25 00:54:26 INFO     >>>>> Predictor: Computing H scores of rules
+2025-06-25 00:55:10 INFO     >>>>> Generator: Training
+2025-06-25 00:55:11 INFO     [E00001] Total 3.040165 | main 3.040165
+2025-06-25 00:55:11 INFO     [E00002] Total 3.038358 | main 3.038358
+2025-06-25 00:55:11 INFO     [E00003] Total 3.036554 | main 3.036554
+2025-06-25 00:55:11 INFO     [E00004] Total 3.034755 | main 3.034755
+2025-06-25 00:55:11 INFO     [E00005] Total 3.032959 | main 3.032959
+2025-06-25 00:55:11 INFO     [E00006] Total 3.031156 | main 3.031156
+2025-06-25 00:55:11 INFO     [E00007] Total 3.029357 | main 3.029357
+2025-06-25 00:55:11 INFO     [E00008] Total 3.027567 | main 3.027567
+2025-06-25 00:55:12 INFO     [E00009] Total 3.025770 | main 3.025770
+2025-06-25 00:55:12 INFO     [E00010] Total 3.023976 | main 3.023976
+2025-06-25 00:55:12 INFO     -------------------------
+2025-06-25 00:55:12 INFO     | Post-train Generator
+2025-06-25 00:55:12 INFO     -------------------------
+2025-06-25 00:55:12 INFO     >>>>> Generator: Training
+2025-06-25 00:55:12 INFO     [E00001] Total 3.022221 | main 3.022221
+2025-06-25 00:55:12 INFO     [E00002] Total 3.020425 | main 3.020425
+2025-06-25 00:55:12 INFO     [E00003] Total 3.018636 | main 3.018636
+2025-06-25 00:55:12 INFO     [E00004] Total 3.016851 | main 3.016851
+2025-06-25 00:55:12 INFO     [E00005] Total 3.015056 | main 3.015056
+2025-06-25 00:55:13 INFO     [E00006] Total 3.013271 | main 3.013271
+2025-06-25 00:55:13 INFO     [E00007] Total 3.011490 | main 3.011490
+2025-06-25 00:55:13 INFO     [E00008] Total 3.009699 | main 3.009699
+2025-06-25 00:55:13 INFO     [E00009] Total 3.007917 | main 3.007917
+2025-06-25 00:55:13 INFO     [E00010] Total 3.006140 | main 3.006140
+2025-06-25 00:55:13 INFO     -------------------------
+2025-06-25 00:55:13 INFO     | Beam Search Best Rules
+2025-06-25 00:55:13 INFO     -------------------------
+2025-06-25 00:55:13 INFO     >>>>> Generator: Rule generation with beam search
+2025-06-25 00:55:24 INFO     Using subset datasets for final predictor+ training, validation, and testing.
+2025-06-25 00:55:24 INFO     Subset ratio: 0.01
+2025-06-25 00:55:24 INFO     Subset sizes: train=59, valid=2, test=2, rule dataset=4
+2025-06-25 00:55:24 INFO     -------------------------
+2025-06-25 00:55:24 INFO     | Train Final Predictor+
+2025-06-25 00:55:24 INFO     -------------------------
+2025-06-25 00:55:24 INFO     Predictor+: read 4 rules from list.
+2025-06-25 00:55:24 INFO     Preprocess training set
+2025-06-25 00:55:24 INFO     -------------------------
+2025-06-25 00:55:24 INFO     | Iteration: 1/1
+2025-06-25 00:55:24 INFO     -------------------------
+2025-06-25 00:55:24 INFO     >>>>> Predictor: Training
+2025-06-25 00:55:34 INFO     >>>>> Predictor: Evaluating on valid
+2025-06-25 00:55:34 INFO     Data : 16
+2025-06-25 00:55:34 INFO     Hit1 : 0.000000
+2025-06-25 00:55:34 INFO     Hit3 : 0.000000
+2025-06-25 00:55:34 INFO     Hit10: 0.000000
+2025-06-25 00:55:34 INFO     MR   : 2817.937500
+2025-06-25 00:55:34 INFO     MRR  : 0.004631
+2025-06-25 00:55:34 INFO     >>>>> Predictor: Evaluating on test
+2025-06-25 00:55:35 INFO     Data : 16
+2025-06-25 00:55:35 INFO     Hit1 : 0.000000
+2025-06-25 00:55:35 INFO     Hit3 : 0.000000
+2025-06-25 00:55:35 INFO     Hit10: 0.000000
+2025-06-25 00:55:35 INFO     MR   : 1056.062500
+2025-06-25 00:55:35 INFO     MRR  : 0.003892
+2025-06-25 00:55:35 INFO     Save checkpoint to results/semmeddb/sm_test/semmeddb_ori_3/predictor.pt
+2025-06-25 00:55:35 INFO     -------------------------
+2025-06-25 00:55:35 INFO     | Final Test MRR: 0.003892
+2025-06-25 00:55:35 INFO     -------------------------

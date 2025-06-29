@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 6, in <module>
+    from easydict import EasyDict
+ModuleNotFoundError: No module named 'easydict'
