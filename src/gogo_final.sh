@@ -5,6 +5,8 @@ mkdir -p logs
 
 RUN_MODE="$1"  # 例如： bash gogo.sh torchrun 或 bash gogo.sh normal
 
+USE_GPU=1
+
 GPUS_PER_NODE=2
 SUBSET_RATIO=1
 PYTHON_SCRIPT="run_rnnlogic.py"
@@ -15,14 +17,14 @@ CONFIG_ORIGINAL="../config/full.yaml"
 CONFIG_FILENAME=$(basename "$CONFIG_ORIGINAL" .yaml)
 
 # MULTITASK_LOSS_MODE="adaptive"  # fixed, warmup, schedule
-MULTITASK_LOSS_MODE="fixed"
+MULTITASK_LOSS_MODE="adaptive"
 PREDICTOR_WEIGHTED_LOSS_MODE="ori"  # triple_count, triple_count_sqrt, triple_count_log
 RELATION_CLUSTER_METHOD="matrix" # naive, matrix
 
 CLUSTER_SIZES=(
-  # 3
+  3
   # 5
-  6
+  # 6
   # 7
   # 8
 )
@@ -52,11 +54,11 @@ for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
     sed -i '/^[[:space:]]*gpus:/c\  gpus: [0, 1]' "$CONFIG_PATH"
   else
     echo "🔧 Updating config for normal python run..."
-    sed -i '/^[[:space:]]*gpus:/c\  gpus: [1]' "$CONFIG_PATH"
+    sed -i "/^[[:space:]]*gpus:/c\  gpus: [${USE_GPU}]" "$CONFIG_PATH"
   fi
 
 
-  EXP_NAME="${DATASET}_${MODEL}_${CLUSTER_SIZE}"
+  EXP_NAME="${DATASET}_${MODEL}_${MULTITASK_LOSS_MODE}_${RELATION_CLUSTER_METHOD}_${CLUSTER_SIZE}"
   echo "▶ Running: $EXP_NAME"
   LOG_FILE="logs/${EXP_NAME}_${STAMP}.log"
 

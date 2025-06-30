@@ -101,6 +101,7 @@ predictor: !!python/object/new:easydict.EasyDict
         expectation: true
     gpus: &id009
     - 0
+    - 1
     model: &id010 !!python/object/new:easydict.EasyDict
       dictitems:
         entity_feature: bias
@@ -138,6 +139,7 @@ predictorplus: !!python/object/new:easydict.EasyDict
         expectation: true
     gpus: &id014
     - 0
+    - 1
     model: &id015 !!python/object/new:easydict.EasyDict
       dictitems:
         aggregator: sum

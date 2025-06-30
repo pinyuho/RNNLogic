@@ -21,6 +21,9 @@ class KnowledgeGraph(object):
         self.ent2types = dict()
         self.id2type = dict()
 
+        self.ent2groups = dict()
+        self.id2group = dict()
+
         seen = set()
         with open(os.path.join(data_path, 'entities.dict')) as fi:
             for line in fi:
@@ -152,12 +155,20 @@ class KnowledgeGraph(object):
         #         self.ent2type[int(eid)] = int(tid)
 
         with gzip.open(os.path.join(data_path, "entid2typeids.pkl.gz"), "rb") as f:
-            self.ent2types = pickle.load(f)   # 直接得到原 dict
+            self.ent2types = pickle.load(f) # entid: [tid1, tid2, ...]
+
+        with gzip.open(os.path.join(data_path, "entid2groupids.pkl.gz"), "rb") as f:
+            self.ent2groups = pickle.load(f) # entid: [gid1, gid2, ...]
 
         with open(os.path.join(data_path, "types.dict")) as f:
             for line in f:
                 tid, semtype = line.strip().split('\t')
                 self.id2type[int(tid)] = str(semtype)
+
+        with open(os.path.join(data_path, "groups.dict")) as f:
+            for line in f:
+                gid, group = line.strip().split('\t')
+                self.id2group[int(gid)] = str(group)
 
         if comm.get_rank() == 0:
             logging.info("Data loading | DONE!")
