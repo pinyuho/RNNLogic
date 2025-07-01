@@ -1,0 +1,4 @@
+['diagnoses', 'inhibits']
+['part_of', 'complicates']
+['isa', 'isa']
+['compared_with', 'isa']

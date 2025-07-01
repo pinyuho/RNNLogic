@@ -1,0 +1,34 @@
+2025-07-01 22:02:09,402 INFO     Data loading | DONE!
+2025-07-01 22:02:09,501 INFO     Using full datasets for training, validation, and testing.
+2025-07-01 22:02:09,614 INFO     -------------------------
+2025-07-01 22:02:09,614 INFO     | EM Iteration: 1/5
+2025-07-01 22:02:09,614 INFO     -------------------------
+2025-07-01 22:02:09,614 INFO     >>>>> Using miner's rule
+2025-07-01 22:02:09,692 INFO     Predictor: read 13661 rules from list.
+2025-07-01 22:02:10,360 INFO     Preprocess training set
+2025-07-01 22:02:10,361 INFO     >>>>> Predictor: Training
+2025-07-01 22:12:27,263 INFO     1000 5959 8.299284 69314.6
+entity size:  8673
+relation size:  20
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 254, in <module>
+    
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 143, in main
+    predictor = Predictor(graph, **cfg.predictor.model)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 95, in train
+    logits, mask = model(all_h, all_r, edges_to_remove) # 這邊的 logits 是 score
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/predictors.py", line 72, in forward
+    x, _ = self.graph.grounding(all_h, r_head, r_body, edges_to_remove)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data/graph.py", line 261, in grounding
+    x = self.propagate(x, r_body, mask)    # (E,B,1)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/data/graph.py", line 282, in propagate
+    x = scatter(message, node_out, dim=0, dim_size=x.size(0))
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch_scatter-2.1.2-py3.9-linux-x86_64.egg/torch_scatter/scatter.py", line 167, in scatter
+    return scatter_sum(src, index, dim, out, dim_size)
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch_scatter-2.1.2-py3.9-linux-x86_64.egg/torch_scatter/scatter.py", line 23, in scatter_sum
+    return out.scatter_add_(dim, index, src)
+KeyboardInterrupt

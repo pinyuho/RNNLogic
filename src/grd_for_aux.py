@@ -96,7 +96,7 @@ def ent_rounds_to_multihot(ent_rounds, ent2types, num_type, dedup=True):
     return type_rounds, multihot_rounds
 
 # def rules_to_encoding(rule2ents, rules, ent2type, num_type, dedup=True, soft_label=False): # rule2ents 是前面 collect_multi_rule_ent_types 的結果
-def rules_to_encoding(rule2ents, rules, ent2types, num_type, dedup=True, soft_label=False): # rule2ents 是前面 collect_multi_rule_ent_types 的結果
+def rules_to_encoding(rule2ents, rules, ent2types, num_type, dedup=True, is_soft_label=False): # rule2ents 是前面 collect_multi_rule_ent_types 的結果
     # multihot or 機率分佈
     """
     依 rules 順序回傳 multihot_rounds_list
@@ -115,7 +115,7 @@ def rules_to_encoding(rule2ents, rules, ent2types, num_type, dedup=True, soft_la
             all_encodings.append(zero)
             continue
 
-        if not soft_label: # multihot
+        if not is_soft_label: # multihot
             # _, parts = ent_rounds_to_multihot(ent_rounds, ent2type, num_type, dedup=dedup)
             _, parts = ent_rounds_to_multihot(ent_rounds, ent2types, num_type, dedup=dedup)
         else:
@@ -128,7 +128,7 @@ def rules_to_encoding(rule2ents, rules, ent2types, num_type, dedup=True, soft_la
     return all_encodings
 
 # def grd2encoding(rules, dump_path, ent2type, type_size, soft_label=False):
-def grd2encoding(rules, dump_path, ent2types, type_size, soft_label=False):
+def grd2encoding(rules, dump_path, ent2types, type_size, is_soft_label=False):
     # logging.info(f"type size: {type_size}")
     records = []                              # 每一輪 EM 都要讀新的
     with gzip.open(dump_path, "rt") as fp:
@@ -138,7 +138,7 @@ def grd2encoding(rules, dump_path, ent2types, type_size, soft_label=False):
     # logging.info(f"readed records: {records}")
     rule2ents = collect_multi_rule_ent_types(records, rules)
     # rule2multi = rules_to_encoding(rule2ents, rules, ent2type, type_size, soft_label)
-    rule2multi = rules_to_encoding(rule2ents, rules, ent2types, type_size, soft_label)
+    rule2multi = rules_to_encoding(rule2ents, rules, ent2types, type_size, is_soft_label)
 
     return rule2multi
 

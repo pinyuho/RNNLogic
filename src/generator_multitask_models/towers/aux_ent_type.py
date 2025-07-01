@@ -4,12 +4,12 @@ import torch.nn.functional as F
 import logging
 
 class AuxEntTypeTower(nn.Module):
-    def __init__(self, hidden_dim, type_size, soft_label=False): # soft_label: 機率分佈
+    def __init__(self, hidden_dim, type_size, is_soft_label=False): # is_soft_label: 機率分佈
         super().__init__()
         self.head = nn.Linear(hidden_dim, type_size)
         self.type_size = type_size
 
-        self.soft_label = soft_label
+        self.is_soft_label = is_soft_label
         self.bce_loss = nn.BCEWithLogitsLoss(reduction="none")
         self.kl_loss  = nn.KLDivLoss(reduction="none")
 
@@ -44,14 +44,14 @@ class AuxEntTypeTower(nn.Module):
 
                 # 更新 prev：取當前預測（softmax 或 sigmoid 皆可）
                 prev = (
-                    F.softmax(logits[:, t], dim=-1) if self.soft_label
+                    F.softmax(logits[:, t], dim=-1) if self.is_soft_label
                     else torch.sigmoid(logits[:, t])
                 ).detach()
 
             soft_target = torch.cat(soft_buf, dim=1)      # (B, L, T)
 
         # ───── 選擇 loss ─────
-        if self.soft_label:
+        if self.is_soft_label:
             # soft-label cross-entropy = − Σ p * log q
             log_q    = F.log_softmax(logits, dim=-1)
             per_elem = -(soft_target * log_q)             # (B, L, T)

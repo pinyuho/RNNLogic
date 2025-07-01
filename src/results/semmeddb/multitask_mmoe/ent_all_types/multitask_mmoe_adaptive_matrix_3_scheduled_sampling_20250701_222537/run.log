@@ -1,0 +1,12 @@
+2025-07-01 22:25:38 INFO     is_soft_label: False
+2025-07-01 22:25:38 INFO     is_scheduled_sampling: True
+2025-07-01 22:25:38 INFO     is_test_mode: False
+2025-07-01 22:25:39 INFO     Data loading | DONE!
+2025-07-01 22:25:39 INFO     Using full datasets for training, validation, and testing.
+2025-07-01 22:25:39 INFO     -------------------------
+2025-07-01 22:25:39 INFO     | EM Iteration: 1/5
+2025-07-01 22:25:39 INFO     -------------------------
+2025-07-01 22:25:39 INFO     >>>>> Using miner's rule
+2025-07-01 22:25:39 INFO     Predictor: read 13661 rules from list.
+2025-07-01 22:25:40 INFO     Preprocess training set
+2025-07-01 22:25:40 INFO     >>>>> Predictor: Training

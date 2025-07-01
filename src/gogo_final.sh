@@ -4,8 +4,13 @@ set -e  # 出錯即停止
 mkdir -p logs
 
 RUN_MODE="$1"  # 例如： bash gogo.sh torchrun 或 bash gogo.sh normal
+IS_SOFT_LABEL=False # Not good
+IS_SCHEDULED_SAMPLING=False
+IS_TEST_MODE=False
 
-USE_GPU=1
+TYPE_OR_GROUP="group"
+
+USE_GPU=0
 
 GPUS_PER_NODE=2
 SUBSET_RATIO=1
@@ -44,7 +49,24 @@ fi
 
 for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
   STAMP=$(date +"%Y%m%d_%H%M%S")
-  echo "🔧 Processing config: $CONFIG_FILENAME with Model: $MODEL, $MULTITASK_LOSS_MODE, RELATION_CLUSTER_METHOD: $RELATION_CLUSTER_METHOD, CLUSTER_SIZE: $CLUSTER_SIZE"
+
+  echo "============================================================="
+  echo " 🚀 Starting run with the following configuration:"
+  echo "-------------------------------------------------------------"
+  echo " 🔹 Config                  : $CONFIG_FILENAME.yaml"
+  echo " 🔹 Model                   : $MODEL"
+  echo " 🔹 Is Test Mode            : $IS_TEST_MODE"
+  echo " 🔹 Loss Mode               : $MULTITASK_LOSS_MODE"
+  echo " 🔹 Predictor Loss          : $PREDICTOR_WEIGHTED_LOSS_MODE"
+  echo " 🔹 Relation Clust          : $RELATION_CLUSTER_METHOD (cluster size: $CLUSTER_SIZE)"
+  echo " 🔹 Is Soft Label           : $IS_SOFT_LABEL"
+  echo " 🔹 Is Scheduled sampling   : $IS_SCHEDULED_SAMPLING"
+  echo " 🔹 Dataset                 : $DATASET"
+  echo " 🔹 Semantic Type / Group   : $TYPE_OR_GROUP"
+  echo " 🔹 Subset Ratio            : $SUBSET_RATIO"
+  echo " 🔹 GPUs Per Node           : $GPUS_PER_NODE"
+  echo " 🔹 Run Mode                : $RUN_MODE"
+  echo "============================================================="
 
   CONFIG_PATH="../config/copies_in_process/${MULTITASK_LOSS_MODE}_${CONFIG_FILENAME}.yaml"
   cp "$CONFIG_ORIGINAL" "$CONFIG_PATH"
@@ -58,17 +80,21 @@ for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
   fi
 
 
-  EXP_NAME="${DATASET}_${MODEL}_${MULTITASK_LOSS_MODE}_${RELATION_CLUSTER_METHOD}_${CLUSTER_SIZE}"
-  echo "▶ Running: $EXP_NAME"
-  LOG_FILE="logs/${EXP_NAME}_${STAMP}.log"
+  EXP_NAME="${MODEL}_${MULTITASK_LOSS_MODE}_${RELATION_CLUSTER_METHOD}_${CLUSTER_SIZE}_${TYPE_OR_GROUP}"
+  echo "▶ Running: ${STAMP}.log"
+  LOG_FILE="logs/${STAMP}.log"
 
-  sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask_mmoe/${EXP_NAME}_${STAMP}|" "$CONFIG_PATH"
+  sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask_mmoe/ent_all_types/${EXP_NAME}_${STAMP}|" "$CONFIG_PATH"
 
   sed -i "s|data_path: .*|data_path: ../data/${DATASET}|" "$CONFIG_PATH"
   sed -i "s|rule_file: .*|rule_file: ../data/${DATASET}/mined_rules.txt|" "$CONFIG_PATH"
   sed -i "s|cluster_size: .*|cluster_size: ${CLUSTER_SIZE}|" "$CONFIG_PATH"
-  sed -i "s|relation_cluster_file: .*|relation_cluster_file: ../data/${DATASET}/relation_cluster/${RELATION_CLUSTER_METHOD}_${CLUSTER_SIZE}.dict|" "$CONFIG_PATH"
-
+  # sed -i "s|relation_cluster_file: .*|relation_cluster_file: ../data/${DATASET}/relation_cluster/${RELATION_CLUSTER_METHOD}_${CLUSTER_SIZE}.dict|" "$CONFIG_PATH"
+  if [ "$TYPE_OR_GROUP" == "group" ]; then
+    sed -i "s|relation_cluster_file: .*|relation_cluster_file: ../data/${DATASET}/relation_cluster/sg_${RELATION_CLUSTER_METHOD}_${CLUSTER_SIZE}.dict|" "$CONFIG_PATH"
+  else
+    sed -i "s|relation_cluster_file: .*|relation_cluster_file: ../data/${DATASET}/relation_cluster/${RELATION_CLUSTER_METHOD}_${CLUSTER_SIZE}.dict|" "$CONFIG_PATH"
+  fi
 
   if [[ "$RUN_MODE" == "torchrun" ]]; then
     echo "🚀 Running with torchrun..."
@@ -79,6 +105,10 @@ for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
       --model $MODEL \
       --multitask_loss_mode $MULTITASK_LOSS_MODE \
       --predictor_weighted_loss_mode $PREDICTOR_WEIGHTED_LOSS_MODE \
+      --is_soft_label $IS_SOFT_LABEL \
+      --is_scheduled_sampling $IS_SCHEDULED_SAMPLING \
+      --type_or_group $TYPE_OR_GROUP \
+      --is_test_mode $IS_TEST_MODE \
       > "$LOG_FILE" 2>&1
     then
       echo "❌ Error detected in $EXP_NAME. See log: $LOG_FILE"
@@ -93,6 +123,10 @@ for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
       --model $MODEL \
       --multitask_loss_mode $MULTITASK_LOSS_MODE \
       --predictor_weighted_loss_mode $PREDICTOR_WEIGHTED_LOSS_MODE \
+      --is_soft_label $IS_SOFT_LABEL \
+      --is_scheduled_sampling $IS_SCHEDULED_SAMPLING \
+      --type_or_group $TYPE_OR_GROUP \
+      --is_test_mode $IS_TEST_MODE \
       > "$LOG_FILE" 2>&1
     then
       echo "❌ Error detected in $EXP_NAME. See log: $LOG_FILE"

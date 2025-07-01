@@ -10,12 +10,6 @@ from datamodules.utils import Iterator
 import torch.nn.functional as F
 import gzip, json
 
-TASK_CFG = {
-    "main":            {"use_alpha": False},
-    "aux_rel_cluster": {"use_alpha": False},
-    "aux_ent_type":    {"use_alpha": False},   # ← 想關掉 α 時改成 False
-}
-
 class TrainerPredictor(object):
 
     def __init__(self, model, train_set, valid_set, test_set, optimizer, weighted_loss_mode, scheduler=None, gpus=None, num_worker=0):
@@ -335,10 +329,17 @@ class TrainerPredictor(object):
 
 class TrainerGenerator(object):
 
-    def __init__(self, model, model_design, loss_mode, gpu): # model: 模型 object, model_design: ori or multitask sharing / mmoe
+    def __init__(self, model, model_design, loss_mode, is_scheduled_sampling, gpu): # model: 模型 object, model_design: ori or multitask sharing / mmoe
         self.model = model
         self.model_design = model_design
         self.loss_mode = loss_mode
+        self.is_scheduled_sampling = is_scheduled_sampling
+
+        self.task_alpha = {
+            "main":            {"use_alpha": False},
+            "aux_rel_cluster": {"use_alpha": False},
+            "aux_ent_type":    {"use_alpha": True if is_scheduled_sampling else False},
+        }
 
         if gpu is None:
             self.device = torch.device("cpu")
@@ -470,7 +471,7 @@ class TrainerGenerator(object):
 
                 aux_losses = []
                 for task in ("aux_rel_cluster", "aux_ent_type"):
-                    cfg = TASK_CFG[task]
+                    cfg = self.task_alpha[task]
                     kwargs = {"alpha": alpha} if cfg["use_alpha"] else {}
                     aux_losses.append(model.loss(batch, hidden, task=task, **kwargs))
 

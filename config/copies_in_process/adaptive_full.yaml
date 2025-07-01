@@ -1,4 +1,4 @@
-save_path: results/semmeddb/multitask_mmoe/semmeddb_multitask_mmoe_adaptive_matrix_3_20250630_122227
+save_path: results/semmeddb/multitask_mmoe/ent_all_types/multitask_mmoe_adaptive_matrix_3_scheduled_sampling_20250701_222537
 load_path: null
 seed: 1
 

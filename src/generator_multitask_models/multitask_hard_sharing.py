@@ -8,15 +8,15 @@ from .towers.aux_rel_cluster      import AuxRelClusterTower
 from .towers.aux_ent_type         import AuxEntTypeTower
 
 class MultitaskHardSharing(nn.Module):
-    def __init__(self, graph, cluster_size, loss_mode, num_layers, embedding_dim, hidden_dim, emb_init_mode="random"): 
+    def __init__(self, graph, cluster_size, num_layers, embedding_dim, hidden_dim, emb_init_mode="random"): 
         super().__init__()
 
         self.graph = graph
         self.num_relations = graph.relation_size
-        # self.loss_mode = loss_mode
+        self.type_size = graph.type_size
 
         self.num_layers = num_layers
-        self.embedding_dim = 512        # 仍固定 512, FIXME: flexible
+        self.embedding_dim = embedding_dim
         self.hidden_dim = hidden_dim
 
         self.vocab_size = self.num_relations + 2
@@ -25,8 +25,6 @@ class MultitaskHardSharing(nn.Module):
 
         self.label_size = self.num_relations + 1
         self.cluster_size = cluster_size
-
-        self.type_size = 136 # FIXME: hard coded
 
         self.encoder = nn.LSTM(self.embedding_dim * 2, self.hidden_dim, self.num_layers, batch_first=True)
 

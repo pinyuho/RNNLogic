@@ -324,33 +324,33 @@ if __name__ == "__main__":
     dbname = "semmeddb"
     cluster_size = 3
     mode = "matrix"  # "naive", "matrix"
-    svd_dim = 20
+    svd_dim = 100
 
-    for mode in ["naive", "matrix"]:
-        for cluster_size in [3, 4, 5, 6, 7, 8]:
-            if mode == "matrix":
-                workingdir = f"semmeddb_alltypes_0629/{mode}/ori/cluster_{cluster_size}"
-            else:
-                workingdir = f"semmeddb_alltypes_0629/{mode}/cluster_{cluster_size}"
-            # workingdir = f"{dbname}/{mode}/svd/dim_{svd_dim}"
-            # workingdir = f"{dbname}/bidirectional/cluster_{cluster_size}"
-            graph = KnowledgeGraph(f"../../data/{dbname}")
+    # for mode in ["naive", "matrix"]:
+    #     for cluster_size in [3, 4, 5, 6, 7, 8]:
+    if mode == "matrix":
+        workingdir = f"semmeddb_alltypes_0629/{mode}/group/cluster_{cluster_size}"
+    else:
+        workingdir = f"semmeddb_alltypes_0629/{mode}/cluster_{cluster_size}"
+    # workingdir = f"{dbname}/{mode}/svd/dim_{svd_dim}"
+    # workingdir = f"{dbname}/bidirectional/cluster_{cluster_size}"
+    graph = KnowledgeGraph(f"../../data/{dbname}")
 
-            clusterer = RelationClusterer(
-                dbname=dbname,
-                cluster_size=cluster_size,
-                workingdir=workingdir,
-                graph=graph,
-                # entity_type_path=f"./entity_type.dict",
-                entity_type_path="entid2typeids.pkl.gz",
-                relation_dict_path=f"../../data/{dbname}/relations.dict"
-            )
+    clusterer = RelationClusterer(
+        dbname=dbname,
+        cluster_size=cluster_size,
+        workingdir=workingdir,
+        graph=graph,
+        # entity_type_path=f"./entity_type.dict",
+        entity_type_path=f"../../data/{dbname}/entid2groupids.pkl.gz",
+        relation_dict_path=f"../../data/{dbname}/relations.dict"
+    )
 
-            X, rel_ids = clusterer.encode_relation_features(mode, svd=True, svd_dim=svd_dim)
-            clusterer.plot_elbow_curve(X, max_k=12)
+    X, rel_ids = clusterer.encode_relation_features(mode, svd=False, svd_dim=svd_dim)
+    clusterer.plot_elbow_curve(X, max_k=12)
 
-            labels, rel2clus = clusterer.run_kmeans(X, rel_ids)
-            clusterer.save_clustered_relations(rel2clus)
-            clusterer.evaluate_clustering(X, labels)
+    labels, rel2clus = clusterer.run_kmeans(X, rel_ids)
+    clusterer.save_clustered_relations(rel2clus)
+    clusterer.evaluate_clustering(X, labels)
 
-            clusterer.visualize_pca_clusters(X, labels, method="pca", title="KMeans Clustering")
+    clusterer.visualize_pca_clusters(X, labels, method="pca", title="KMeans Clustering")

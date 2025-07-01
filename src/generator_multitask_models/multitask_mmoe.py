@@ -11,14 +11,14 @@ from .towers.aux_ent_type         import AuxEntTypeTower
 import logging
 
 class MultitaskMMOE(torch.nn.Module):
-    def __init__(self, graph, cluster_size, loss_mode, soft_label, # soft_label: grounding encoding 是否為機率分佈
+    def __init__(self, graph, cluster_size, is_soft_label, # is_soft_label: grounding encoding 是否為機率分佈
                  num_layers, embedding_dim, hidden_dim, emb_init_mode="random",
                  num_experts=4, mmoe_dropout=0.1): 
         super().__init__()
 
         self.graph = graph
         self.num_relations = graph.relation_size
-        # self.loss_mode = loss_mode
+        self.type_size = graph.type_size
 
         self.num_layers = num_layers
         self.embedding_dim = embedding_dim
@@ -31,7 +31,6 @@ class MultitaskMMOE(torch.nn.Module):
         self.label_size = self.num_relations + 1
         self.cluster_size = cluster_size
 
-        self.type_size = 136 # FIXME: hard coded
 
         if emb_init_mode == "random":
             self.embedding = torch.nn.Embedding(self.vocab_size, self.embedding_dim, padding_idx=self.padding_idx)
@@ -59,7 +58,7 @@ class MultitaskMMOE(torch.nn.Module):
         self.towers = torch.nn.ModuleDict({
             "main":            MainNextRelTower(self.hidden_dim, self.label_size, self.padding_idx),
             "aux_rel_cluster": AuxRelClusterTower(self.hidden_dim, self.cluster_size),
-            "aux_ent_type":    AuxEntTypeTower(self.hidden_dim, self.type_size, soft_label),
+            "aux_ent_type":    AuxEntTypeTower(self.hidden_dim, self.type_size, is_soft_label),
         })
 
     def shared_encode(self, inputs, relation, sem_multihot, hidden):

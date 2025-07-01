@@ -9,7 +9,7 @@ import gzip
 import pickle
 
 class KnowledgeGraph(object):
-    def __init__(self, data_path):
+    def __init__(self, data_path, type_or_group="type"):
         self.data_path = data_path
 
         self.entity2id = dict()
@@ -21,8 +21,7 @@ class KnowledgeGraph(object):
         self.ent2types = dict()
         self.id2type = dict()
 
-        self.ent2groups = dict()
-        self.id2group = dict()
+        self.type_or_group = type_or_group # "type" / "group"
 
         seen = set()
         with open(os.path.join(data_path, 'entities.dict')) as fi:
@@ -154,21 +153,16 @@ class KnowledgeGraph(object):
         #         eid, tid = line.strip().split('\t')
         #         self.ent2type[int(eid)] = int(tid)
 
-        with gzip.open(os.path.join(data_path, "entid2typeids.pkl.gz"), "rb") as f:
-            self.ent2types = pickle.load(f) # entid: [tid1, tid2, ...]
-
-        with gzip.open(os.path.join(data_path, "entid2groupids.pkl.gz"), "rb") as f:
-            self.ent2groups = pickle.load(f) # entid: [gid1, gid2, ...]
-
-        with open(os.path.join(data_path, "types.dict")) as f:
+        with open(os.path.join(data_path, f"{self.type_or_group}s.dict")) as f:
             for line in f:
                 tid, semtype = line.strip().split('\t')
                 self.id2type[int(tid)] = str(semtype)
+        
+        self.type_size = len(self.id2type)
 
-        with open(os.path.join(data_path, "groups.dict")) as f:
-            for line in f:
-                gid, group = line.strip().split('\t')
-                self.id2group[int(gid)] = str(group)
+        with gzip.open(os.path.join(data_path, f"entid2{self.type_or_group}ids.pkl.gz"), "rb") as f:
+            self.ent2types = pickle.load(f) # entid: [tid1, tid2, ...]
+            # logging.info(f"ent2{self.type_or_group}: {self.ent2types}")
 
         if comm.get_rank() == 0:
             logging.info("Data loading | DONE!")

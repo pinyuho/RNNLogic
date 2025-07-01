@@ -1,10 +1,7 @@
-import sys
 import os
 import logging
 import argparse
 import random
-from easydict import EasyDict
-import numpy as np
 from datetime import datetime
 import torch
 import torch.distributed as dist
@@ -22,11 +19,7 @@ from generator_multitask_models.multitask_hard_sharing import MultitaskHardShari
 from utils import load_config, save_config, set_logger, set_seed, get_subset_dataset
 from trainer import TrainerPredictor, TrainerGenerator
 import comm
-
 from grd_for_aux import grd2encoding
-
-SOFT_LABEL = False
-TEST_MODE = False
 
 # ------- util -----------
 def bcast_obj(obj, src=0):
@@ -36,6 +29,8 @@ def bcast_obj(obj, src=0):
     dist.broadcast_object_list(buf, src)
     return buf[0]
 
+def str2bool(v): # args parsing
+    return str(v).lower() in ("True", "true", "t", "1")
 
 def save_rules(cfg, rules, label):
     relation_map = {}
@@ -67,6 +62,10 @@ def parse_args(args=None):
     parser.add_argument('--model', type=str, default='ori')
     parser.add_argument('--multitask_loss_mode', type=str, default='adaptive')
     parser.add_argument('--predictor_weighted_loss_mode', type=str, default='ori')
+    parser.add_argument('--is_soft_label', type=str2bool, default=False)
+    parser.add_argument('--is_scheduled_sampling', type=str2bool, default=False)
+    parser.add_argument('--type_or_group', type=str, default='type')
+    parser.add_argument('--is_test_mode', type=str2bool, default=False)
 
     return parser.parse_args(args)
 
@@ -84,8 +83,11 @@ def main(args):
 
     set_logger(cfg.save_path)
     set_seed(cfg.seed)
+    logging.info(f"is_soft_label: {args.is_soft_label}")
+    logging.info(f"is_scheduled_sampling: {args.is_scheduled_sampling}")
+    logging.info(f"is_test_mode: {args.is_test_mode}")
 
-    graph = KnowledgeGraph(cfg.data.data_path)
+    graph = KnowledgeGraph(cfg.data.data_path, args.type_or_group)
     train_set = TrainDataset(graph, cfg.data.batch_size)
     
     valid_set = ValidDataset(graph, cfg.data.batch_size)
@@ -110,11 +112,11 @@ def main(args):
     if args.model == 'ori':
         generator = Generator(graph, **cfg.generator.model)
     elif args.model == 'multitask_hard_sharing':
-        generator = MultitaskHardSharing(graph, cfg.data.cluster_size, args.multitask_loss_mode, **cfg.generator.model)
+        generator = MultitaskHardSharing(graph, cfg.data.cluster_size, **cfg.generator.model)
     else: # multitask_mmoe
-        generator = MultitaskMMOE(graph, cfg.data.cluster_size, args.multitask_loss_mode, soft_label=SOFT_LABEL, **cfg.generator.model)
+        generator = MultitaskMMOE(graph, cfg.data.cluster_size, is_soft_label=args.is_soft_label, **cfg.generator.model)
 
-    solver_g = TrainerGenerator(generator, args.model, args.multitask_loss_mode, gpu=cfg.generator.gpu)
+    solver_g = TrainerGenerator(generator, args.model, args.multitask_loss_mode, args.is_scheduled_sampling, gpu=cfg.generator.gpu)
 
     replay_buffer = list()
     for k in range(cfg.EM.num_iters):
@@ -127,7 +129,7 @@ def main(args):
             # EM round 0: Use mined rules as RP's input
             logging.info('>>>>> Using miner\'s rule')
             sampled_rules = dataset.rp_input
-            if TEST_MODE:
+            if args.is_test_mode:
                 sampled_rules = sampled_rules[:10] 
         else:
             # Sample logic rules with Generator
@@ -164,9 +166,7 @@ def main(args):
         replay_buffer += rules
         
         # M-step: Update the rule generator.
-        # FIXME: FIXME: FIXME:
-        # grd_encoding = grd2encoding(rules, dump_path, graph.ent2type, len(graph.id2type), soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
-        grd_encoding = grd2encoding(rules, dump_path, graph.ent2types, len(graph.id2type), soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
+        grd_encoding = grd2encoding(rules, dump_path, graph.ent2types, len(graph.id2type), is_soft_label=args.is_soft_label) # old: graph.ent2type
         assert len(grd_encoding) == len(rules)
         for mh, r in zip(grd_encoding, rules):
             # mh.shape[0] 應該 ＝ len(r)   (rule_head + body)   ← 先不含 END
@@ -183,8 +183,8 @@ def main(args):
             logging.info('-------------------------')
             logging.info('| Post-train Generator')
             logging.info('-------------------------')
-        # grd_encoding = grd2encoding(replay_buffer, dump_path, graph.ent2type, len(graph.id2type), soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
-        grd_encoding = grd2encoding(replay_buffer, dump_path, graph.ent2types, len(graph.id2type), soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
+        # grd_encoding = grd2encoding(replay_buffer, dump_path, graph.ent2type, len(graph.id2type), is_soft_label=SOFT_LABEL) # rule_num * rule_len + 1(head) + 1(end) * 
+        grd_encoding = grd2encoding(replay_buffer, dump_path, graph.ent2types, len(graph.id2type), is_soft_label=args.is_soft_label) # rule_num * rule_len + 1(head) + 1(end) * 
         
         dataset = RuleDataset(graph.relation_size, replay_buffer, cfg.data.cluster_size, cfg.data.relation_cluster_file)
         dataset.update_grd_multihot(grd_encoding, len(graph.id2type))

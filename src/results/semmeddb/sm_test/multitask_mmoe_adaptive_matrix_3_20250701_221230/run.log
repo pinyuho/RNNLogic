@@ -1,0 +1,125 @@
+2025-07-01 22:12:31 INFO     is_soft_label: False
+2025-07-01 22:12:31 INFO     is_scheduled_sampling: False
+2025-07-01 22:12:31 INFO     is_test_mode: True
+2025-07-01 22:12:31 INFO     Data loading | DONE!
+2025-07-01 22:12:31 INFO     Using subset datasets for training, validation, and testing.
+2025-07-01 22:12:31 INFO     Subset ratio: 0.01
+2025-07-01 22:12:31 INFO     [Subset] TrainDataset: 59/5959 samples (1%)
+2025-07-01 22:12:31 INFO     [Subset] ValidDataset: 2/260 samples (1%)
+2025-07-01 22:12:31 INFO     [Subset] TestDataset: 2/293 samples (1%)
+2025-07-01 22:12:31 INFO     [Subset] RuleDataset: 136/13661 samples (1%)
+2025-07-01 22:12:31 INFO     -------------------------
+2025-07-01 22:12:31 INFO     | EM Iteration: 1/2
+2025-07-01 22:12:31 INFO     -------------------------
+2025-07-01 22:12:31 INFO     >>>>> Using miner's rule
+2025-07-01 22:12:31 INFO     Predictor: read 10 rules from list.
+2025-07-01 22:12:32 INFO     Preprocess training set
+2025-07-01 22:12:32 INFO     >>>>> Predictor: Training
+2025-07-01 22:12:33 INFO     >>>>> Predictor: Evaluating on valid
+2025-07-01 22:12:33 INFO     Data : 16
+2025-07-01 22:12:33 INFO     Hit1 : 0.000000
+2025-07-01 22:12:33 INFO     Hit3 : 0.000000
+2025-07-01 22:12:33 INFO     Hit10: 0.062500
+2025-07-01 22:12:33 INFO     MR   : 2373.875000
+2025-07-01 22:12:33 INFO     MRR  : 0.008906
+2025-07-01 22:12:33 INFO     >>>>> Predictor: Evaluating on test
+2025-07-01 22:12:33 INFO     Data : 16
+2025-07-01 22:12:33 INFO     Hit1 : 0.000000
+2025-07-01 22:12:33 INFO     Hit3 : 0.000000
+2025-07-01 22:12:33 INFO     Hit10: 0.000000
+2025-07-01 22:12:33 INFO     MR   : 2367.812500
+2025-07-01 22:12:33 INFO     MRR  : 0.004095
+2025-07-01 22:12:33 INFO     >>>>> Predictor: Computing H scores of rules
+2025-07-01 22:12:34 INFO     >>>>> Generator: Training
+2025-07-01 22:12:34 INFO     [E00001] Total 8.112116 | Main 3.069973 | RelClus 1.104033 | EntType 10.354311
+2025-07-01 22:12:34 INFO     [E00002] Total 8.110017 | Main 3.069521 | RelClus 1.103928 | EntType 10.351771
+2025-07-01 22:12:34 INFO     [E00003] Total 8.107172 | Main 3.068043 | RelClus 1.105220 | EntType 10.348865
+2025-07-01 22:12:34 INFO     [E00004] Total 8.102973 | Main 3.070457 | RelClus 1.104216 | EntType 10.343926
+2025-07-01 22:12:34 INFO     [E00005] Total 8.098753 | Main 3.070051 | RelClus 1.104500 | EntType 10.339128
+2025-07-01 22:12:34 INFO     [E00006] Total 8.094436 | Main 3.070900 | RelClus 1.105435 | EntType 10.334717
+2025-07-01 22:12:34 INFO     [E00007] Total 8.093247 | Main 3.070421 | RelClus 1.105973 | EntType 10.333523
+2025-07-01 22:12:34 INFO     [E00008] Total 8.090810 | Main 3.070792 | RelClus 1.103997 | EntType 10.329842
+2025-07-01 22:12:34 INFO     [E00009] Total 8.086736 | Main 3.071605 | RelClus 1.105400 | EntType 10.325923
+2025-07-01 22:12:34 INFO     [E00010] Total 8.083335 | Main 3.070921 | RelClus 1.104864 | EntType 10.321641
+2025-07-01 22:12:34 INFO     -------------------------
+2025-07-01 22:12:34 INFO     | EM Iteration: 2/2
+2025-07-01 22:12:34 INFO     -------------------------
+2025-07-01 22:12:34 INFO     >>>>> Using Generator's sample rule
+2025-07-01 22:12:34 INFO     >>>>> Generator: Rule generation with sampling
+2025-07-01 22:12:34 INFO     Predictor: read 199 rules from list.
+2025-07-01 22:12:34 INFO     Preprocess training set
+2025-07-01 22:12:34 INFO     >>>>> Predictor: Training
+2025-07-01 22:12:36 INFO     >>>>> Predictor: Evaluating on valid
+2025-07-01 22:12:36 INFO     Data : 16
+2025-07-01 22:12:36 INFO     Hit1 : 0.000000
+2025-07-01 22:12:36 INFO     Hit3 : 0.000000
+2025-07-01 22:12:36 INFO     Hit10: 0.000000
+2025-07-01 22:12:36 INFO     MR   : 2107.156250
+2025-07-01 22:12:36 INFO     MRR  : 0.004785
+2025-07-01 22:12:36 INFO     >>>>> Predictor: Evaluating on test
+2025-07-01 22:12:36 INFO     Data : 16
+2025-07-01 22:12:36 INFO     Hit1 : 0.000000
+2025-07-01 22:12:36 INFO     Hit3 : 0.000000
+2025-07-01 22:12:36 INFO     Hit10: 0.000000
+2025-07-01 22:12:36 INFO     MR   : 2347.312500
+2025-07-01 22:12:36 INFO     MRR  : 0.008179
+2025-07-01 22:12:36 INFO     >>>>> Predictor: Computing H scores of rules
+2025-07-01 22:12:41 INFO     >>>>> Generator: Training
+2025-07-01 22:12:41 INFO     [E00001] Total 8.108749 | Main 3.044570 | RelClus 1.105594 | EntType 10.347136
+2025-07-01 22:12:41 INFO     [E00002] Total 8.107016 | Main 3.044745 | RelClus 1.105494 | EntType 10.345120
+2025-07-01 22:12:41 INFO     [E00003] Total 8.105745 | Main 3.044511 | RelClus 1.105839 | EntType 10.343781
+2025-07-01 22:12:41 INFO     [E00004] Total 8.103307 | Main 3.044644 | RelClus 1.105937 | EntType 10.341040
+2025-07-01 22:12:41 INFO     [E00005] Total 8.101373 | Main 3.044367 | RelClus 1.106037 | EntType 10.338813
+2025-07-01 22:12:41 INFO     [E00006] Total 8.099339 | Main 3.044615 | RelClus 1.106192 | EntType 10.336583
+2025-07-01 22:12:41 INFO     [E00007] Total 8.098086 | Main 3.044733 | RelClus 1.106370 | EntType 10.335241
+2025-07-01 22:12:41 INFO     [E00008] Total 8.096221 | Main 3.044536 | RelClus 1.106623 | EntType 10.333179
+2025-07-01 22:12:41 INFO     [E00009] Total 8.094057 | Main 3.044795 | RelClus 1.106542 | EntType 10.330688
+2025-07-01 22:12:41 INFO     [E00010] Total 8.092020 | Main 3.044910 | RelClus 1.107046 | EntType 10.328594
+2025-07-01 22:12:41 INFO     -------------------------
+2025-07-01 22:12:41 INFO     | Post-train Generator
+2025-07-01 22:12:41 INFO     -------------------------
+2025-07-01 22:12:41 INFO     >>>>> Generator: Training
+2025-07-01 22:12:41 INFO     [E00001] Total 8.089630 | Main 3.044875 | RelClus 1.106740 | EntType 10.325692
+2025-07-01 22:12:41 INFO     [E00002] Total 8.087259 | Main 3.044653 | RelClus 1.106835 | EntType 10.322969
+2025-07-01 22:12:41 INFO     [E00003] Total 8.085667 | Main 3.044982 | RelClus 1.107234 | EntType 10.321372
+2025-07-01 22:12:41 INFO     [E00004] Total 8.084161 | Main 3.044753 | RelClus 1.107329 | EntType 10.319645
+2025-07-01 22:12:41 INFO     [E00005] Total 8.081820 | Main 3.044887 | RelClus 1.107234 | EntType 10.316922
+2025-07-01 22:12:41 INFO     [E00006] Total 8.079869 | Main 3.044954 | RelClus 1.107577 | EntType 10.314846
+2025-07-01 22:12:41 INFO     [E00007] Total 8.078282 | Main 3.045218 | RelClus 1.107563 | EntType 10.313052
+2025-07-01 22:12:41 INFO     [E00008] Total 8.075880 | Main 3.044949 | RelClus 1.107886 | EntType 10.310390
+2025-07-01 22:12:41 INFO     [E00009] Total 8.073725 | Main 3.044813 | RelClus 1.108100 | EntType 10.307984
+2025-07-01 22:12:41 INFO     [E00010] Total 8.072215 | Main 3.044941 | RelClus 1.108350 | EntType 10.306380
+2025-07-01 22:12:41 INFO     -------------------------
+2025-07-01 22:12:41 INFO     | Beam Search Best Rules
+2025-07-01 22:12:41 INFO     -------------------------
+2025-07-01 22:12:41 INFO     >>>>> Generator: Rule generation with beam search
+2025-07-01 22:12:42 INFO     Using subset datasets for final predictor+ training, validation, and testing.
+2025-07-01 22:12:42 INFO     Subset ratio: 0.01
+2025-07-01 22:12:42 INFO     Subset sizes: train=59, valid=2, test=2, rule dataset=4
+2025-07-01 22:12:42 INFO     -------------------------
+2025-07-01 22:12:42 INFO     | Train Final Predictor+
+2025-07-01 22:12:42 INFO     -------------------------
+2025-07-01 22:12:42 INFO     Predictor+: read 4 rules from list.
+2025-07-01 22:12:42 INFO     Preprocess training set
+2025-07-01 22:12:42 INFO     -------------------------
+2025-07-01 22:12:42 INFO     | Iteration: 1/1
+2025-07-01 22:12:42 INFO     -------------------------
+2025-07-01 22:12:42 INFO     >>>>> Predictor: Training
+2025-07-01 22:12:43 INFO     >>>>> Predictor: Evaluating on valid
+2025-07-01 22:12:43 INFO     Data : 16
+2025-07-01 22:12:43 INFO     Hit1 : 0.000000
+2025-07-01 22:12:43 INFO     Hit3 : 0.000000
+2025-07-01 22:12:43 INFO     Hit10: 0.000000
+2025-07-01 22:12:43 INFO     MR   : 2813.687500
+2025-07-01 22:12:43 INFO     MRR  : 0.004631
+2025-07-01 22:12:43 INFO     >>>>> Predictor: Evaluating on test
+2025-07-01 22:12:43 INFO     Data : 16
+2025-07-01 22:12:43 INFO     Hit1 : 0.000000
+2025-07-01 22:12:43 INFO     Hit3 : 0.000000
+2025-07-01 22:12:43 INFO     Hit10: 0.000000
+2025-07-01 22:12:43 INFO     MR   : 1055.656250
+2025-07-01 22:12:43 INFO     MRR  : 0.003892
+2025-07-01 22:12:43 INFO     Save checkpoint to results/semmeddb/sm_test/multitask_mmoe_adaptive_matrix_3_20250701_221230/predictor.pt
+2025-07-01 22:12:43 INFO     -------------------------
+2025-07-01 22:12:43 INFO     | Final Test MRR: 0.003892
+2025-07-01 22:12:43 INFO     -------------------------

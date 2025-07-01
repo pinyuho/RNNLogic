@@ -1,0 +1,59 @@
+2025-07-01 21:58:44,155 INFO     Data loading | DONE!
+2025-07-01 21:58:44,247 INFO     Using full datasets for training, validation, and testing.
+2025-07-01 21:58:44,353 INFO     -------------------------
+2025-07-01 21:58:44,353 INFO     | EM Iteration: 1/5
+2025-07-01 21:58:44,353 INFO     -------------------------
+2025-07-01 21:58:44,353 INFO     >>>>> Using miner's rule
+2025-07-01 21:58:44,354 INFO     Predictor: read 10 rules from list.
+2025-07-01 21:58:44,999 INFO     Preprocess training set
+2025-07-01 21:58:45,000 INFO     >>>>> Predictor: Training
+2025-07-01 21:58:47,985 INFO     1000 5959 8.840337 69314.6
+2025-07-01 21:58:50,618 INFO     2000 5959 8.544598 69271.3
+2025-07-01 21:58:53,272 INFO     3000 5959 8.400789 69245.2
+2025-07-01 21:58:55,950 INFO     4000 5959 8.293292 69340.6
+2025-07-01 21:58:58,853 INFO     5000 5959 8.199750 69340.6
+2025-07-01 21:59:01,480 INFO     >>>>> Predictor: Evaluating on valid
+2025-07-01 21:59:02,415 INFO     Data : 2077
+2025-07-01 21:59:02,415 INFO     Hit1 : 0.000963
+2025-07-01 21:59:02,415 INFO     Hit3 : 0.004333
+2025-07-01 21:59:02,415 INFO     Hit10: 0.009629
+2025-07-01 21:59:02,415 INFO     MR   : 1483.702455
+2025-07-01 21:59:02,415 INFO     MRR  : 0.008204
+2025-07-01 21:59:02,415 INFO     >>>>> Predictor: Evaluating on test
+2025-07-01 21:59:03,439 INFO     Data : 2342
+2025-07-01 21:59:03,439 INFO     Hit1 : 0.000854
+2025-07-01 21:59:03,439 INFO     Hit3 : 0.004697
+2025-07-01 21:59:03,439 INFO     Hit10: 0.008540
+2025-07-01 21:59:03,439 INFO     MR   : 1385.623612
+2025-07-01 21:59:03,439 INFO     MRR  : 0.007828
+2025-07-01 21:59:03,439 INFO     >>>>> Predictor: Computing H scores of rules
+2025-07-01 21:59:04,039 INFO     1000 5959
+2025-07-01 21:59:04,590 INFO     2000 5959
+2025-07-01 21:59:05,189 INFO     3000 5959
+2025-07-01 21:59:05,744 INFO     4000 5959
+2025-07-01 21:59:06,296 INFO     5000 5959
+2025-07-01 21:59:06,883 INFO     >>>>> Generator: Training
+2025-07-01 21:59:09,003 INFO     -------------------------
+2025-07-01 21:59:09,003 INFO     | EM Iteration: 2/5
+2025-07-01 21:59:09,003 INFO     -------------------------
+2025-07-01 21:59:09,003 INFO     >>>>> Using Generator's sample rule
+2025-07-01 21:59:09,003 INFO     >>>>> Generator: Rule generation with sampling
+2025-07-01 21:59:09,151 INFO     Predictor: read 1906 rules from list.
+2025-07-01 21:59:09,152 INFO     Preprocess training set
+2025-07-01 21:59:09,152 INFO     >>>>> Predictor: Training
+entity size:  8673
+relation size:  20
+Traceback (most recent call last):
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 254, in <module>
+    main(parse_args())
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/run_rnnlogic.py", line 143, in main
+    solver_p.train(**cfg.predictor.train)
+  File "/home/emma/emma/bilab_archive/polly/RNNLogic/src/trainer.py", line 112, in train
+    loss.backward()
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/_tensor.py", line 581, in backward
+    torch.autograd.backward(
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/autograd/__init__.py", line 347, in backward
+    _engine_run_backward(
+  File "/home/emma/polly_env_py39/lib/python3.9/site-packages/torch/autograd/graph.py", line 825, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
