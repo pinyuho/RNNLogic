@@ -4,11 +4,11 @@ set -e  # 出錯即停止
 mkdir -p logs
 
 RUN_MODE="$1"  # 例如： bash gogo.sh torchrun 或 bash gogo.sh normal
-IS_SOFT_LABEL=False # Not good
+IS_SOFT_LABEL=False
 IS_SCHEDULED_SAMPLING=False
 IS_TEST_MODE=False
 
-TYPE_OR_GROUP="group"
+TYPE_OR_GROUP="type"
 
 USE_GPU=0
 
@@ -84,7 +84,7 @@ for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
   echo "▶ Running: ${STAMP}.log"
   LOG_FILE="logs/${STAMP}.log"
 
-  sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask_mmoe/ent_all_types/${EXP_NAME}_${STAMP}|" "$CONFIG_PATH"
+  sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask_mmoe/ent_all_types/${EXP_NAME}_soft_label_${STAMP}|" "$CONFIG_PATH"
 
   sed -i "s|data_path: .*|data_path: ../data/${DATASET}|" "$CONFIG_PATH"
   sed -i "s|rule_file: .*|rule_file: ../data/${DATASET}/mined_rules.txt|" "$CONFIG_PATH"

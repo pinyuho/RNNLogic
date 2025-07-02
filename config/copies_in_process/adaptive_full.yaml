@@ -1,12 +1,12 @@
-save_path: results/semmeddb/multitask_mmoe/ent_all_types/multitask_mmoe_adaptive_matrix_3_scheduled_sampling_20250701_222537
+save_path: results/semmeddb/multitask_mmoe/ent_all_types/PCA_multitask_mmoe_adaptive_matrix_4_type_20250702_183136
 load_path: null
 seed: 1
 
 data:
   data_path: ../data/semmeddb
   rule_file: ../data/semmeddb/mined_rules.txt
-  cluster_size: 3
-  relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_3.dict
+  cluster_size: 4
+  relation_cluster_file: ../data/semmeddb/relation_cluster/pca_5_matrix_4.dict
   # batch_size: 32
   batch_size: 8
   
@@ -39,7 +39,7 @@ generator:
     batch_size: 512
 
 predictor:
-  gpus: [1]
+  gpus: [0]
   model:
     entity_feature: bias
   optimizer:
@@ -60,7 +60,7 @@ final_prediction:
   max_length: [1, 2, 3, 4, 5]
 
 predictorplus:
-  gpus: [1]
+  gpus: [0]
   model:
     hidden_dim: 16
     aggregator: pna

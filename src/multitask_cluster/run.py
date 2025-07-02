@@ -96,7 +96,7 @@ class RelationClusterer:
     #     else:
     #         return None, None
 
-    def encode_relation_features(self, mode="naive", svd=False, svd_dim=5):
+    def encode_relation_features(self, mode="naive", pca=False, pca_dim=5):
         # 1. 計算 type vocab size  (max id + 1)
         num_type = max(t for ts in self.ent2types.values() for t in ts) + 1
 
@@ -152,11 +152,17 @@ class RelationClusterer:
             X = torch.stack([relation_matrix[r] for r in rel_ids])      # (R, T, T)
             flat_X = X.view(len(rel_ids), -1)
 
-            if svd:
-                flat_X = TruncatedSVD(
-                    n_components=svd_dim, random_state=42
-                ).fit_transform(flat_X)
-            return flat_X, rel_ids
+            if pca:
+                # flat_X = TruncatedSVD(
+                #     n_components=svd_dim, random_state=42
+                # ).fit_transform(flat_X)
+
+                pca = PCA(n_components=0.90)  # 保留 90% 變異
+                X_reduced = pca.fit_transform(flat_X)
+
+                print("降到維度數量：", X_reduced.shape[1])  # 例如：120 維
+            # return flat_X, rel_ids
+            return X_reduced, rel_ids
 
         else:
             return None, None
@@ -322,16 +328,16 @@ class RelationClusterer:
 if __name__ == "__main__":
 
     dbname = "semmeddb"
-    cluster_size = 3
+    cluster_size = 5
     mode = "matrix"  # "naive", "matrix"
-    svd_dim = 100
+    pca_dim = 100
 
     # for mode in ["naive", "matrix"]:
     #     for cluster_size in [3, 4, 5, 6, 7, 8]:
     if mode == "matrix":
-        workingdir = f"semmeddb_alltypes_0629/{mode}/group/cluster_{cluster_size}"
+        workingdir = f"semmeddb_alltypes_0629/{mode}/pca/cluster_{cluster_size}_dim_{pca_dim}"
     else:
-        workingdir = f"semmeddb_alltypes_0629/{mode}/cluster_{cluster_size}"
+        workingdir = f"semmeddb_alltypes_0629/{mode}/naive/cluster_{cluster_size}"
     # workingdir = f"{dbname}/{mode}/svd/dim_{svd_dim}"
     # workingdir = f"{dbname}/bidirectional/cluster_{cluster_size}"
     graph = KnowledgeGraph(f"../../data/{dbname}")
@@ -342,11 +348,11 @@ if __name__ == "__main__":
         workingdir=workingdir,
         graph=graph,
         # entity_type_path=f"./entity_type.dict",
-        entity_type_path=f"../../data/{dbname}/entid2groupids.pkl.gz",
+        entity_type_path=f"../../data/{dbname}/entid2typeids.pkl.gz",
         relation_dict_path=f"../../data/{dbname}/relations.dict"
     )
 
-    X, rel_ids = clusterer.encode_relation_features(mode, svd=False, svd_dim=svd_dim)
+    X, rel_ids = clusterer.encode_relation_features(mode, pca=True, pca_dim=pca_dim)
     clusterer.plot_elbow_curve(X, max_k=12)
 
     labels, rel2clus = clusterer.run_kmeans(X, rel_ids)
