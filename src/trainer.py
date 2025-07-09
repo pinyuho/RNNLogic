@@ -1,4 +1,5 @@
 import comm
+import pandas as pd
 from utils import *
 import torch
 from torch import distributed as dist
@@ -9,6 +10,8 @@ from data.rules_dataset import RuleDataset
 from datamodules.utils import Iterator
 import torch.nn.functional as F
 import gzip, json
+from torch.utils.data import DataLoader, SequentialSampler
+
 
 class TrainerPredictor(object):
 
@@ -285,7 +288,89 @@ class TrainerPredictor(object):
             logging.info('MRR  : {:.6f}'.format(mrr))
 
         return mrr
+    
+    @torch.no_grad()
+    def inference_evaluate(self, split, expectation=True):
+        if comm.get_rank() == 0:
+            logging.info(f'>>>>> Predictor: Evaluating on {split}')
+        test_set = getattr(self, f"{split}_set")
+        sampler = torch_data.DistributedSampler(test_set, self.world_size, self.rank)
+        dataloader = torch_data.DataLoader(test_set, 1, sampler=sampler, num_workers=self.num_worker)
+        model = self.model
+        model.eval()
 
+        concat_logits, concat_all_h, concat_all_r, concat_all_t, concat_flag, concat_mask = [], [], [], [], [], []
+        for batch in dataloader:
+            all_h, all_r, all_t, flag = [x.squeeze(0) for x in batch]
+            if self.device.type == "cuda":
+                all_h = all_h.cuda(device=self.device)
+                all_r = all_r.cuda(device=self.device)
+                all_t = all_t.cuda(device=self.device)
+                flag = flag.cuda(device=self.device)
+
+            logits, mask = model(all_h, all_r, None)
+            concat_logits.append(logits)
+            concat_all_h.append(all_h)
+            concat_all_r.append(all_r)
+            concat_all_t.append(all_t)
+            concat_flag.append(flag)
+            concat_mask.append(mask)
+
+        concat_logits = torch.cat(concat_logits, dim=0)
+        concat_all_h = torch.cat(concat_all_h, dim=0)
+        concat_all_r = torch.cat(concat_all_r, dim=0)
+        concat_all_t = torch.cat(concat_all_t, dim=0)
+        concat_flag = torch.cat(concat_flag, dim=0)
+        concat_mask = torch.cat(concat_mask, dim=0)
+
+        records = []
+        for k in range(concat_all_t.size(0)):
+            h, r, t = concat_all_h[k], concat_all_r[k], concat_all_t[k]
+            if concat_mask[k, t].item():
+                val = concat_logits[k, t]
+                L = (concat_logits[k][concat_flag[k]] > val).sum().item() + 1
+                H = (concat_logits[k][concat_flag[k]] >= val).sum().item() + 2
+            else:
+                L = 1
+                H = test_set.graph.entity_size + 1
+            records.append((h.item(), r.item(), t.item(), L, H))
+
+        if self.world_size > 1:
+            all_records = comm.gather(records)
+            if comm.get_rank() != 0:
+                return
+            records = [x for sublist in all_records for x in sublist]
+
+        # Save to DataFrame
+        df = pd.DataFrame(records, columns=["h", "r", "t", "L", "H"])
+        df['rank'] = df['H'] - 1
+
+        # === Overall metrics ===
+        overall = {
+            'r': 'overall',
+            'mr': df['rank'].mean(),
+            'mrr': (1.0 / df['rank']).mean(),
+            'hit1': (df['rank'] <= 1).mean(),
+            'hit3': (df['rank'] <= 3).mean(),
+            'hit10': (df['rank'] <= 10).mean(),
+            'count': len(df)
+        }
+        # === Per-relation metrics ===
+        rel_metrics = df.groupby('r')['rank'].agg(
+            mr='mean',
+            mrr=lambda x: (1.0 / x).mean(),
+            hit1=lambda x: (x <= 1).mean(),
+            hit3=lambda x: (x <= 3).mean(),
+            hit10=lambda x: (x <= 10).mean(),
+            count='count'
+        ).reset_index()
+
+        # 將 overall 加到最後一行
+        rel_metrics = pd.concat([rel_metrics, pd.DataFrame([overall])], ignore_index=True)
+
+        return rel_metrics
+
+        
     def load(self, checkpoint, load_optimizer=True):
         """
         Load a checkpoint from file.
@@ -450,7 +535,9 @@ class TrainerGenerator(object):
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
         # -------- 多任務設定 --------
-        running = {k: 0.0 for k in ["total", "main", "aux_rel_cluster", "aux_ent_type"]}
+        # aux_tasks = ["aux_ent_type"]
+        aux_tasks = ["aux_rel_cluster", "aux_ent_type"] if self.model_design != "ori" else []
+        running = {k: 0.0 for k in ["total", "main"] + aux_tasks}
 
         for epoch in range(1, num_epoch + 1):
             alpha = self.schedule_alpha(epoch)  
@@ -470,7 +557,7 @@ class TrainerGenerator(object):
                 main_loss = model.loss(batch, hidden, task="main")
 
                 aux_losses = []
-                for task in ("aux_rel_cluster", "aux_ent_type"):
+                for task in aux_tasks:
                     cfg = self.task_alpha[task]
                     kwargs = {"alpha": alpha} if cfg["use_alpha"] else {}
                     aux_losses.append(model.loss(batch, hidden, task=task, **kwargs))
@@ -489,17 +576,17 @@ class TrainerGenerator(object):
             if aux_losses:
                 running["aux_rel_cluster"] += aux_losses[0].item()
                 running["aux_ent_type"]    += aux_losses[1].item()
+                # running["aux_ent_type"]    += aux_losses[0].item()
 
             if epoch % print_every == 0 and comm.get_rank() == 0:
                 avg = {k: v / print_every for k, v in running.items()}
+                rel_clus = f"RelClus {avg['aux_rel_cluster']:.6f} | " if self.model_design != "ori" else ""
+                ent_type = f"EntType {avg['aux_ent_type']:.6f}" if self.model_design != "ori" else ""
                 logging.info(
-                    f"[E{epoch:05d}] "
-                    f"Total {avg['total']:.6f} | "
-                    f"Main {avg['main']:.6f} | "
-                    f"RelClus {avg['aux_rel_cluster']:.6f} | "
-                    f"EntType {avg['aux_ent_type']:.6f}"
+                    f"[E{epoch:05d}] Total {avg['total']:.6f} | Main {avg['main']:.6f} | "
+                    f"{rel_clus}{ent_type}"
                 )
-                running = {k: 0.0 for k in running}  # reset
+                running = {k: 0.0 for k in running} # reset
     
     def zero_state(self, batch_size): 
         state_shape = (self.model.num_layers, batch_size, self.model.hidden_dim)

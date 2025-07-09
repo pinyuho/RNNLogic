@@ -328,9 +328,9 @@ class RelationClusterer:
 if __name__ == "__main__":
 
     dbname = "semmeddb"
-    cluster_size = 5
+    cluster_size = 8
     mode = "matrix"  # "naive", "matrix"
-    pca_dim = 100
+    pca_dim = 5
 
     # for mode in ["naive", "matrix"]:
     #     for cluster_size in [3, 4, 5, 6, 7, 8]:

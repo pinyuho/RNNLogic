@@ -14,6 +14,8 @@ from predictors import Predictor, PredictorPlus
 from generators import Generator
 
 from generator_multitask_models.multitask_mmoe import MultitaskMMOE
+from generator_multitask_models.multitask_mmoe_aux1 import MultitaskMMOEAux1
+from generator_multitask_models.multitask_mmoe_aux2 import MultitaskMMOEAux2
 from generator_multitask_models.multitask_hard_sharing import MultitaskHardSharing
 
 from utils import load_config, save_config, set_logger, set_seed, get_subset_dataset
@@ -115,6 +117,8 @@ def main(args):
         generator = MultitaskHardSharing(graph, cfg.data.cluster_size, **cfg.generator.model)
     else: # multitask_mmoe
         generator = MultitaskMMOE(graph, cfg.data.cluster_size, is_soft_label=args.is_soft_label, **cfg.generator.model)
+        # generator = MultitaskMMOEAux1(graph, cfg.data.cluster_size, is_soft_label=args.is_soft_label, **cfg.generator.model)
+        # generator = MultitaskMMOEAux2(graph, cfg.data.cluster_size, is_soft_label=args.is_soft_label, **cfg.generator.model)
 
     solver_g = TrainerGenerator(generator, args.model, args.multitask_loss_mode, args.is_scheduled_sampling, gpu=cfg.generator.gpu)
 
@@ -144,8 +148,21 @@ def main(args):
         predictor.set_rules(rules)
         optim = torch.optim.Adam(predictor.parameters(), **cfg.predictor.optimizer)
 
+
+        if k == 0 and args.is_test_mode != True:
+            # Load checkpoint
+            checkpoint = torch.load(os.path.join(cfg.data.data_path, 'predictor_init.pt'))
+            predictor.load_state_dict(checkpoint["model"])
+            optim.load_state_dict(checkpoint["optimizer"])
+
+
         solver_p = TrainerPredictor(predictor, train_set, valid_set, test_set, optim, args.predictor_weighted_loss_mode, gpus=cfg.predictor.gpus)
-        solver_p.train(**cfg.predictor.train)
+        
+        if k != 0: # 第一輪就不訓練了
+            solver_p.train(**cfg.predictor.train) # TODO: 
+        # if k == 0:
+        #     solver_p.save(os.path.join(cfg.save_path, 'predictor_init.pt'))
+
         valid_mrr_iter = solver_p.evaluate('valid', expectation=cfg.predictor.eval.expectation)
         test_mrr_iter = solver_p.evaluate('test', expectation=cfg.predictor.eval.expectation)
 

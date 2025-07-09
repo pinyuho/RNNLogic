@@ -108,7 +108,9 @@ def get_subset_dataset(dataset, ratio: float = 1.0, seed: int = 42):
         logging.info(f"[Subset] {dataset.__class__.__name__}: {k}/{n} samples ({ratio:.0%})")
     return SubsetProxy(dataset, idx)
 
-def build_rotate_embedding(path, num_extra=2, scale=0.01):
+def build_rotate_embedding(num_extra=2, scale=0.01): # FIXME: 有兩個一樣的 function，另一個在 /generator_multitask_models
+    # path = "../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_0426_all_256/relation_embedding.npy"
+    path = "../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_512/relation_embedding.npy"
     """
     讀 RotatE 向量，再補 2 格隨機權重 ⇒ nn.Embedding
     """

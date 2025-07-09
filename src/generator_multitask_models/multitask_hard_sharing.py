@@ -32,16 +32,14 @@ class MultitaskHardSharing(nn.Module):
             self.embedding = torch.nn.Embedding(self.vocab_size, self.embedding_dim,
                                           padding_idx=self.padding_idx)
         else:  # rotate
-            self.embedding = build_rotate_embedding(
-                "../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_512/relation_embedding.npy"
-            )
+            self.embedding = build_rotate_embedding()
 
         self.encoder = torch.nn.LSTM(self.embedding_dim * 2, self.hidden_dim, self.num_layers, batch_first=True)
         self.mlp_shared = torch.nn.Linear(self.hidden_dim, self.hidden_dim)
 
         self.towers = nn.ModuleDict({
             "main":            MainNextRelTower(self.hidden_dim, self.label_size, self.padding_idx),
-            "aux_rel_cluster": AuxRelClusterTower(self.hidden_dim, self.cluster_size),
+            # "aux_rel_cluster": AuxRelClusterTower(self.hidden_dim, self.cluster_size),
             "aux_ent_type":    AuxEntTypeTower(self.hidden_dim, self.type_size),
         })
 

@@ -4,9 +4,9 @@ set -e  # 出錯即停止
 mkdir -p logs
 
 RUN_MODE="$1"  # 例如： bash gogo.sh torchrun 或 bash gogo.sh normal
-IS_TEST_MODE=True
+IS_TEST_MODE=False
 
-USE_GPU=0
+USE_GPU=1
 
 GPUS_PER_NODE=2
 SUBSET_RATIO=0.01

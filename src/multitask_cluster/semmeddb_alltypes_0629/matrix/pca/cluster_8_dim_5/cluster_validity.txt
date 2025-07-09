@@ -1,0 +1,6 @@
+
+[Cluster Validity (k = 8)]
+- SSE (Inertia)            : 1816577.9136 (Lower is better)
+- Silhouette Score         : 0.5042 (Higher is better, max=1.0)
+- Davies-Bouldin Index     : 0.2323 (Lower is better, min=0.0)
+- Calinski-Harabasz Index  : 109.0672 (Higher is better)

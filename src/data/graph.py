@@ -115,6 +115,7 @@ class KnowledgeGraph(object):
 
         with open(os.path.join(data_path, "test_filtered.txt")) as fi:
         # with open(os.path.join(data_path, "test.txt")) as fi:
+        # with open(os.path.join(data_path, "all_rels_test.txt")) as fi: # FIXME: urgent
             for line in fi:
                 h, r, t = line.strip().split('\t')
                 h, r, t = self.entity2id[h], self.relation2id[r], self.entity2id[t]

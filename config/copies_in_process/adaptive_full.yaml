@@ -1,12 +1,12 @@
-save_path: results/semmeddb/multitask_mmoe/ent_all_types/PCA_multitask_mmoe_adaptive_matrix_4_type_20250702_183136
+save_path: results/semmeddb/10_times_each/ori/multitask_mmoe_adaptive_matrix_3_type_20250709_032422
 load_path: null
 seed: 1
 
 data:
   data_path: ../data/semmeddb
   rule_file: ../data/semmeddb/mined_rules.txt
-  cluster_size: 4
-  relation_cluster_file: ../data/semmeddb/relation_cluster/pca_5_matrix_4.dict
+  cluster_size: 3
+  relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_3.dict
   # batch_size: 32
   batch_size: 8
   

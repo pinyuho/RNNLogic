@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 
 def compute_total_loss(
         self,
@@ -13,9 +14,9 @@ def compute_total_loss(
         return main_loss
 
     if self.loss_mode == "fixed":
-        # return 0.8 * main_loss + 0.1 * aux_losses[0]
-        # return 0.6 * main_loss + 0.2 * aux_losses[0] + 0.2 * aux_losses[1]
         return 0.8 * main_loss + 0.1 * aux_losses[0] + 0.1 * aux_losses[1]
+        # return 0.6 * main_loss + 0.2 * aux_losses[0] + 0.2 * aux_losses[1]
+        # return 0.6 * main_loss + 0.2 * aux_losses[0] + 0.2 * aux_losses[1]
         # return (1/3) * main_loss + (1/3) * aux_losses[0] + (1/3) * aux_losses[1]
 
 
@@ -41,3 +42,16 @@ def compute_total_loss(
 
     else:
         raise ValueError(f"Unknown loss_mode: {self.loss_mode}")
+
+def build_rotate_embedding(num_extra=2, scale=0.01):
+    # path = "../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_0426_all_256/relation_embedding.npy"
+    path = "../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_512/relation_embedding.npy"
+    """
+    讀 RotatE 向量，再補 2 格隨機權重 ⇒ nn.Embedding
+    """
+    base = torch.as_tensor(np.load(path), dtype=torch.float)          # (R, D)
+    extra = torch.randn(num_extra, base.size(1)).mul_(scale)          # (2, D)
+    weight = torch.cat([base, extra], dim=0)                          # (R+2, D)
+    return torch.nn.Embedding.from_pretrained(
+        weight, freeze=True, padding_idx=weight.size(0)-1             # 最後一格當 padding
+    )

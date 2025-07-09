@@ -16,3 +16,4 @@ dataset
 data/semmeddb/route_all.pkl
 data/semmeddb/relation_strength_all.pkl
 data/semmeddb/relation_strength_train.pkl
+data/semmeddb/backups/relation_strength_all.pkl

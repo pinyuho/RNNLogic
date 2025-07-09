@@ -6,7 +6,7 @@ mkdir -p logs
 RUN_MODE="$1"  # 例如： bash gogo.sh torchrun 或 bash gogo.sh normal
 IS_SOFT_LABEL=False
 IS_SCHEDULED_SAMPLING=False
-IS_TEST_MODE=False
+IS_TEST_MODE=False # FIXME:
 
 TYPE_OR_GROUP="type"
 
@@ -18,16 +18,17 @@ PYTHON_SCRIPT="run_rnnlogic.py"
 
 DATASET="semmeddb" 
 
-CONFIG_ORIGINAL="../config/full.yaml"
+CONFIG_ORIGINAL="../config/full.yaml" # FIXME:
 CONFIG_FILENAME=$(basename "$CONFIG_ORIGINAL" .yaml)
 
-# MULTITASK_LOSS_MODE="adaptive"  # fixed, warmup, schedule
-MULTITASK_LOSS_MODE="adaptive"
+MULTITASK_LOSS_MODE="adaptive"  # fixed, warmup, schedule
+# MULTITASK_LOSS_MODE="fixed"
 PREDICTOR_WEIGHTED_LOSS_MODE="ori"  # triple_count, triple_count_sqrt, triple_count_log
 RELATION_CLUSTER_METHOD="matrix" # naive, matrix
 
 CLUSTER_SIZES=(
   3
+  # 4
   # 5
   # 6
   # 7
@@ -84,7 +85,11 @@ for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
   echo "▶ Running: ${STAMP}.log"
   LOG_FILE="logs/${STAMP}.log"
 
-  sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask_mmoe/ent_all_types/${EXP_NAME}_soft_label_${STAMP}|" "$CONFIG_PATH"
+  # sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask_mmoe/ent_all_types/ablations/baseline_rotate/${EXP_NAME}_${STAMP}|" "$CONFIG_PATH"
+  sed -i "s|^save_path: .*|save_path: results/${DATASET}/10_times_each/cluster_k/${EXP_NAME}_${STAMP}|" "$CONFIG_PATH"
+  # sed -i "s|^save_path: .*|save_path: results/${DATASET}/sm_test/${STAMP}|" "$CONFIG_PATH" # FIXME:
+  # sed -i "s|^save_path: .*|save_path: results/${DATASET}/ori|" "$CONFIG_PATH" # FIXME:
+
 
   sed -i "s|data_path: .*|data_path: ../data/${DATASET}|" "$CONFIG_PATH"
   sed -i "s|rule_file: .*|rule_file: ../data/${DATASET}/mined_rules.txt|" "$CONFIG_PATH"

@@ -1,12 +1,12 @@
-save_path: results/semmeddb/multitask_mmoe/semmeddb_multitask_mmoe_3_20250630_121123
+save_path: results/semmeddb/multitask_mmoe/ent_all_types/k7_multitask_mmoe_fixed_matrix_7_type_20250704_135545
 load_path: null
 seed: 1
 
 data:
   data_path: ../data/semmeddb
   rule_file: ../data/semmeddb/mined_rules.txt
-  cluster_size: 3
-  relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_3.dict
+  cluster_size: 7
+  relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_7.dict
   # batch_size: 32
   batch_size: 8
   
@@ -39,7 +39,7 @@ generator:
     batch_size: 512
 
 predictor:
-  gpus: [0]
+  gpus: [1]
   model:
     entity_feature: bias
   optimizer:
@@ -60,7 +60,7 @@ final_prediction:
   max_length: [1, 2, 3, 4, 5]
 
 predictorplus:
-  gpus: [0]
+  gpus: [1]
   model:
     hidden_dim: 16
     aggregator: pna

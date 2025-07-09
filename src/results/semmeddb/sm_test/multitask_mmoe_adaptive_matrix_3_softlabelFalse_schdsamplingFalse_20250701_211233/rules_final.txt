@@ -1,4 +1,0 @@
-['diagnoses', 'isa']
-['part_of', 'coexists_with']
-['isa', 'occurs_in']
-['compared_with', 'location_of']

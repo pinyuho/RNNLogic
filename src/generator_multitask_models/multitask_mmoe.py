@@ -13,7 +13,7 @@ import logging
 class MultitaskMMOE(torch.nn.Module):
     def __init__(self, graph, cluster_size, is_soft_label, # is_soft_label: grounding encoding 是否為機率分佈
                  num_layers, embedding_dim, hidden_dim, emb_init_mode="random",
-                 num_experts=4, mmoe_dropout=0.1): 
+                 num_experts=8, mmoe_dropout=0.1): 
         super().__init__()
 
         self.graph = graph
@@ -35,9 +35,7 @@ class MultitaskMMOE(torch.nn.Module):
         if emb_init_mode == "random":
             self.embedding = torch.nn.Embedding(self.vocab_size, self.embedding_dim, padding_idx=self.padding_idx)
         else:  # rotate
-            self.embedding = build_rotate_embedding(
-                "../../KnowledgeGraphEmbedding/models/RotatE_semmeddb_0426_all_256/relation_embedding.npy"
-            )
+            self.embedding = build_rotate_embedding()
             
 
         self.encoder = torch.nn.LSTM(self.embedding_dim * 2 + self.type_size, self.hidden_dim, self.num_layers, batch_first=True)
