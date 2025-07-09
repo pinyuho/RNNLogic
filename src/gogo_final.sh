@@ -28,10 +28,10 @@ RELATION_CLUSTER_METHOD="matrix" # naive, matrix
 
 CLUSTER_SIZES=(
   3
-  # 4
-  # 5
-  # 6
-  # 7
+  4
+  5
+  6
+  7
   # 8
 )
 
@@ -86,7 +86,7 @@ for CLUSTER_SIZE in "${CLUSTER_SIZES[@]}"; do
   LOG_FILE="logs/${STAMP}.log"
 
   # sed -i "s|^save_path: .*|save_path: results/${DATASET}/multitask_mmoe/ent_all_types/ablations/baseline_rotate/${EXP_NAME}_${STAMP}|" "$CONFIG_PATH"
-  sed -i "s|^save_path: .*|save_path: results/${DATASET}/10_times_each/cluster_k/${EXP_NAME}_${STAMP}|" "$CONFIG_PATH"
+  sed -i "s|^save_path: .*|save_path: results/${DATASET}/10_times_each/cluster_k/${CLUSTER_SIZE}_${STAMP}|" "$CONFIG_PATH"
   # sed -i "s|^save_path: .*|save_path: results/${DATASET}/sm_test/${STAMP}|" "$CONFIG_PATH" # FIXME:
   # sed -i "s|^save_path: .*|save_path: results/${DATASET}/ori|" "$CONFIG_PATH" # FIXME:
 
