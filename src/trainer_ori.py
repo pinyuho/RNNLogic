@@ -8,17 +8,10 @@ from itertools import islice
 # from data import RuleDataset, Iterator
 from backups.data_ori import RuleDataset
 from datamodules.utils import Iterator
-from speed_up_module.cppext import groundings_cppext
-from speed_up_module.groundings_cppext import compute_H_cpp
-import gzip
-import json
-import os
-import logging
 
 class TrainerPredictor(object):
 
     def __init__(self, model, train_set, valid_set, test_set, optimizer, scheduler=None, gpus=None, num_worker=0):
-        self.use_cpp_grounding = True
         self.rank = comm.get_rank()
         self.world_size = comm.get_world_size()
         self.gpus = gpus
@@ -114,60 +107,42 @@ class TrainerPredictor(object):
             self.scheduler.step()
     
     @torch.no_grad()
-    def compute_H(self, dump_path=None, print_every=1000):
+    def compute_H(self, print_every):
         if comm.get_rank() == 0:
             logging.info('>>>>> Predictor: Computing H scores of rules')
-
         sampler = torch_data.DistributedSampler(self.train_set, self.world_size, self.rank)
         dataloader = torch_data.DataLoader(self.train_set, 1, sampler=sampler, num_workers=self.num_worker)
         model = self.model
 
         model.eval()
         all_H_score = torch.zeros(model.num_rules, device=self.device)
-
-        record_pool = [] if dump_path is not None else None   # ★ 開啟 record_pool（可選）
-
         for batch_id, batch in enumerate(dataloader):
-            all_h, all_r, all_t, target, edges_to_remove, triple_weight = batch
+            all_h, all_r, all_t, target, edges_to_remove = batch
             all_h = all_h.squeeze(0)
             all_r = all_r.squeeze(0)
             all_t = all_t.squeeze(0)
             target = target.squeeze(0)
             edges_to_remove = edges_to_remove.squeeze(0)
-
+            
             if self.device.type == "cuda":
                 all_h = all_h.cuda(device=self.device)
                 all_r = all_r.cuda(device=self.device)
-                all_t = all_t.cuda(device=self.device)
                 target = target.cuda(device=self.device)
                 edges_to_remove = edges_to_remove.cuda(device=self.device)
-
-            # 🔁 呼叫 C++ 加速版本（你會在 groundings_cppext.py 裡定義）
-            H, index = compute_H_cpp(
-                model, all_h, all_r, all_t, edges_to_remove,
-                record_pool=record_pool
-            )
-
-            if H is not None and index is not None:
+            
+            H, index = model.compute_H(all_h, all_r, all_t, edges_to_remove)
+            if H != None and index != None:
                 all_H_score[index] += H / len(model.graph.train_facts)
-
+                
             if (batch_id + 1) % print_every == 0:
                 if comm.get_rank() == 0:
-                    logging.info('{} / {}'.format(batch_id + 1, len(dataloader)))
-
+                    logging.info('{} {}'.format(batch_id + 1, len(dataloader)))
+        
         if self.world_size > 1:
             all_H_score = comm.stack(all_H_score)
             all_H_score = all_H_score.sum(0)
-
-        # 📦 將 record_pool 寫入 .jsonl.gz
-        if record_pool is not None and comm.get_rank() == 0:
-            with gzip.open(dump_path, "wt") as fp:
-                for rec in record_pool:
-                    fp.write(json.dumps(rec) + "\n")
-            record_pool.clear()
-
+        
         return all_H_score.data.cpu().numpy().tolist()
-
     
     @torch.no_grad()
     def evaluate(self, split, expectation=True):
