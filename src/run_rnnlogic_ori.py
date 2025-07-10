@@ -48,6 +48,7 @@ def parse_args(args=None):
     parser.add_argument('--config', default='../rnnlogic.yaml', type=str)
     parser.add_argument("--local_rank", type=int, default=0)
     parser.add_argument('--is_test_mode', type=str2bool, default=False)
+    parser.add_argument('--subset_ratio', type=float, default=1.0)
 
     return parser.parse_args(args)
 
@@ -72,6 +73,17 @@ def main(args):
     test_set = TestDataset(graph, cfg.data.batch_size)
 
     dataset = RuleDataset(graph.relation_size, cfg.data.rule_file)
+    if args.subset_ratio < 1.0:
+        if comm.get_rank() == 0:
+            logging.info('Using subset datasets for training, validation, and testing.')
+            logging.info(f'Subset ratio: {args.subset_ratio}')
+        train_set = get_subset_dataset(train_set, args.subset_ratio, seed=42)
+        valid_set = get_subset_dataset(valid_set, args.subset_ratio, seed=99)   # 也可用不同 seed
+        test_set  = get_subset_dataset(test_set,  args.subset_ratio, seed=123)
+        dataset = get_subset_dataset(dataset, args.subset_ratio, seed=456)
+    else:
+        if comm.get_rank() == 0:
+            logging.info('Using full datasets for training, validation, and testing.')
 
     if comm.get_rank() == 0:
         logging.info('-------------------------')

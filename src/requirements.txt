@@ -3,3 +3,4 @@ torch-scatter
 numpy
 easydict
 pandas
+pyyaml
