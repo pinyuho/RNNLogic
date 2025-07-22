@@ -1,0 +1,177 @@
+EM: !!python/object/new:easydict.EasyDict
+  dictitems:
+    max_length: 3
+    num_iters: 5
+    num_rules: 100
+    prior_weight: 0.001
+  state:
+    max_length: 3
+    num_iters: 5
+    num_rules: 100
+    prior_weight: 0.001
+data: !!python/object/new:easydict.EasyDict
+  dictitems:
+    batch_size: 8
+    cluster_size: 6
+    data_path: ../data/semmeddb
+    relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_6.dict
+    rule_file: ../data/semmeddb/mined_rules.txt
+  state:
+    batch_size: 8
+    cluster_size: 6
+    data_path: ../data/semmeddb
+    relation_cluster_file: ../data/semmeddb/relation_cluster/matrix_6.dict
+    rule_file: ../data/semmeddb/mined_rules.txt
+final_prediction: !!python/object/new:easydict.EasyDict
+  dictitems:
+    max_length: &id001
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    num_iters: 5
+    num_rules: &id002
+    - 100
+    - 100
+    - 500
+    - 200
+    - 100
+  state:
+    max_length: *id001
+    num_iters: 5
+    num_rules: *id002
+generator: !!python/object/new:easydict.EasyDict
+  dictitems:
+    gpu: 0
+    model: &id003 !!python/object/new:easydict.EasyDict
+      dictitems:
+        embedding_dim: 512
+        hidden_dim: 256
+        num_layers: 1
+      state:
+        embedding_dim: 512
+        hidden_dim: 256
+        num_layers: 1
+    post_train: &id004 !!python/object/new:easydict.EasyDict
+      dictitems:
+        batch_size: 512
+        lr: 1.0e-05
+        num_epoch: 1000
+        print_every: 1000
+      state:
+        batch_size: 512
+        lr: 1.0e-05
+        num_epoch: 1000
+        print_every: 1000
+    pre_train: &id005 !!python/object/new:easydict.EasyDict
+      dictitems:
+        batch_size: 512
+        lr: 0.001
+        num_epoch: 10000
+        print_every: 1000
+      state:
+        batch_size: 512
+        lr: 0.001
+        num_epoch: 10000
+        print_every: 1000
+    train: &id006 !!python/object/new:easydict.EasyDict
+      dictitems:
+        batch_size: 512
+        lr: 1.0e-05
+        num_epoch: 100
+        print_every: 1000
+      state:
+        batch_size: 512
+        lr: 1.0e-05
+        num_epoch: 100
+        print_every: 1000
+  state:
+    gpu: 0
+    model: *id003
+    post_train: *id004
+    pre_train: *id005
+    train: *id006
+load_path: null
+predictor: !!python/object/new:easydict.EasyDict
+  dictitems:
+    H_score: &id007 !!python/object/new:easydict.EasyDict
+      dictitems:
+        print_every: 1000
+      state:
+        print_every: 1000
+    eval: &id008 !!python/object/new:easydict.EasyDict
+      dictitems:
+        expectation: true
+      state:
+        expectation: true
+    gpus: &id009
+    - 0
+    model: &id010 !!python/object/new:easydict.EasyDict
+      dictitems:
+        entity_feature: bias
+      state:
+        entity_feature: bias
+    optimizer: &id011 !!python/object/new:easydict.EasyDict
+      dictitems:
+        lr: 0.001
+        weight_decay: 0
+      state:
+        lr: 0.001
+        weight_decay: 0
+    train: &id012 !!python/object/new:easydict.EasyDict
+      dictitems:
+        batch_per_epoch: 1000000
+        print_every: 1000
+        smoothing: 0.2
+      state:
+        batch_per_epoch: 1000000
+        print_every: 1000
+        smoothing: 0.2
+  state:
+    H_score: *id007
+    eval: *id008
+    gpus: *id009
+    model: *id010
+    optimizer: *id011
+    train: *id012
+predictorplus: !!python/object/new:easydict.EasyDict
+  dictitems:
+    eval: &id013 !!python/object/new:easydict.EasyDict
+      dictitems:
+        expectation: true
+      state:
+        expectation: true
+    gpus: &id014
+    - 0
+    model: &id015 !!python/object/new:easydict.EasyDict
+      dictitems:
+        aggregator: pna
+        hidden_dim: 16
+      state:
+        aggregator: pna
+        hidden_dim: 16
+    optimizer: &id016 !!python/object/new:easydict.EasyDict
+      dictitems:
+        lr: 0.005
+        weight_decay: 0
+      state:
+        lr: 0.005
+        weight_decay: 0
+    train: &id017 !!python/object/new:easydict.EasyDict
+      dictitems:
+        batch_per_epoch: 1000000
+        print_every: 1000
+        smoothing: 0.2
+      state:
+        batch_per_epoch: 1000000
+        print_every: 1000
+        smoothing: 0.2
+  state:
+    eval: *id013
+    gpus: *id014
+    model: *id015
+    optimizer: *id016
+    train: *id017
+save_path: results/semmeddb/10_times_each/fixed/622/3_20250719_084324
+seed: 1
